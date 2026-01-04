@@ -1,0 +1,69 @@
+[tool.poetry]
+name = "crow-osint"
+version = "0.1.0"
+description = "Crow Recon OSINT Framework – Modular & Open Source"
+authors = ["securescript25 <elyasalemad17@gmail.com>"]
+license = "GPL-3.0"
+readme = "README.md"
+homepage = "https://github.com/securescript25/CROW-OSINT"
+repository = "https://github.com/securescript25/CROW-OSINT.git"
+keywords = ["osint", "recon", "cybersecurity", "modular"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Information Technology",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+packages = [{include = "crow"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pydantic = "^2.5.0"
+loguru = "^0.7.0"
+click = "^8.1.0"
+httpx = "^0.25.0"
+aiofiles = "^23.0.0"
+aiohttp = "^3.9.0"
+aiodns = "^3.1.0"
+jinja2 = "^3.1.0"
+weasyprint = ">=59.0"
+python-whois = ">=0.9.0"
+dnspython = "^2.4.0"
+email-validator = "^2.1.0"
+mutagen = "^1.47.0"
+colorama = "^0.4.6"
+art = "^6.5"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.0.0"
+isort = "^5.12.0"
+flake8 = "^6.0.0"
+mypy = "^1.7.0"
+pytest = "^7.4.0"
+pytest-cov = "^4.1.0"
+pre-commit = "^3.5.0"
+
+[tool.poetry.scripts]
+crow = "crow.cli:app"
+
+[tool.black]
+line-length = 88
+target-version = ['py39']
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "crow"]
+python_files = ["test_*.py", "*_test.py"]
+addopts = "--cov=crow --cov-report=term-missing"
