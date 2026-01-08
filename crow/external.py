@@ -1,4 +1,3 @@
-"""External Commands – مثل msfconsole."""
 import subprocess
 
 from crow.core.logger import logger
