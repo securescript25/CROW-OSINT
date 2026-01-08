@@ -1,4 +1,3 @@
-"""Scripting Engine – مثل msfconsole."""
 import ast
 import os
 
