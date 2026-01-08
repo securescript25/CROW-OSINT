@@ -5,7 +5,7 @@ from pathlib import Path
 import click
 
 from crow.banners import print_banner
-from crow.core import PluginRegistry  # إذا عندك PluginRegistry هنا كما هو في مشروعك
+from crow.core import PluginRegistry  
 from crow.core.config import load_config
 from crow.core.logger import logger
 
@@ -37,14 +37,14 @@ def _run_plugin(plugin_obj, target: str, **kwargs):
 
 def _as_jsonable(obj):
     """تحويل المخرجات لأي شيء قابل للتخزين كـ JSON."""
-    # PluginOutput غالباً فيه .dict() أو attributes
+   
     if hasattr(obj, "dict") and callable(getattr(obj, "dict")):
         return obj.dict()
     if isinstance(obj, dict):
         return obj
     if isinstance(obj, list):
         return [_as_jsonable(x) for x in obj]
-    # كائنات فيها __dict__
+    
     if hasattr(obj, "__dict__"):
         return obj.__dict__
     return str(obj)
@@ -123,7 +123,6 @@ def auto(target, output, delay):
     outputs = []
 
     for name in all_plugins:
-        # تحديد نوع البلجن
         if name in PluginRegistry.list_passive():
             cls = PluginRegistry.get_passive(name)
         else:
