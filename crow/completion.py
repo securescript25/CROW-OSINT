@@ -1,4 +1,4 @@
-"""Tab completion لـ CROW – مثل msfconsole."""
+
 import click
 
 from crow.core import PluginRegistry
