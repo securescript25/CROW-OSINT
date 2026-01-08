@@ -1,4 +1,3 @@
-"""Global Datastore – مثل msfconsole."""
 from typing import Any, Dict
 
 from crow.core.logger import logger
