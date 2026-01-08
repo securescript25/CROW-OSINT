@@ -1,4 +1,3 @@
-"""CLI interface for CROW – مبسّط ويعمل مباشرة مع الإطار"""
 import json
 import time
 from pathlib import Path
