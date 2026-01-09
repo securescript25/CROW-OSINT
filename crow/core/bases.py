@@ -1,6 +1,6 @@
 """Base classes for all plugins."""
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from crow.core.models import PluginOutput
 
@@ -10,11 +10,17 @@ class PassivePlugin(ABC):
 
     name: str = ""
     description: str = ""
+    version: str = "1.0.0"
+
+    def __init__(self, config: Any = None, logger: Any = None):
+        # مهم: البلوقنز تعتمد على هذي القيم
+        self.config = config
+        self.logger = logger
 
     @abstractmethod
     def run(self, target: str, **kwargs) -> PluginOutput:
         """Run the plugin and return results."""
-        pass
+        raise NotImplementedError
 
 
 class ActivePlugin(ABC):
@@ -22,11 +28,17 @@ class ActivePlugin(ABC):
 
     name: str = ""
     description: str = ""
+    version: str = "1.0.0"
+
+    def __init__(self, config: Any = None, logger: Any = None):
+        # مهم: البلوقنز الـ Active (مثل bhp) تمرر (config, logger)
+        self.config = config
+        self.logger = logger
 
     @abstractmethod
     def run(self, target: str, port: int = None, **kwargs) -> PluginOutput:
         """Run the plugin and return results."""
-        pass
+        raise NotImplementedError
 
 
 class ReporterPlugin(ABC):
@@ -34,8 +46,13 @@ class ReporterPlugin(ABC):
 
     name: str = ""
     description: str = ""
+    version: str = "1.0.0"
+
+    def __init__(self, config: Any = None, logger: Any = None):
+        self.config = config
+        self.logger = logger
 
     @abstractmethod
     def write(self, data: List[PluginOutput], out_path: str) -> str:
         """Write data to file and return path."""
-        pass
+        raise NotImplementedError

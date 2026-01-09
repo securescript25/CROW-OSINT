@@ -1,3 +1,3 @@
-from .plugin import ActiveBHPPlugin
+from .plugin import bhp
 
-__all__ = ["ActiveBHPPlugin"]
+__all__ = ["bhp"]

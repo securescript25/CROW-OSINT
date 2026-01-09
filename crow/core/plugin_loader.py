@@ -33,19 +33,22 @@ class PluginRegistry:
         Return a list of modules to inspect for a plugin directory.
 
         We support (and inspect ALL if available):
+        - crow.plugins.<plugin_dir>.plugin       (standard plugin.py)  [PREFERRED]
         - crow.plugins.<plugin_dir>              (package __init__.py)
-        - crow.plugins.<plugin_dir>.plugin       (standard plugin.py)
         - crow.plugins.<plugin_dir>.<plugin_dir> (rare alternative layout)
+
+        Why prefer plugin.py first?
+        Because many packages import classes in __init__.py, which can cause duplicate registration.
         """
         mods: List[Any] = []
 
-        # 1) package
-        m = cls._safe_import(f"crow.plugins.{plugin_dir}")
+        # 1) plugin.py first (IMPORTANT)
+        m = cls._safe_import(f"crow.plugins.{plugin_dir}.plugin")
         if m is not None:
             mods.append(m)
 
-        # 2) plugin.py (IMPORTANT: inspect even if package import succeeds)
-        m = cls._safe_import(f"crow.plugins.{plugin_dir}.plugin")
+        # 2) package
+        m = cls._safe_import(f"crow.plugins.{plugin_dir}")
         if m is not None:
             mods.append(m)
 
@@ -54,7 +57,7 @@ class PluginRegistry:
         if m is not None:
             mods.append(m)
 
-        # remove duplicates
+        # remove duplicates by object id
         uniq: List[Any] = []
         seen: Set[int] = set()
         for mm in mods:
@@ -64,6 +67,16 @@ class PluginRegistry:
             uniq.append(mm)
 
         return uniq
+
+    @classmethod
+    def _register_plugin_info(cls, pname: str, ptype: str, obj, plugin_dir: str):
+        cls._plugin_info[pname] = {
+            "type": ptype,
+            "description": getattr(obj, "description", "No description"),
+            "version": getattr(obj, "version", "1.0.0"),
+            "module": plugin_dir,
+            "python_module": getattr(obj, "__module__", "unknown"),
+        }
 
     @classmethod
     def autoload(cls):
@@ -98,13 +111,12 @@ class PluginRegistry:
                 )
                 continue
 
-            found_plugins = []
+            found_any = False
 
             # Inspect all candidate modules for this plugin_dir
             for module in modules:
                 try:
                     for _, obj in inspect.getmembers(module, inspect.isclass):
-                        # Avoid picking up unrelated imported classes
                         # Only allow classes that belong to this plugin package
                         obj_mod = getattr(obj, "__module__", "") or ""
                         if not obj_mod.startswith(f"crow.plugins.{plugin_dir}"):
@@ -116,22 +128,20 @@ class PluginRegistry:
                             and obj is not PassivePlugin
                             and hasattr(obj, "name")
                         ):
-                            cls._passive[obj.name] = obj
-                            found_plugins.append(("passive", obj.name))
+                            pname = obj.name
 
-                            cls._plugin_info[obj.name] = {
-                                "type": "passive",
-                                "description": getattr(
-                                    obj, "description", "No description"
-                                ),
-                                "version": getattr(obj, "version", "1.0.0"),
-                                "module": plugin_dir,
-                                "python_module": obj_mod,
-                            }
+                            # ✅ prevent duplicates (plugin.py first wins)
+                            if pname in cls._passive:
+                                continue
+
+                            cls._passive[pname] = obj
+                            cls._register_plugin_info(pname, "passive", obj, plugin_dir)
 
                             logger.info(
-                                f"Registered passive plugin: {obj.name} ({plugin_dir})"
+                                f"Registered passive plugin: {pname} ({plugin_dir})"
                             )
+                            found_any = True
+                            continue
 
                         # Active
                         if (
@@ -139,29 +149,27 @@ class PluginRegistry:
                             and obj is not ActivePlugin
                             and hasattr(obj, "name")
                         ):
-                            cls._active[obj.name] = obj
-                            found_plugins.append(("active", obj.name))
+                            pname = obj.name
 
-                            cls._plugin_info[obj.name] = {
-                                "type": "active",
-                                "description": getattr(
-                                    obj, "description", "No description"
-                                ),
-                                "version": getattr(obj, "version", "1.0.0"),
-                                "module": plugin_dir,
-                                "python_module": obj_mod,
-                            }
+                            # ✅ prevent duplicates (plugin.py first wins)
+                            if pname in cls._active:
+                                continue
+
+                            cls._active[pname] = obj
+                            cls._register_plugin_info(pname, "active", obj, plugin_dir)
 
                             logger.info(
-                                f"Registered active plugin: {obj.name} ({plugin_dir})"
+                                f"Registered active plugin: {pname} ({plugin_dir})"
                             )
+                            found_any = True
+                            continue
 
                 except Exception as e:
                     logger.error(
                         f"Error inspecting module {getattr(module, '__name__', module)}: {e}"
                     )
 
-            if not found_plugins:
+            if not found_any:
                 logger.warning(f"No plugin classes found in: {plugin_dir}")
 
         # Load reporter plugins
@@ -181,17 +189,19 @@ class PluginRegistry:
                         and obj is not ReporterPlugin
                         and hasattr(obj, "name")
                     ):
-                        cls._reporters[obj.name] = obj
-                        cls._plugin_info[obj.name] = {
+                        pname = obj.name
+                        if pname in cls._reporters:
+                            continue
+
+                        cls._reporters[pname] = obj
+                        cls._plugin_info[pname] = {
                             "type": "reporter",
-                            "description": getattr(
-                                obj, "description", "No description"
-                            ),
+                            "description": getattr(obj, "description", "No description"),
                             "version": getattr(obj, "version", "1.0.0"),
                             "module": name,
                             "python_module": getattr(obj, "__module__", "unknown"),
                         }
-                        logger.info(f"Registered reporter plugin: {obj.name}")
+                        logger.info(f"Registered reporter plugin: {pname}")
 
         except ModuleNotFoundError:
             logger.warning("crow.reporters module not found, skipping reporter plugins")

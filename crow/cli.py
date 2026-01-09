@@ -1,11 +1,12 @@
 import json
 import time
+import inspect
 from pathlib import Path
 
 import click
 
 from crow.banners import print_banner
-from crow.core import PluginRegistry  
+from crow.core import PluginRegistry
 from crow.core.config import load_config
 from crow.core.logger import logger
 
@@ -13,13 +14,34 @@ from crow.core.logger import logger
 # -------------------- Helpers --------------------
 def _instantiate_plugin(cls, config_obj, logger_obj):
     """
-    بعض plugins تُنشأ بدون args (مثل dns/email عندك)
-    وبعضها تتوقع (config, logger)
+    ✅ حل المشكلة:
+    لا نستخدم try/except TypeError للتخمين (لأنه يخفي TypeError الحقيقي داخل __init__)
+    بدل ذلك نفحص توقيع __init__ ونقرر كيف ننشئ الـ plugin بشكل صحيح.
     """
-    try:
-        return cls(config_obj, logger_obj)
-    except TypeError:
+    sig = inspect.signature(cls.__init__)
+    params = list(sig.parameters.values())
+
+    # remove self
+    params = [p for p in params if p.name != "self"]
+
+    # count required positional args (no defaults)
+    required = [
+        p
+        for p in params
+        if p.default is inspect._empty
+        and p.kind in (p.POSITIONAL_ONLY, p.POSITIONAL_OR_KEYWORD)
+    ]
+
+    # 0 required args => cls()
+    if len(required) == 0:
         return cls()
+
+    # 1 required arg => cls(config)
+    if len(required) == 1:
+        return cls(config_obj)
+
+    # 2+ required args => cls(config, logger)
+    return cls(config_obj, logger_obj)
 
 
 def _run_plugin(plugin_obj, target: str, **kwargs):
@@ -37,14 +59,13 @@ def _run_plugin(plugin_obj, target: str, **kwargs):
 
 def _as_jsonable(obj):
     """تحويل المخرجات لأي شيء قابل للتخزين كـ JSON."""
-   
     if hasattr(obj, "dict") and callable(getattr(obj, "dict")):
-        return obj.dict()
+        return obj.model_dump()
     if isinstance(obj, dict):
         return obj
     if isinstance(obj, list):
         return [_as_jsonable(x) for x in obj]
-    
+
     if hasattr(obj, "__dict__"):
         return obj.__dict__
     return str(obj)
@@ -85,19 +106,13 @@ def interactive_menu(ctx):
     if choice == "1":
         target = click.prompt("→ Target (IP or Domain)")
         output = click.prompt("→ Output file", default="report.json")
-        delay = click.prompt(
-            "→ Delay between plugins (seconds)", default=1.0, type=float
-        )
+        delay = click.prompt("→ Delay between plugins (seconds)", default=1.0, type=float)
         ctx.invoke(auto, target=target, output=output, delay=delay)
 
     elif choice == "2":
         target = click.prompt("→ Target (IP or Domain)")
-        plugins = click.prompt(
-            "→ Plugin name(s) (comma separated) مثل: dns,whois,subdomain"
-        )
-        output = click.prompt(
-            "→ Output file (optional)", default="", show_default=False
-        )
+        plugins = click.prompt("→ Plugin name(s) (comma separated) مثل: dns,whois,subdomain")
+        output = click.prompt("→ Output file (optional)", default="", show_default=False)
         plist = [p.strip() for p in plugins.split(",") if p.strip()]
         ctx.invoke(scan, target=target, plugin=tuple(plist), output=(output or None))
 
@@ -112,9 +127,7 @@ def interactive_menu(ctx):
 @app.command("auto")
 @click.option("-t", "--target", required=True, help="Domain/IP to scan")
 @click.option("-o", "--output", default="report.json", help="Output file")
-@click.option(
-    "-d", "--delay", default=1.0, type=float, help="Delay between plugins (seconds)"
-)
+@click.option("-d", "--delay", default=1.0, type=float, help="Delay between plugins (seconds)")
 def auto(target, output, delay):
     """Run all passive & active plugins against target."""
     config_obj = load_config()
@@ -182,13 +195,7 @@ def scan(target, plugin, output):
             cls = PluginRegistry.get_active(pname)
 
         if not cls:
-            outputs.append(
-                {
-                    "plugin": pname,
-                    "results": [],
-                    "errors": [f"Plugin '{pname}' not found"],
-                }
-            )
+            outputs.append({"plugin": pname, "results": [], "errors": [f"Plugin '{pname}' not found"]})
             continue
 
         try:
