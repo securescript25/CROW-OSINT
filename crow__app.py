@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# أمر تنفيذي لـ CROW – يستدعي الكود مباشرةً
+
 import os
 import sys
 
