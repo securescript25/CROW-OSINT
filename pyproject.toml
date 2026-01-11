@@ -36,6 +36,8 @@ email-validator = "^2.1.0"
 mutagen = "^1.47.0"
 colorama = "^0.4.6"
 art = "^6.5"
+pyfiglet = "^1.0.4"
+requests = "^2.32.5"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.0.0"
@@ -47,7 +49,7 @@ pytest-cov = "^4.1.0"
 pre-commit = "^3.5.0"
 
 [tool.poetry.scripts]
-crow = "crow.cli:app"
+crow = "crow.cli:main"
 
 [tool.black]
 line-length = 88

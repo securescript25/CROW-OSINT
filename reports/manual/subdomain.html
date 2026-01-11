@@ -1,0 +1,967 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>MANUAL Report - subdomain</title>
+<style>
+:root{
+  --bg:#0b1020;
+  --card:#111a33;
+  --card2:#0e1630;
+  --text:#e8ecff;
+  --muted:#aab3d6;
+  --accent:#6ee7ff;
+  --accent2:#a78bfa;
+  --border:rgba(255,255,255,.08);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  background: radial-gradient(900px 600px at 20% 10%, rgba(110,231,255,.18), transparent),
+              radial-gradient(900px 600px at 80% 20%, rgba(167,139,250,.18), transparent),
+              var(--bg);
+  color:var(--text);
+}
+.container{
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 28px 16px 60px;
+}
+.header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  flex-wrap:wrap;
+  margin-bottom: 18px;
+}
+.logo{
+  font-size: 54px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  line-height:1;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color: transparent;
+  position:relative;
+  text-transform:uppercase;
+  animation: glow 2.6s ease-in-out infinite;
+}
+@keyframes glow{
+  0%,100% { filter: drop-shadow(0 0 10px rgba(110,231,255,.15)); transform: translateY(0px); }
+  50%     { filter: drop-shadow(0 0 18px rgba(167,139,250,.20)); transform: translateY(-2px); }
+}
+.badge{
+  padding:8px 12px;
+  border:1px solid var(--border);
+  background: rgba(255,255,255,.03);
+  border-radius:999px;
+  color:var(--muted);
+  font-size: 13px;
+}
+.grid{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+.card{
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+  border-radius: 16px;
+  overflow:hidden;
+}
+.card .card-h{
+  padding: 14px 16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  border-bottom:1px solid var(--border);
+  background: rgba(17,26,51,.35);
+}
+.card .title{
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+}
+.card .meta{
+  font-size: 12px;
+  color: var(--muted);
+}
+.card .card-b{
+  padding: 14px 16px;
+}
+pre{
+  margin:0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap:anywhere;
+  font-size: 13px;
+  line-height: 1.45;
+  color: #dbe4ff;
+}
+.kv{
+  display:grid;
+  grid-template-columns: 220px 1fr;
+  gap: 8px 12px;
+}
+@media (max-width: 700px){
+  .logo{font-size:44px}
+  .kv{grid-template-columns: 1fr}
+}
+.k{
+  color: var(--muted);
+  font-size: 13px;
+}
+.v{
+  color: var(--text);
+  font-size: 13px;
+  overflow-wrap:anywhere;
+}
+.pill{
+  display:inline-flex;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background: rgba(255,255,255,.03);
+  color: var(--muted);
+  font-size: 12px;
+}
+hr{
+  border:0;
+  border-top:1px solid var(--border);
+  margin: 14px 0;
+}
+.small{
+  font-size:12px;
+  color:var(--muted);
+}
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">CROW</div>
+      <div class="badge">MANUAL Report - subdomain</div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="card-h">
+          <div class="title">Summary</div>
+          <div class="meta" id="meta"></div>
+        </div>
+        <div class="card-b">
+          <div class="kv" id="summary"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-h">
+          <div class="title">Results</div>
+          <div class="meta" id="count"></div>
+        </div>
+        <div class="card-b">
+          <pre id="json"></pre>
+          <div class="small" style="margin-top:10px">Tip: This view is generated locally from JSON.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script id="DATA" type="application/json">{
+  "framework": "CROW",
+  "version": "1.0.0",
+  "workspace": "default",
+  "mode": "manual",
+  "plugin": "subdomain",
+  "target": "google.com",
+  "timestamp": "20260111_181601",
+  "results": [
+    {
+      "status": "success",
+      "plugin": "subdomain",
+      "type": "passive",
+      "target": "google.com",
+      "timestamp": "2026-01-11T18:16:01.313353",
+      "output": {
+        "plugin": "subdomain",
+        "results": [
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:14:56.200181",
+            "domain": "accounts.google.com",
+            "type": "A",
+            "values": [
+              "192.178.223.84"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:14:56.260385",
+            "domain": "admin.google.com",
+            "type": "A",
+            "values": [
+              "142.250.74.238"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:14:56.530134",
+            "domain": "adwords.google.com",
+            "type": "A",
+            "values": [
+              "192.178.223.100",
+              "192.178.223.113",
+              "192.178.223.102",
+              "192.178.223.138",
+              "192.178.223.139",
+              "192.178.223.101"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:14:56.730719",
+            "domain": "alt1.aspmx.l.google.com",
+            "type": "A",
+            "values": [
+              "142.250.102.26"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:14:56.934279",
+            "domain": "alt1.gmail-smtp-in.l.google.com",
+            "type": "A",
+            "values": [
+              "142.250.102.27"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:14:57.130014",
+            "domain": "alt1.gmr-smtp-in.l.google.com",
+            "type": "A",
+            "values": [
+              "142.250.102.14"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:14:57.421534",
+            "domain": "alt2.aspmx.l.google.com",
+            "type": "A",
+            "values": [
+              "192.178.213.27"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:14:57.728768",
+            "domain": "alt2.gmail-smtp-in.l.google.com",
+            "type": "A",
+            "values": [
+              "192.178.213.27"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:14:57.933394",
+            "domain": "alt2.gmr-smtp-in.l.google.com",
+            "type": "A",
+            "values": [
+              "192.178.213.14"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:14:58.138021",
+            "domain": "alt3.aspmx.l.google.com",
+            "type": "A",
+            "values": [
+              "142.250.147.27"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:14:58.445262",
+            "domain": "alt3.gmail-smtp-in.l.google.com",
+            "type": "A",
+            "values": [
+              "142.250.147.27"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:14:58.752586",
+            "domain": "alt3.gmr-smtp-in.l.google.com",
+            "type": "A",
+            "values": [
+              "142.250.147.14"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:14:58.957267",
+            "domain": "alt4.aspmx.l.google.com",
+            "type": "A",
+            "values": [
+              "172.253.130.27"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:14:59.162011",
+            "domain": "alt4.gmail-smtp-in.l.google.com",
+            "type": "A",
+            "values": [
+              "172.253.130.26"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:14:59.468992",
+            "domain": "alt4.gmr-smtp-in.l.google.com",
+            "type": "A",
+            "values": [
+              "172.253.130.14"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:14:59.677261",
+            "domain": "answers.google.com",
+            "type": "A",
+            "values": [
+              "216.58.213.78"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:14:59.776488",
+            "domain": "api.google.com",
+            "type": "A",
+            "values": [
+              "216.58.214.164"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:00.390934",
+            "domain": "appengine.google.com",
+            "type": "A",
+            "values": [
+              "216.58.213.78"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:01.005914",
+            "domain": "aspmx.l.google.com",
+            "type": "A",
+            "values": [
+              "192.178.223.26"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:01.517203",
+            "domain": "audioads.google.com",
+            "type": "A",
+            "values": [
+              "216.58.214.78"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:02.336111",
+            "domain": "bigstore.corp.google.com",
+            "type": "A",
+            "values": [
+              "142.250.102.129"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:02.441958",
+            "domain": "blog.google.com",
+            "type": "A",
+            "values": [
+              "142.250.74.233"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:13.496136",
+            "domain": "cert-test.sandbox.google.com",
+            "type": "A",
+            "values": [
+              "192.178.223.90"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:13.906016",
+            "domain": "chrome.google.com",
+            "type": "A",
+            "values": [
+              "216.58.213.78"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:14.314925",
+            "domain": "client-channel.google.com",
+            "type": "A",
+            "values": [
+              "216.58.215.46"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:14.519653",
+            "domain": "cloud.google.com",
+            "type": "A",
+            "values": [
+              "142.250.75.238"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:14.827086",
+            "domain": "cod.ext.google.com",
+            "type": "A",
+            "values": [
+              "216.239.44.73"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:14.929480",
+            "domain": "code.google.com",
+            "type": "A",
+            "values": [
+              "142.250.179.110"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:15.338496",
+            "domain": "corp.google.com",
+            "type": "A",
+            "values": [
+              "142.250.27.129"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:15.956034",
+            "domain": "dasher-qa.corp.google.com",
+            "type": "A",
+            "values": [
+              "142.250.102.129"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:16.158446",
+            "domain": "dasher.corp.google.com",
+            "type": "A",
+            "values": [
+              "142.250.102.129"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:16.882413",
+            "domain": "devconsole-testers.sandbox.google.com",
+            "type": "A",
+            "values": [
+              "192.178.223.81"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:16.935396",
+            "domain": "developer.google.com",
+            "type": "A",
+            "values": [
+              "216.58.214.174"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:16.990904",
+            "domain": "developers.google.com",
+            "type": "A",
+            "values": [
+              "172.217.20.46"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:17.334622",
+            "domain": "dg.video.google.com",
+            "type": "A",
+            "values": [
+              "173.194.76.176"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:17.533337",
+            "domain": "docs-dev.corp.google.com",
+            "type": "A",
+            "values": [
+              "142.250.102.129"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:18.132803",
+            "domain": "docs-qa.corp.google.com",
+            "type": "A",
+            "values": [
+              "142.250.102.129"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:18.204699",
+            "domain": "docs.google.com",
+            "type": "A",
+            "values": [
+              "172.217.20.46"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:18.406785",
+            "domain": "docs.sandbox.google.com",
+            "type": "A",
+            "values": [
+              "192.178.223.81"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:18.922502",
+            "domain": "drive.google.com",
+            "type": "A",
+            "values": [
+              "142.251.39.206"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:19.229324",
+            "domain": "drive.sandbox.google.com",
+            "type": "A",
+            "values": [
+              "192.178.223.81"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:19.843625",
+            "domain": "ecc-test.sandbox.google.com",
+            "type": "A",
+            "values": [
+              "192.178.223.81"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:20.154098",
+            "domain": "eggroll.ext.google.com",
+            "type": "A",
+            "values": [
+              "216.239.44.90"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:24.163663",
+            "domain": "friendconnect.google.com",
+            "type": "A",
+            "values": [
+              "216.58.213.78"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:25.270375",
+            "domain": "git.corp.google.com",
+            "type": "A",
+            "values": [
+              "142.250.102.129"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:26.703385",
+            "domain": "gmail-smtp-in.l.google.com",
+            "type": "A",
+            "values": [
+              "192.178.223.26"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:26.890948",
+            "domain": "gmail.google.com",
+            "type": "A",
+            "values": [
+              "216.58.213.78"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:27.214969",
+            "domain": "gmr-smtp-in.l.google.com",
+            "type": "A",
+            "values": [
+              "192.178.223.14"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:31.106132",
+            "domain": "jmt0.google.com",
+            "type": "A",
+            "values": [
+              "216.58.213.78"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:31.618261",
+            "domain": "login.corp.google.com",
+            "type": "A",
+            "values": [
+              "142.250.102.129"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:32.024942",
+            "domain": "m.google.com",
+            "type": "A",
+            "values": [
+              "142.250.178.139"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:32.437183",
+            "domain": "m.guts.corp.google.com",
+            "type": "A",
+            "values": [
+              "142.250.102.129"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:32.744740",
+            "domain": "m.gutsdev.corp.google.com",
+            "type": "A",
+            "values": [
+              "142.250.102.129"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:33.460821",
+            "domain": "mail.google.com",
+            "type": "A",
+            "values": [
+              "142.251.39.197"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:34.484785",
+            "domain": "mtalk.google.com",
+            "type": "A",
+            "values": [
+              "66.102.1.188"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:35.405981",
+            "domain": "mtv-da.ext.google.com",
+            "type": "A",
+            "values": [
+              "216.239.45.170"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:40.730128",
+            "domain": "photos.google.com",
+            "type": "A",
+            "values": [
+              "216.58.214.174"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:44.006811",
+            "domain": "plus.google.com",
+            "type": "A",
+            "values": [
+              "142.251.39.206"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:46.054451",
+            "domain": "prom-test.sandbox.google.com",
+            "type": "A",
+            "values": [
+              "172.217.76.81"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:46.337945",
+            "domain": "prom.corp.google.com",
+            "type": "A",
+            "values": [
+              "142.250.102.129"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:46.669123",
+            "domain": "proxyconfig.corp.google.com",
+            "type": "A",
+            "values": [
+              "142.250.102.129"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:47.283077",
+            "domain": "sandbox.google.com",
+            "type": "A",
+            "values": [
+              "172.217.76.81"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:47.590249",
+            "domain": "script.sandbox.google.com",
+            "type": "A",
+            "values": [
+              "192.178.223.81"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:47.897611",
+            "domain": "search.corp.google.com",
+            "type": "A",
+            "values": [
+              "142.250.102.129"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:48.614437",
+            "domain": "services.google.com",
+            "type": "A",
+            "values": [
+              "216.58.213.78"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:48.716187",
+            "domain": "shop.google.com",
+            "type": "A",
+            "values": [
+              "172.217.76.92"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:51.688588",
+            "domain": "sites.google.com",
+            "type": "A",
+            "values": [
+              "142.250.75.238"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:51.890015",
+            "domain": "sites.sandbox.google.com",
+            "type": "A",
+            "values": [
+              "192.178.223.81"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:52.357679",
+            "domain": "soaproxyprod01.ext.google.com",
+            "type": "A",
+            "values": [
+              "72.14.225.70"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:52.606496",
+            "domain": "soaproxytest01.ext.google.com",
+            "type": "A",
+            "values": [
+              "216.239.44.94"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:55.099941",
+            "domain": "staging-git.corp.google.com",
+            "type": "A",
+            "values": [
+              "142.250.102.129"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:56.372450",
+            "domain": "talkgadget.google.com",
+            "type": "A",
+            "values": [
+              "216.58.213.78"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:56.907641",
+            "domain": "twd-da.ext.google.com",
+            "type": "A",
+            "values": [
+              "72.14.229.178"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:58.204133",
+            "domain": "uberproxy.corp.google.com",
+            "type": "A",
+            "values": [
+              "142.250.102.129"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:58.340610",
+            "domain": "upload.google.com",
+            "type": "A",
+            "values": [
+              "142.250.75.239"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:58.750902",
+            "domain": "upload.video.google.com",
+            "type": "A",
+            "values": [
+              "172.217.18.207"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:15:59.979076",
+            "domain": "webdrive-test-canary.corp.google.com",
+            "type": "A",
+            "values": [
+              "142.250.102.129"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:16:00.285522",
+            "domain": "webdrive-test-prod.corp.google.com",
+            "type": "A",
+            "values": [
+              "142.250.102.129"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:16:00.593235",
+            "domain": "wifi.google.com",
+            "type": "A",
+            "values": [
+              "74.125.71.123"
+            ]
+          },
+          {
+            "plugin": "subdomain",
+            "timestamp": "2026-01-11T15:16:01.313116",
+            "domain": "www.google.com",
+            "type": "A",
+            "values": [
+              "216.239.38.120"
+            ]
+          }
+        ],
+        "errors": []
+      }
+    }
+  ]
+}</script>
+<script>
+const data = JSON.parse(document.getElementById("DATA").textContent);
+
+function safe(v){
+  if (v === null || v === undefined) return "";
+  if (typeof v === "string") return v;
+  try { return JSON.stringify(v, null, 2); } catch(e){ return String(v); }
+}
+
+function setSummary(k, v){
+  const wrap = document.getElementById("summary");
+  const kEl = document.createElement("div");
+  kEl.className = "k";
+  kEl.textContent = k;
+
+  const vEl = document.createElement("div");
+  vEl.className = "v";
+  vEl.textContent = safe(v);
+
+  wrap.appendChild(kEl);
+  wrap.appendChild(vEl);
+}
+
+document.getElementById("json").textContent = JSON.stringify(data, null, 2);
+
+document.getElementById("meta").textContent =
+  (data.framework ? data.framework + " " : "") +
+  (data.version ? "v" + data.version + " " : "") +
+  (data.workspace ? " | workspace: " + data.workspace : "");
+
+if (data.mode) setSummary("Mode", data.mode);
+if (data.target) setSummary("Target", data.target);
+if (data.timestamp) setSummary("Timestamp", data.timestamp);
+
+let results = data.results;
+if (!results && data.output) results = [data];
+if (Array.isArray(results)){
+  document.getElementById("count").textContent = "Items: " + results.length;
+} else {
+  document.getElementById("count").textContent = "";
+}
+</script>
+</body>
+</html>

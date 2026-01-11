@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AUTO Report</title>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --panel: rgba(255,255,255,0.06);
+      --panel2: rgba(255,255,255,0.10);
+      --border: rgba(255,255,255,0.10);
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.65);
+      --accent: #66f;
+      --accent2: #00d4ff;
+      --good: #39d98a;
+      --bad: #ff5c5c;
+      --shadow: 0 20px 60px rgba(0,0,0,0.45);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans Arabic", "Noto Sans", sans-serif;
+      background: radial-gradient(1200px 700px at 80% 10%, rgba(102,102,255,0.22), transparent 60%),
+                  radial-gradient(900px 600px at 10% 70%, rgba(0,212,255,0.18), transparent 55%),
+                  var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* HERO (full first screen) */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 40px 18px;
+      position: relative;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: -200px;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(102,102,255,0.22), transparent 55%),
+        radial-gradient(circle at 35% 60%, rgba(0,212,255,0.18), transparent 60%);
+      filter: blur(40px);
+      opacity: 0.8;
+      animation: floatGlow 10s ease-in-out infinite;
+    }
+    @keyframes floatGlow {
+      0%,100% { transform: translateY(0px); }
+      50% { transform: translateY(18px); }
+    }
+
+    .logoWrap {
+      position: relative;
+      text-align: center;
+      z-index: 2;
+      max-width: 980px;
+      width: 100%;
+    }
+
+    .logo {
+      font-size: clamp(72px, 14vw, 160px);
+      font-weight: 900;
+      letter-spacing: 2px;
+      margin: 0;
+      line-height: 0.95;
+      background: linear-gradient(90deg, #fff, rgba(255,255,255,0.55), #fff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      position: relative;
+      display: inline-block;
+      text-shadow: 0 0 40px rgba(102,102,255,0.35);
+      animation: shimmer 2.8s ease-in-out infinite;
+    }
+    @keyframes shimmer {
+      0% { filter: drop-shadow(0 0 0 rgba(102,102,255,0.0)); transform: translateY(0); }
+      50% { filter: drop-shadow(0 0 20px rgba(0,212,255,0.35)); transform: translateY(-6px); }
+      100% { filter: drop-shadow(0 0 0 rgba(102,102,255,0.0)); transform: translateY(0); }
+    }
+
+    .subtitle {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .heroCard {
+      margin-top: 26px;
+      display: inline-flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .pill {
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .btn {
+      cursor: pointer;
+      user-select: none;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: linear-gradient(135deg, rgba(102,102,255,0.35), rgba(0,212,255,0.22));
+      color: #fff;
+      font-weight: 700;
+      transition: transform .15s ease, filter .15s ease;
+    }
+    .btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+
+    /* CONTENT */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 18px 80px;
+    }
+
+    .sectionTitle {
+      margin: 0 0 14px;
+      font-size: 18px;
+      color: rgba(255,255,255,0.9);
+    }
+
+    .layout {
+      position: relative;
+      margin-top: 30px;
+      padding-top: 10px;
+    }
+
+    /* Results is the "background" */
+    .results {
+      border: 1px solid var(--border);
+      background: var(--panel);
+      border-radius: 20px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    /* Summary overlays results */
+    .summary {
+      position: absolute;
+      top: -22px;
+      left: 18px; /* RTL: keep it visually nice; still left side overlay */
+      width: min(420px, calc(100% - 36px));
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.06));
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+      z-index: 2;
+      backdrop-filter: blur(8px);
+    }
+
+    .kv {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 8px 12px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .kv b { color: var(--text); font-weight: 700; }
+    .kv .ok { color: var(--good); }
+    .kv .bad { color: var(--bad); }
+
+    .resultsInner {
+      padding-top: 130px; /* leave space for summary overlay */
+      display: grid;
+      gap: 14px;
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      border-radius: 18px;
+      padding: 14px;
+      overflow: hidden;
+    }
+    .cardHeader {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .tag {
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.05);
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .cardTitle {
+      font-weight: 900;
+      font-size: 15px;
+      color: rgba(255,255,255,0.92);
+      margin: 0;
+    }
+
+    pre {
+      margin: 0;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,0.25);
+      overflow: auto;
+      direction: ltr;
+      text-align: left;
+      font-size: 12px;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.88);
+      max-width: 100%;
+    }
+
+    .footer {
+      margin-top: 26px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    @media (max-width: 720px) {
+      .summary {
+        position: static;
+        width: 100%;
+        margin-bottom: 14px;
+      }
+      .resultsInner { padding-top: 0; }
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div class="logoWrap">
+      <h1 class="logo">CROW</h1>
+      <div class="subtitle">
+       AUTO Report 
+      </div>
+      <div class="heroCard">
+        <span class="pill">Project: /home/al-emad/Documents/python/FinalProject/CROW-OSINT</span>
+        <span class="pill">Workspace: default</span>
+        <span class="pill" id="tsPill">Timestamp: —</span>
+        <span class="btn" onclick="document.getElementById('report').scrollIntoView({behavior:'smooth'})">عرض التقرير</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="container" id="report">
+    <div class="layout">
+      <div class="summary" id="summary">
+        <div class="sectionTitle">Summary</div>
+        <div class="kv" id="kv"></div>
+      </div>
+
+      <div class="results">
+        <div class="sectionTitle">Results</div>
+        <div class="resultsInner" id="results"></div>
+      </div>
+    </div>
+
+    <div class="footer">Generated by CROW • 2026-01-11 21:22:29</div>
+  </div>
+
+  <script>
+    const DATA = {"framework": "CROW", "version": "1.0.0", "workspace": "default", "target": "google.com", "timestamp": "2026-01-11T21:22:29.829878", "results": [{"status": "success", "plugin": "active_robots", "type": "active", "target": "google.com", "timestamp": "2026-01-11T21:13:33.485482", "output": {"plugin": "active_robots", "results": [{"plugin": "active_robots", "target": "google.com", "robots_url": "https://www.google.com/robots.txt", "status_code": 200, "exists": true, "content_length": 6579, "raw_content": "User-agent: *\nUser-agent: Yandex\nDisallow: /search\nAllow: /search/about\nAllow: /search/howsearchworks\nDisallow: /sdch\nDisallow: /groups\nDisallow: /index.html?\nDisallow: /?\nAllow: /?hl=\nDisallow: /?hl=*&\nAllow: /?hl=*&gws_rd=ssl$\nDisallow: /?hl=*&*&gws_rd=ssl\nAllow: /?gws_rd=ssl$\nAllow: /?pt1=true$\nDisallow: /imgres\nDisallow: /u/\nDisallow: /setprefs\nDisallow: /m?\nDisallow: /m/\nAllow:    /m/finance\nDisallow: /wml?\nDisallow: /wml/?\nDisallow: /wml/search?\nDisallow: /xhtml?\nDisallow: /xhtml/?\nDisallow: /xhtml/search?\nDisallow: /xml?\nDisallow: /imode?\nDisallow: /imode/?\nDisallow: /imode/search?\nDisallow: /jsky?\nDisallow: /jsky/?\nDisallow: /jsky/search?\nDisallow: /pda?\nDisallow: /pda/?\nDisallow: /pda/search?\nDisallow: /local?\nDisallow: /local_url\nDisallow: /products?\nDisallow: /product_\nDisallow: /products_\nDisallow: /products;\nDisallow: /print\nDisallow: /books/\nDisallow: /bkshp?*q=\nDisallow: /books?*q=\nDisallow: /books?*output=\nDisallow: /books?*pg=\nDisallow: /books?*jtp=\nDisallow: /books?*jscmd=\nDisallow: /books?*buy=\nDisallow: /books?*zoom=\nAllow: /books?*q=related:\nAllow: /books?*q=editions:\nAllow: /books?*q=subject:\nAllow: /books/about\nAllow: /books?*zoom=1\nAllow: /books?*zoom=5\nAllow: /books/content?*zoom=1\nAllow: /books/content?*zoom=5\nDisallow: /patents?\nDisallow: /patents/download/\nDisallow: /patents/pdf/\nDisallow: /patents/related/\nDisallow: /scholar\nDisallow: /citations?\nAllow: /citations?user=\nAllow: /citations?view_op=new_profile\nAllow: /citations?view_op=top_venues\nAllow: /scholar_share\nDisallow: /s?\nDisallow: /maps?\nAllow: /maps?daddr=\nAllow: /maps?entry=wc\nAllow: /maps?f=\nAllow: /maps?hl=\nAllow: /maps?q=\nAllow: /maps?saddr=\nAllow: /maps?sid=\nAllow: /maps?*output=classic\nAllow: /maps?*file=\nDisallow: /mapslt?\nDisallow: /maphp?\nDisallow: /maps/\nAllow: /maps/$\nAllow: /maps/@\nAllow: /maps/?daddr=\nAllow: /maps/?entry=wc\nAllow: /maps/?f=\nAllow: /maps/?hl=\nAllow: /maps/?q=\nAllow: /maps/?saddr=\nAllow: /maps/?sid=\nAllow: /maps/search/\nAllow: /maps/sitemap.xml\nAllow: /maps/sitemaps/\nAllow: /maps/dir/\nAllow: /maps/d/\nAllow: /maps/reserve\nAllow: /maps/about\nAllow: /maps/contrib/\nAllow: /maps/match\nAllow: /maps/place/\nAllow: /maps/_/\nAllow: /search?*tbm=map\nAllow: /maps/vt?\nAllow: /maps/preview\nDisallow: /maps/api/js/\nAllow: /maps/api/js\nDisallow: /mld?\nDisallow: /staticmap?\nDisallow: /help/maps/streetview/partners/welcome/\nDisallow: /help/maps/indoormaps/partners/\nDisallow: /lochp?\nDisallow: /ie?\nDisallow: /uds/\nDisallow: /transit?\nDisallow: /trends?\nDisallow: /trends/music?\nDisallow: /trends/hottrends?\nDisallow: /trends/viz?\nDisallow: /trends/embed.js?\nDisallow: /trends/fetchComponent?\nDisallow: /trends/beta\nDisallow: /trends/topics\nDisallow: /trends/explore?\nDisallow: /trends/api\nDisallow: /musica\nDisallow: /musicl\nDisallow: /musics\nDisallow: /urchin_test/\nDisallow: /movies?\nDisallow: /wapsearch?\nDisallow: /reviews/search?\nDisallow: /cbk\nDisallow: /profiles/me\nDisallow: /s2/profiles/me\nAllow: /s2/profiles\nAllow: /s2/oz\nAllow: /s2/photos\nAllow: /s2/search/social\nAllow: /s2/static\nDisallow: /s2\nDisallow: /transconsole/portal/\nDisallow: /aclk\nDisallow: /tbproxy/\nDisallow: /support/forum/search?\nDisallow: /reviews/polls/\nDisallow: /hosted/images/\nDisallow: /accounts/ClientLogin\nDisallow: /accounts/ClientAuth\nDisallow: /accounts/o8\nAllow: /accounts/o8/id\nDisallow: /quality_form?\nDisallow: /labs/popgadget/search\nDisallow: /compressiontest/\nDisallow: /analytics/feeds/\nDisallow: /analytics/partners/comments/\nDisallow: /analytics/portal/\nDisallow: /analytics/uploads/\nAllow: /alerts/manage\nAllow: /alerts/remove\nDisallow: /alerts/\nAllow: /alerts/$\nDisallow: /phone/compare/?\nDisallow: /travel/clk\nDisallow: /travel/entity\nDisallow: /travel/search\nDisallow: /travel/flights/booking\nDisallow: /travel/flights/s/\nDisallow: /travel/flights/search\nDisallow: /travel/hotels/entity\nDisallow: /travel/hotels/*/entity\nDisallow: /travel/hotels/stories\nDisallow: /travel/hotels/*/stories\nDisallow: /travel/story\nDisallow: /hotelfinder/rpc\nDisallow: /hotels/rpc\nDisallow: /evaluation/\nDisallow: /forms/perks/\nDisallow: /shopping/suppliers/search\nDisallow: /edu/cs4hs/\nDisallow: /trustedstores/s/\nDisallow: /trustedstores/tm2\nDisallow: /trustedstores/verify\nDisallow: /shopping?\nDisallow: /shopping/product/\nDisallow: /shopping/seller\nDisallow: /shopping/ratings/account/metrics\nDisallow: /shopping/ratings/merchant/immersivedetails\nDisallow: /shopping/reviewer\nDisallow: /shopping/search\nDisallow: /shopping/deals\nAllow: /shopping?udm=28$\nDisallow: /storefront\nDisallow: /storepicker\nDisallow: /about/careers/applications/candidate-prep\nDisallow: /about/careers/applications/connect-with-a-googler\nDisallow: /about/careers/applications/jobs/results?page=\nDisallow: /about/careers/applications/jobs/results/?page=\nDisallow: /about/careers/applications/jobs/results?*&page=\nDisallow: /about/careers/applications/jobs/results/?*&page=\nDisallow: /landing/signout.html\nDisallow: /gallery/\nDisallow: /landing/now/ontap/\nAllow: /maps/reserve\nAllow: /maps/reserve/partners\nDisallow: /maps/reserve/api/\nDisallow: /maps/reserve/search\nDisallow: /maps/reserve/bookings\nDisallow: /maps/reserve/settings\nDisallow: /maps/reserve/manage\nDisallow: /maps/reserve/payment\nDisallow: /maps/reserve/receipt\nDisallow: /maps/reserve/sellersignup\nDisallow: /maps/reserve/feedback\nDisallow: /maps/reserve/terms\nDisallow: /maps/reserve/m/\nDisallow: /maps/reserve/b/\nDisallow: /maps/reserve/partner-dashboard\nDisallow: /local/cars\nDisallow: /local/dealership/\nDisallow: /local/dining/\nDisallow: /local/place/products/\nDisallow: /local/place/reviews/\nDisallow: /local/place/rap/\nDisallow: /local/tab/\nDisallow: /localservices/\nDisallow: /nonprofits/account/\nDisallow: /uviewer\nDisallow: /landing/cmsnext-root/\n\n# AdsBot\nUser-agent: AdsBot-Google\nDisallow: /maps/api/js/\nAllow: /maps/api/js\nDisallow: /maps/api/place/js/\nDisallow: /maps/api/staticmap\nDisallow: /maps/api/streetview\n\n# New user agent groups must also have a user agent reference in the global (*)\n# group. See \"Order of precedence\" section in\n# https://goo.gle/rep#order-of-precedence-for-user-agents\nUser-agent: Yandex\nDisallow: /about/careers/applications/jobs/results\nDisallow: /about/careers/applications-a/jobs/results\n\n# Crawlers of certain social media sites are allowed to access page markup when\n# google.com/imgres* links are shared. To learn more, please contact\n# images-robots-allowlist@google.com.\nUser-agent: facebookexternalhit\nUser-agent: Twitterbot\nAllow: /imgres\nAllow: /search\nDisallow: /groups\nDisallow: /hosted/images/\nDisallow: /m/\n\nSitemap: https://www.google.com/sitemap.xml\n", "parsed_data": {"total_rules": 249, "user_agents": ["*", "AdsBot-Google", "Yandex", "Twitterbot", "facebookexternalhit"], "disallow_count": 175, "allow_count": 67, "sitemaps": ["https://www.google.com/sitemap.xml"], "rules": [{"line": 1, "directive": "user-agent", "value": "*", "raw": "User-agent: *", "user_agent": "*"}, {"line": 2, "directive": "user-agent", "value": "Yandex", "raw": "User-agent: Yandex", "user_agent": "Yandex"}, {"line": 3, "directive": "disallow", "value": "/search", "raw": "Disallow: /search", "user_agent": "Yandex", "path": "/search"}, {"line": 4, "directive": "allow", "value": "/search/about", "raw": "Allow: /search/about", "user_agent": "Yandex", "path": "/search/about"}, {"line": 5, "directive": "allow", "value": "/search/howsearchworks", "raw": "Allow: /search/howsearchworks", "user_agent": "Yandex", "path": "/search/howsearchworks"}, {"line": 6, "directive": "disallow", "value": "/sdch", "raw": "Disallow: /sdch", "user_agent": "Yandex", "path": "/sdch"}, {"line": 7, "directive": "disallow", "value": "/groups", "raw": "Disallow: /groups", "user_agent": "Yandex", "path": "/groups"}, {"line": 8, "directive": "disallow", "value": "/index.html?", "raw": "Disallow: /index.html?", "user_agent": "Yandex", "path": "/index.html?"}, {"line": 9, "directive": "disallow", "value": "/?", "raw": "Disallow: /?", "user_agent": "Yandex", "path": "/?"}, {"line": 10, "directive": "allow", "value": "/?hl=", "raw": "Allow: /?hl=", "user_agent": "Yandex", "path": "/?hl="}, {"line": 11, "directive": "disallow", "value": "/?hl=*&", "raw": "Disallow: /?hl=*&", "user_agent": "Yandex", "path": "/?hl=*&"}, {"line": 12, "directive": "allow", "value": "/?hl=*&gws_rd=ssl$", "raw": "Allow: /?hl=*&gws_rd=ssl$", "user_agent": "Yandex", "path": "/?hl=*&gws_rd=ssl$"}, {"line": 13, "directive": "disallow", "value": "/?hl=*&*&gws_rd=ssl", "raw": "Disallow: /?hl=*&*&gws_rd=ssl", "user_agent": "Yandex", "path": "/?hl=*&*&gws_rd=ssl"}, {"line": 14, "directive": "allow", "value": "/?gws_rd=ssl$", "raw": "Allow: /?gws_rd=ssl$", "user_agent": "Yandex", "path": "/?gws_rd=ssl$"}, {"line": 15, "directive": "allow", "value": "/?pt1=true$", "raw": "Allow: /?pt1=true$", "user_agent": "Yandex", "path": "/?pt1=true$"}, {"line": 16, "directive": "disallow", "value": "/imgres", "raw": "Disallow: /imgres", "user_agent": "Yandex", "path": "/imgres"}, {"line": 17, "directive": "disallow", "value": "/u/", "raw": "Disallow: /u/", "user_agent": "Yandex", "path": "/u/"}, {"line": 18, "directive": "disallow", "value": "/setprefs", "raw": "Disallow: /setprefs", "user_agent": "Yandex", "path": "/setprefs"}, {"line": 19, "directive": "disallow", "value": "/m?", "raw": "Disallow: /m?", "user_agent": "Yandex", "path": "/m?"}, {"line": 20, "directive": "disallow", "value": "/m/", "raw": "Disallow: /m/", "user_agent": "Yandex", "path": "/m/"}, {"line": 21, "directive": "allow", "value": "/m/finance", "raw": "Allow:    /m/finance", "user_agent": "Yandex", "path": "/m/finance"}, {"line": 22, "directive": "disallow", "value": "/wml?", "raw": "Disallow: /wml?", "user_agent": "Yandex", "path": "/wml?"}, {"line": 23, "directive": "disallow", "value": "/wml/?", "raw": "Disallow: /wml/?", "user_agent": "Yandex", "path": "/wml/?"}, {"line": 24, "directive": "disallow", "value": "/wml/search?", "raw": "Disallow: /wml/search?", "user_agent": "Yandex", "path": "/wml/search?"}, {"line": 25, "directive": "disallow", "value": "/xhtml?", "raw": "Disallow: /xhtml?", "user_agent": "Yandex", "path": "/xhtml?"}, {"line": 26, "directive": "disallow", "value": "/xhtml/?", "raw": "Disallow: /xhtml/?", "user_agent": "Yandex", "path": "/xhtml/?"}, {"line": 27, "directive": "disallow", "value": "/xhtml/search?", "raw": "Disallow: /xhtml/search?", "user_agent": "Yandex", "path": "/xhtml/search?"}, {"line": 28, "directive": "disallow", "value": "/xml?", "raw": "Disallow: /xml?", "user_agent": "Yandex", "path": "/xml?"}, {"line": 29, "directive": "disallow", "value": "/imode?", "raw": "Disallow: /imode?", "user_agent": "Yandex", "path": "/imode?"}, {"line": 30, "directive": "disallow", "value": "/imode/?", "raw": "Disallow: /imode/?", "user_agent": "Yandex", "path": "/imode/?"}, {"line": 31, "directive": "disallow", "value": "/imode/search?", "raw": "Disallow: /imode/search?", "user_agent": "Yandex", "path": "/imode/search?"}, {"line": 32, "directive": "disallow", "value": "/jsky?", "raw": "Disallow: /jsky?", "user_agent": "Yandex", "path": "/jsky?"}, {"line": 33, "directive": "disallow", "value": "/jsky/?", "raw": "Disallow: /jsky/?", "user_agent": "Yandex", "path": "/jsky/?"}, {"line": 34, "directive": "disallow", "value": "/jsky/search?", "raw": "Disallow: /jsky/search?", "user_agent": "Yandex", "path": "/jsky/search?"}, {"line": 35, "directive": "disallow", "value": "/pda?", "raw": "Disallow: /pda?", "user_agent": "Yandex", "path": "/pda?"}, {"line": 36, "directive": "disallow", "value": "/pda/?", "raw": "Disallow: /pda/?", "user_agent": "Yandex", "path": "/pda/?"}, {"line": 37, "directive": "disallow", "value": "/pda/search?", "raw": "Disallow: /pda/search?", "user_agent": "Yandex", "path": "/pda/search?"}, {"line": 38, "directive": "disallow", "value": "/local?", "raw": "Disallow: /local?", "user_agent": "Yandex", "path": "/local?"}, {"line": 39, "directive": "disallow", "value": "/local_url", "raw": "Disallow: /local_url", "user_agent": "Yandex", "path": "/local_url"}, {"line": 40, "directive": "disallow", "value": "/products?", "raw": "Disallow: /products?", "user_agent": "Yandex", "path": "/products?"}, {"line": 41, "directive": "disallow", "value": "/product_", "raw": "Disallow: /product_", "user_agent": "Yandex", "path": "/product_"}, {"line": 42, "directive": "disallow", "value": "/products_", "raw": "Disallow: /products_", "user_agent": "Yandex", "path": "/products_"}, {"line": 43, "directive": "disallow", "value": "/products;", "raw": "Disallow: /products;", "user_agent": "Yandex", "path": "/products;"}, {"line": 44, "directive": "disallow", "value": "/print", "raw": "Disallow: /print", "user_agent": "Yandex", "path": "/print"}, {"line": 45, "directive": "disallow", "value": "/books/", "raw": "Disallow: /books/", "user_agent": "Yandex", "path": "/books/"}, {"line": 46, "directive": "disallow", "value": "/bkshp?*q=", "raw": "Disallow: /bkshp?*q=", "user_agent": "Yandex", "path": "/bkshp?*q="}, {"line": 47, "directive": "disallow", "value": "/books?*q=", "raw": "Disallow: /books?*q=", "user_agent": "Yandex", "path": "/books?*q="}, {"line": 48, "directive": "disallow", "value": "/books?*output=", "raw": "Disallow: /books?*output=", "user_agent": "Yandex", "path": "/books?*output="}, {"line": 49, "directive": "disallow", "value": "/books?*pg=", "raw": "Disallow: /books?*pg=", "user_agent": "Yandex", "path": "/books?*pg="}, {"line": 50, "directive": "disallow", "value": "/books?*jtp=", "raw": "Disallow: /books?*jtp=", "user_agent": "Yandex", "path": "/books?*jtp="}, {"line": 51, "directive": "disallow", "value": "/books?*jscmd=", "raw": "Disallow: /books?*jscmd=", "user_agent": "Yandex", "path": "/books?*jscmd="}, {"line": 52, "directive": "disallow", "value": "/books?*buy=", "raw": "Disallow: /books?*buy=", "user_agent": "Yandex", "path": "/books?*buy="}, {"line": 53, "directive": "disallow", "value": "/books?*zoom=", "raw": "Disallow: /books?*zoom=", "user_agent": "Yandex", "path": "/books?*zoom="}, {"line": 54, "directive": "allow", "value": "/books?*q=related:", "raw": "Allow: /books?*q=related:", "user_agent": "Yandex", "path": "/books?*q=related:"}, {"line": 55, "directive": "allow", "value": "/books?*q=editions:", "raw": "Allow: /books?*q=editions:", "user_agent": "Yandex", "path": "/books?*q=editions:"}, {"line": 56, "directive": "allow", "value": "/books?*q=subject:", "raw": "Allow: /books?*q=subject:", "user_agent": "Yandex", "path": "/books?*q=subject:"}, {"line": 57, "directive": "allow", "value": "/books/about", "raw": "Allow: /books/about", "user_agent": "Yandex", "path": "/books/about"}, {"line": 58, "directive": "allow", "value": "/books?*zoom=1", "raw": "Allow: /books?*zoom=1", "user_agent": "Yandex", "path": "/books?*zoom=1"}, {"line": 59, "directive": "allow", "value": "/books?*zoom=5", "raw": "Allow: /books?*zoom=5", "user_agent": "Yandex", "path": "/books?*zoom=5"}, {"line": 60, "directive": "allow", "value": "/books/content?*zoom=1", "raw": "Allow: /books/content?*zoom=1", "user_agent": "Yandex", "path": "/books/content?*zoom=1"}, {"line": 61, "directive": "allow", "value": "/books/content?*zoom=5", "raw": "Allow: /books/content?*zoom=5", "user_agent": "Yandex", "path": "/books/content?*zoom=5"}, {"line": 62, "directive": "disallow", "value": "/patents?", "raw": "Disallow: /patents?", "user_agent": "Yandex", "path": "/patents?"}, {"line": 63, "directive": "disallow", "value": "/patents/download/", "raw": "Disallow: /patents/download/", "user_agent": "Yandex", "path": "/patents/download/"}, {"line": 64, "directive": "disallow", "value": "/patents/pdf/", "raw": "Disallow: /patents/pdf/", "user_agent": "Yandex", "path": "/patents/pdf/"}, {"line": 65, "directive": "disallow", "value": "/patents/related/", "raw": "Disallow: /patents/related/", "user_agent": "Yandex", "path": "/patents/related/"}, {"line": 66, "directive": "disallow", "value": "/scholar", "raw": "Disallow: /scholar", "user_agent": "Yandex", "path": "/scholar"}, {"line": 67, "directive": "disallow", "value": "/citations?", "raw": "Disallow: /citations?", "user_agent": "Yandex", "path": "/citations?"}, {"line": 68, "directive": "allow", "value": "/citations?user=", "raw": "Allow: /citations?user=", "user_agent": "Yandex", "path": "/citations?user="}, {"line": 69, "directive": "allow", "value": "/citations?view_op=new_profile", "raw": "Allow: /citations?view_op=new_profile", "user_agent": "Yandex", "path": "/citations?view_op=new_profile"}, {"line": 70, "directive": "allow", "value": "/citations?view_op=top_venues", "raw": "Allow: /citations?view_op=top_venues", "user_agent": "Yandex", "path": "/citations?view_op=top_venues"}, {"line": 71, "directive": "allow", "value": "/scholar_share", "raw": "Allow: /scholar_share", "user_agent": "Yandex", "path": "/scholar_share"}, {"line": 72, "directive": "disallow", "value": "/s?", "raw": "Disallow: /s?", "user_agent": "Yandex", "path": "/s?"}, {"line": 73, "directive": "disallow", "value": "/maps?", "raw": "Disallow: /maps?", "user_agent": "Yandex", "path": "/maps?"}, {"line": 74, "directive": "allow", "value": "/maps?daddr=", "raw": "Allow: /maps?daddr=", "user_agent": "Yandex", "path": "/maps?daddr="}, {"line": 75, "directive": "allow", "value": "/maps?entry=wc", "raw": "Allow: /maps?entry=wc", "user_agent": "Yandex", "path": "/maps?entry=wc"}, {"line": 76, "directive": "allow", "value": "/maps?f=", "raw": "Allow: /maps?f=", "user_agent": "Yandex", "path": "/maps?f="}, {"line": 77, "directive": "allow", "value": "/maps?hl=", "raw": "Allow: /maps?hl=", "user_agent": "Yandex", "path": "/maps?hl="}, {"line": 78, "directive": "allow", "value": "/maps?q=", "raw": "Allow: /maps?q=", "user_agent": "Yandex", "path": "/maps?q="}, {"line": 79, "directive": "allow", "value": "/maps?saddr=", "raw": "Allow: /maps?saddr=", "user_agent": "Yandex", "path": "/maps?saddr="}, {"line": 80, "directive": "allow", "value": "/maps?sid=", "raw": "Allow: /maps?sid=", "user_agent": "Yandex", "path": "/maps?sid="}, {"line": 81, "directive": "allow", "value": "/maps?*output=classic", "raw": "Allow: /maps?*output=classic", "user_agent": "Yandex", "path": "/maps?*output=classic"}, {"line": 82, "directive": "allow", "value": "/maps?*file=", "raw": "Allow: /maps?*file=", "user_agent": "Yandex", "path": "/maps?*file="}, {"line": 83, "directive": "disallow", "value": "/mapslt?", "raw": "Disallow: /mapslt?", "user_agent": "Yandex", "path": "/mapslt?"}, {"line": 84, "directive": "disallow", "value": "/maphp?", "raw": "Disallow: /maphp?", "user_agent": "Yandex", "path": "/maphp?"}, {"line": 85, "directive": "disallow", "value": "/maps/", "raw": "Disallow: /maps/", "user_agent": "Yandex", "path": "/maps/"}, {"line": 86, "directive": "allow", "value": "/maps/$", "raw": "Allow: /maps/$", "user_agent": "Yandex", "path": "/maps/$"}, {"line": 87, "directive": "allow", "value": "/maps/@", "raw": "Allow: /maps/@", "user_agent": "Yandex", "path": "/maps/@"}, {"line": 88, "directive": "allow", "value": "/maps/?daddr=", "raw": "Allow: /maps/?daddr=", "user_agent": "Yandex", "path": "/maps/?daddr="}, {"line": 89, "directive": "allow", "value": "/maps/?entry=wc", "raw": "Allow: /maps/?entry=wc", "user_agent": "Yandex", "path": "/maps/?entry=wc"}, {"line": 90, "directive": "allow", "value": "/maps/?f=", "raw": "Allow: /maps/?f=", "user_agent": "Yandex", "path": "/maps/?f="}, {"line": 91, "directive": "allow", "value": "/maps/?hl=", "raw": "Allow: /maps/?hl=", "user_agent": "Yandex", "path": "/maps/?hl="}, {"line": 92, "directive": "allow", "value": "/maps/?q=", "raw": "Allow: /maps/?q=", "user_agent": "Yandex", "path": "/maps/?q="}, {"line": 93, "directive": "allow", "value": "/maps/?saddr=", "raw": "Allow: /maps/?saddr=", "user_agent": "Yandex", "path": "/maps/?saddr="}, {"line": 94, "directive": "allow", "value": "/maps/?sid=", "raw": "Allow: /maps/?sid=", "user_agent": "Yandex", "path": "/maps/?sid="}, {"line": 95, "directive": "allow", "value": "/maps/search/", "raw": "Allow: /maps/search/", "user_agent": "Yandex", "path": "/maps/search/"}, {"line": 96, "directive": "allow", "value": "/maps/sitemap.xml", "raw": "Allow: /maps/sitemap.xml", "user_agent": "Yandex", "path": "/maps/sitemap.xml"}, {"line": 97, "directive": "allow", "value": "/maps/sitemaps/", "raw": "Allow: /maps/sitemaps/", "user_agent": "Yandex", "path": "/maps/sitemaps/"}, {"line": 98, "directive": "allow", "value": "/maps/dir/", "raw": "Allow: /maps/dir/", "user_agent": "Yandex", "path": "/maps/dir/"}, {"line": 99, "directive": "allow", "value": "/maps/d/", "raw": "Allow: /maps/d/", "user_agent": "Yandex", "path": "/maps/d/"}, {"line": 100, "directive": "allow", "value": "/maps/reserve", "raw": "Allow: /maps/reserve", "user_agent": "Yandex", "path": "/maps/reserve"}, {"line": 101, "directive": "allow", "value": "/maps/about", "raw": "Allow: /maps/about", "user_agent": "Yandex", "path": "/maps/about"}, {"line": 102, "directive": "allow", "value": "/maps/contrib/", "raw": "Allow: /maps/contrib/", "user_agent": "Yandex", "path": "/maps/contrib/"}, {"line": 103, "directive": "allow", "value": "/maps/match", "raw": "Allow: /maps/match", "user_agent": "Yandex", "path": "/maps/match"}, {"line": 104, "directive": "allow", "value": "/maps/place/", "raw": "Allow: /maps/place/", "user_agent": "Yandex", "path": "/maps/place/"}, {"line": 105, "directive": "allow", "value": "/maps/_/", "raw": "Allow: /maps/_/", "user_agent": "Yandex", "path": "/maps/_/"}, {"line": 106, "directive": "allow", "value": "/search?*tbm=map", "raw": "Allow: /search?*tbm=map", "user_agent": "Yandex", "path": "/search?*tbm=map"}, {"line": 107, "directive": "allow", "value": "/maps/vt?", "raw": "Allow: /maps/vt?", "user_agent": "Yandex", "path": "/maps/vt?"}, {"line": 108, "directive": "allow", "value": "/maps/preview", "raw": "Allow: /maps/preview", "user_agent": "Yandex", "path": "/maps/preview"}, {"line": 109, "directive": "disallow", "value": "/maps/api/js/", "raw": "Disallow: /maps/api/js/", "user_agent": "Yandex", "path": "/maps/api/js/"}, {"line": 110, "directive": "allow", "value": "/maps/api/js", "raw": "Allow: /maps/api/js", "user_agent": "Yandex", "path": "/maps/api/js"}, {"line": 111, "directive": "disallow", "value": "/mld?", "raw": "Disallow: /mld?", "user_agent": "Yandex", "path": "/mld?"}, {"line": 112, "directive": "disallow", "value": "/staticmap?", "raw": "Disallow: /staticmap?", "user_agent": "Yandex", "path": "/staticmap?"}, {"line": 113, "directive": "disallow", "value": "/help/maps/streetview/partners/welcome/", "raw": "Disallow: /help/maps/streetview/partners/welcome/", "user_agent": "Yandex", "path": "/help/maps/streetview/partners/welcome/"}, {"line": 114, "directive": "disallow", "value": "/help/maps/indoormaps/partners/", "raw": "Disallow: /help/maps/indoormaps/partners/", "user_agent": "Yandex", "path": "/help/maps/indoormaps/partners/"}, {"line": 115, "directive": "disallow", "value": "/lochp?", "raw": "Disallow: /lochp?", "user_agent": "Yandex", "path": "/lochp?"}, {"line": 116, "directive": "disallow", "value": "/ie?", "raw": "Disallow: /ie?", "user_agent": "Yandex", "path": "/ie?"}, {"line": 117, "directive": "disallow", "value": "/uds/", "raw": "Disallow: /uds/", "user_agent": "Yandex", "path": "/uds/"}, {"line": 118, "directive": "disallow", "value": "/transit?", "raw": "Disallow: /transit?", "user_agent": "Yandex", "path": "/transit?"}, {"line": 119, "directive": "disallow", "value": "/trends?", "raw": "Disallow: /trends?", "user_agent": "Yandex", "path": "/trends?"}, {"line": 120, "directive": "disallow", "value": "/trends/music?", "raw": "Disallow: /trends/music?", "user_agent": "Yandex", "path": "/trends/music?"}, {"line": 121, "directive": "disallow", "value": "/trends/hottrends?", "raw": "Disallow: /trends/hottrends?", "user_agent": "Yandex", "path": "/trends/hottrends?"}, {"line": 122, "directive": "disallow", "value": "/trends/viz?", "raw": "Disallow: /trends/viz?", "user_agent": "Yandex", "path": "/trends/viz?"}, {"line": 123, "directive": "disallow", "value": "/trends/embed.js?", "raw": "Disallow: /trends/embed.js?", "user_agent": "Yandex", "path": "/trends/embed.js?"}, {"line": 124, "directive": "disallow", "value": "/trends/fetchComponent?", "raw": "Disallow: /trends/fetchComponent?", "user_agent": "Yandex", "path": "/trends/fetchComponent?"}, {"line": 125, "directive": "disallow", "value": "/trends/beta", "raw": "Disallow: /trends/beta", "user_agent": "Yandex", "path": "/trends/beta"}, {"line": 126, "directive": "disallow", "value": "/trends/topics", "raw": "Disallow: /trends/topics", "user_agent": "Yandex", "path": "/trends/topics"}, {"line": 127, "directive": "disallow", "value": "/trends/explore?", "raw": "Disallow: /trends/explore?", "user_agent": "Yandex", "path": "/trends/explore?"}, {"line": 128, "directive": "disallow", "value": "/trends/api", "raw": "Disallow: /trends/api", "user_agent": "Yandex", "path": "/trends/api"}, {"line": 129, "directive": "disallow", "value": "/musica", "raw": "Disallow: /musica", "user_agent": "Yandex", "path": "/musica"}, {"line": 130, "directive": "disallow", "value": "/musicl", "raw": "Disallow: /musicl", "user_agent": "Yandex", "path": "/musicl"}, {"line": 131, "directive": "disallow", "value": "/musics", "raw": "Disallow: /musics", "user_agent": "Yandex", "path": "/musics"}, {"line": 132, "directive": "disallow", "value": "/urchin_test/", "raw": "Disallow: /urchin_test/", "user_agent": "Yandex", "path": "/urchin_test/"}, {"line": 133, "directive": "disallow", "value": "/movies?", "raw": "Disallow: /movies?", "user_agent": "Yandex", "path": "/movies?"}, {"line": 134, "directive": "disallow", "value": "/wapsearch?", "raw": "Disallow: /wapsearch?", "user_agent": "Yandex", "path": "/wapsearch?"}, {"line": 135, "directive": "disallow", "value": "/reviews/search?", "raw": "Disallow: /reviews/search?", "user_agent": "Yandex", "path": "/reviews/search?"}, {"line": 136, "directive": "disallow", "value": "/cbk", "raw": "Disallow: /cbk", "user_agent": "Yandex", "path": "/cbk"}, {"line": 137, "directive": "disallow", "value": "/profiles/me", "raw": "Disallow: /profiles/me", "user_agent": "Yandex", "path": "/profiles/me"}, {"line": 138, "directive": "disallow", "value": "/s2/profiles/me", "raw": "Disallow: /s2/profiles/me", "user_agent": "Yandex", "path": "/s2/profiles/me"}, {"line": 139, "directive": "allow", "value": "/s2/profiles", "raw": "Allow: /s2/profiles", "user_agent": "Yandex", "path": "/s2/profiles"}, {"line": 140, "directive": "allow", "value": "/s2/oz", "raw": "Allow: /s2/oz", "user_agent": "Yandex", "path": "/s2/oz"}, {"line": 141, "directive": "allow", "value": "/s2/photos", "raw": "Allow: /s2/photos", "user_agent": "Yandex", "path": "/s2/photos"}, {"line": 142, "directive": "allow", "value": "/s2/search/social", "raw": "Allow: /s2/search/social", "user_agent": "Yandex", "path": "/s2/search/social"}, {"line": 143, "directive": "allow", "value": "/s2/static", "raw": "Allow: /s2/static", "user_agent": "Yandex", "path": "/s2/static"}, {"line": 144, "directive": "disallow", "value": "/s2", "raw": "Disallow: /s2", "user_agent": "Yandex", "path": "/s2"}, {"line": 145, "directive": "disallow", "value": "/transconsole/portal/", "raw": "Disallow: /transconsole/portal/", "user_agent": "Yandex", "path": "/transconsole/portal/"}, {"line": 146, "directive": "disallow", "value": "/aclk", "raw": "Disallow: /aclk", "user_agent": "Yandex", "path": "/aclk"}, {"line": 147, "directive": "disallow", "value": "/tbproxy/", "raw": "Disallow: /tbproxy/", "user_agent": "Yandex", "path": "/tbproxy/"}, {"line": 148, "directive": "disallow", "value": "/support/forum/search?", "raw": "Disallow: /support/forum/search?", "user_agent": "Yandex", "path": "/support/forum/search?"}, {"line": 149, "directive": "disallow", "value": "/reviews/polls/", "raw": "Disallow: /reviews/polls/", "user_agent": "Yandex", "path": "/reviews/polls/"}, {"line": 150, "directive": "disallow", "value": "/hosted/images/", "raw": "Disallow: /hosted/images/", "user_agent": "Yandex", "path": "/hosted/images/"}, {"line": 151, "directive": "disallow", "value": "/accounts/ClientLogin", "raw": "Disallow: /accounts/ClientLogin", "user_agent": "Yandex", "path": "/accounts/ClientLogin"}, {"line": 152, "directive": "disallow", "value": "/accounts/ClientAuth", "raw": "Disallow: /accounts/ClientAuth", "user_agent": "Yandex", "path": "/accounts/ClientAuth"}, {"line": 153, "directive": "disallow", "value": "/accounts/o8", "raw": "Disallow: /accounts/o8", "user_agent": "Yandex", "path": "/accounts/o8"}, {"line": 154, "directive": "allow", "value": "/accounts/o8/id", "raw": "Allow: /accounts/o8/id", "user_agent": "Yandex", "path": "/accounts/o8/id"}, {"line": 155, "directive": "disallow", "value": "/quality_form?", "raw": "Disallow: /quality_form?", "user_agent": "Yandex", "path": "/quality_form?"}, {"line": 156, "directive": "disallow", "value": "/labs/popgadget/search", "raw": "Disallow: /labs/popgadget/search", "user_agent": "Yandex", "path": "/labs/popgadget/search"}, {"line": 157, "directive": "disallow", "value": "/compressiontest/", "raw": "Disallow: /compressiontest/", "user_agent": "Yandex", "path": "/compressiontest/"}, {"line": 158, "directive": "disallow", "value": "/analytics/feeds/", "raw": "Disallow: /analytics/feeds/", "user_agent": "Yandex", "path": "/analytics/feeds/"}, {"line": 159, "directive": "disallow", "value": "/analytics/partners/comments/", "raw": "Disallow: /analytics/partners/comments/", "user_agent": "Yandex", "path": "/analytics/partners/comments/"}, {"line": 160, "directive": "disallow", "value": "/analytics/portal/", "raw": "Disallow: /analytics/portal/", "user_agent": "Yandex", "path": "/analytics/portal/"}, {"line": 161, "directive": "disallow", "value": "/analytics/uploads/", "raw": "Disallow: /analytics/uploads/", "user_agent": "Yandex", "path": "/analytics/uploads/"}, {"line": 162, "directive": "allow", "value": "/alerts/manage", "raw": "Allow: /alerts/manage", "user_agent": "Yandex", "path": "/alerts/manage"}, {"line": 163, "directive": "allow", "value": "/alerts/remove", "raw": "Allow: /alerts/remove", "user_agent": "Yandex", "path": "/alerts/remove"}, {"line": 164, "directive": "disallow", "value": "/alerts/", "raw": "Disallow: /alerts/", "user_agent": "Yandex", "path": "/alerts/"}, {"line": 165, "directive": "allow", "value": "/alerts/$", "raw": "Allow: /alerts/$", "user_agent": "Yandex", "path": "/alerts/$"}, {"line": 166, "directive": "disallow", "value": "/phone/compare/?", "raw": "Disallow: /phone/compare/?", "user_agent": "Yandex", "path": "/phone/compare/?"}, {"line": 167, "directive": "disallow", "value": "/travel/clk", "raw": "Disallow: /travel/clk", "user_agent": "Yandex", "path": "/travel/clk"}, {"line": 168, "directive": "disallow", "value": "/travel/entity", "raw": "Disallow: /travel/entity", "user_agent": "Yandex", "path": "/travel/entity"}, {"line": 169, "directive": "disallow", "value": "/travel/search", "raw": "Disallow: /travel/search", "user_agent": "Yandex", "path": "/travel/search"}, {"line": 170, "directive": "disallow", "value": "/travel/flights/booking", "raw": "Disallow: /travel/flights/booking", "user_agent": "Yandex", "path": "/travel/flights/booking"}, {"line": 171, "directive": "disallow", "value": "/travel/flights/s/", "raw": "Disallow: /travel/flights/s/", "user_agent": "Yandex", "path": "/travel/flights/s/"}, {"line": 172, "directive": "disallow", "value": "/travel/flights/search", "raw": "Disallow: /travel/flights/search", "user_agent": "Yandex", "path": "/travel/flights/search"}, {"line": 173, "directive": "disallow", "value": "/travel/hotels/entity", "raw": "Disallow: /travel/hotels/entity", "user_agent": "Yandex", "path": "/travel/hotels/entity"}, {"line": 174, "directive": "disallow", "value": "/travel/hotels/*/entity", "raw": "Disallow: /travel/hotels/*/entity", "user_agent": "Yandex", "path": "/travel/hotels/*/entity"}, {"line": 175, "directive": "disallow", "value": "/travel/hotels/stories", "raw": "Disallow: /travel/hotels/stories", "user_agent": "Yandex", "path": "/travel/hotels/stories"}, {"line": 176, "directive": "disallow", "value": "/travel/hotels/*/stories", "raw": "Disallow: /travel/hotels/*/stories", "user_agent": "Yandex", "path": "/travel/hotels/*/stories"}, {"line": 177, "directive": "disallow", "value": "/travel/story", "raw": "Disallow: /travel/story", "user_agent": "Yandex", "path": "/travel/story"}, {"line": 178, "directive": "disallow", "value": "/hotelfinder/rpc", "raw": "Disallow: /hotelfinder/rpc", "user_agent": "Yandex", "path": "/hotelfinder/rpc"}, {"line": 179, "directive": "disallow", "value": "/hotels/rpc", "raw": "Disallow: /hotels/rpc", "user_agent": "Yandex", "path": "/hotels/rpc"}, {"line": 180, "directive": "disallow", "value": "/evaluation/", "raw": "Disallow: /evaluation/", "user_agent": "Yandex", "path": "/evaluation/"}, {"line": 181, "directive": "disallow", "value": "/forms/perks/", "raw": "Disallow: /forms/perks/", "user_agent": "Yandex", "path": "/forms/perks/"}, {"line": 182, "directive": "disallow", "value": "/shopping/suppliers/search", "raw": "Disallow: /shopping/suppliers/search", "user_agent": "Yandex", "path": "/shopping/suppliers/search"}, {"line": 183, "directive": "disallow", "value": "/edu/cs4hs/", "raw": "Disallow: /edu/cs4hs/", "user_agent": "Yandex", "path": "/edu/cs4hs/"}, {"line": 184, "directive": "disallow", "value": "/trustedstores/s/", "raw": "Disallow: /trustedstores/s/", "user_agent": "Yandex", "path": "/trustedstores/s/"}, {"line": 185, "directive": "disallow", "value": "/trustedstores/tm2", "raw": "Disallow: /trustedstores/tm2", "user_agent": "Yandex", "path": "/trustedstores/tm2"}, {"line": 186, "directive": "disallow", "value": "/trustedstores/verify", "raw": "Disallow: /trustedstores/verify", "user_agent": "Yandex", "path": "/trustedstores/verify"}, {"line": 187, "directive": "disallow", "value": "/shopping?", "raw": "Disallow: /shopping?", "user_agent": "Yandex", "path": "/shopping?"}, {"line": 188, "directive": "disallow", "value": "/shopping/product/", "raw": "Disallow: /shopping/product/", "user_agent": "Yandex", "path": "/shopping/product/"}, {"line": 189, "directive": "disallow", "value": "/shopping/seller", "raw": "Disallow: /shopping/seller", "user_agent": "Yandex", "path": "/shopping/seller"}, {"line": 190, "directive": "disallow", "value": "/shopping/ratings/account/metrics", "raw": "Disallow: /shopping/ratings/account/metrics", "user_agent": "Yandex", "path": "/shopping/ratings/account/metrics"}, {"line": 191, "directive": "disallow", "value": "/shopping/ratings/merchant/immersivedetails", "raw": "Disallow: /shopping/ratings/merchant/immersivedetails", "user_agent": "Yandex", "path": "/shopping/ratings/merchant/immersivedetails"}, {"line": 192, "directive": "disallow", "value": "/shopping/reviewer", "raw": "Disallow: /shopping/reviewer", "user_agent": "Yandex", "path": "/shopping/reviewer"}, {"line": 193, "directive": "disallow", "value": "/shopping/search", "raw": "Disallow: /shopping/search", "user_agent": "Yandex", "path": "/shopping/search"}, {"line": 194, "directive": "disallow", "value": "/shopping/deals", "raw": "Disallow: /shopping/deals", "user_agent": "Yandex", "path": "/shopping/deals"}, {"line": 195, "directive": "allow", "value": "/shopping?udm=28$", "raw": "Allow: /shopping?udm=28$", "user_agent": "Yandex", "path": "/shopping?udm=28$"}, {"line": 196, "directive": "disallow", "value": "/storefront", "raw": "Disallow: /storefront", "user_agent": "Yandex", "path": "/storefront"}, {"line": 197, "directive": "disallow", "value": "/storepicker", "raw": "Disallow: /storepicker", "user_agent": "Yandex", "path": "/storepicker"}, {"line": 198, "directive": "disallow", "value": "/about/careers/applications/candidate-prep", "raw": "Disallow: /about/careers/applications/candidate-prep", "user_agent": "Yandex", "path": "/about/careers/applications/candidate-prep"}, {"line": 199, "directive": "disallow", "value": "/about/careers/applications/connect-with-a-googler", "raw": "Disallow: /about/careers/applications/connect-with-a-googler", "user_agent": "Yandex", "path": "/about/careers/applications/connect-with-a-googler"}, {"line": 200, "directive": "disallow", "value": "/about/careers/applications/jobs/results?page=", "raw": "Disallow: /about/careers/applications/jobs/results?page=", "user_agent": "Yandex", "path": "/about/careers/applications/jobs/results?page="}, {"line": 201, "directive": "disallow", "value": "/about/careers/applications/jobs/results/?page=", "raw": "Disallow: /about/careers/applications/jobs/results/?page=", "user_agent": "Yandex", "path": "/about/careers/applications/jobs/results/?page="}, {"line": 202, "directive": "disallow", "value": "/about/careers/applications/jobs/results?*&page=", "raw": "Disallow: /about/careers/applications/jobs/results?*&page=", "user_agent": "Yandex", "path": "/about/careers/applications/jobs/results?*&page="}, {"line": 203, "directive": "disallow", "value": "/about/careers/applications/jobs/results/?*&page=", "raw": "Disallow: /about/careers/applications/jobs/results/?*&page=", "user_agent": "Yandex", "path": "/about/careers/applications/jobs/results/?*&page="}, {"line": 204, "directive": "disallow", "value": "/landing/signout.html", "raw": "Disallow: /landing/signout.html", "user_agent": "Yandex", "path": "/landing/signout.html"}, {"line": 205, "directive": "disallow", "value": "/gallery/", "raw": "Disallow: /gallery/", "user_agent": "Yandex", "path": "/gallery/"}, {"line": 206, "directive": "disallow", "value": "/landing/now/ontap/", "raw": "Disallow: /landing/now/ontap/", "user_agent": "Yandex", "path": "/landing/now/ontap/"}, {"line": 207, "directive": "allow", "value": "/maps/reserve", "raw": "Allow: /maps/reserve", "user_agent": "Yandex", "path": "/maps/reserve"}, {"line": 208, "directive": "allow", "value": "/maps/reserve/partners", "raw": "Allow: /maps/reserve/partners", "user_agent": "Yandex", "path": "/maps/reserve/partners"}, {"line": 209, "directive": "disallow", "value": "/maps/reserve/api/", "raw": "Disallow: /maps/reserve/api/", "user_agent": "Yandex", "path": "/maps/reserve/api/"}, {"line": 210, "directive": "disallow", "value": "/maps/reserve/search", "raw": "Disallow: /maps/reserve/search", "user_agent": "Yandex", "path": "/maps/reserve/search"}, {"line": 211, "directive": "disallow", "value": "/maps/reserve/bookings", "raw": "Disallow: /maps/reserve/bookings", "user_agent": "Yandex", "path": "/maps/reserve/bookings"}, {"line": 212, "directive": "disallow", "value": "/maps/reserve/settings", "raw": "Disallow: /maps/reserve/settings", "user_agent": "Yandex", "path": "/maps/reserve/settings"}, {"line": 213, "directive": "disallow", "value": "/maps/reserve/manage", "raw": "Disallow: /maps/reserve/manage", "user_agent": "Yandex", "path": "/maps/reserve/manage"}, {"line": 214, "directive": "disallow", "value": "/maps/reserve/payment", "raw": "Disallow: /maps/reserve/payment", "user_agent": "Yandex", "path": "/maps/reserve/payment"}, {"line": 215, "directive": "disallow", "value": "/maps/reserve/receipt", "raw": "Disallow: /maps/reserve/receipt", "user_agent": "Yandex", "path": "/maps/reserve/receipt"}, {"line": 216, "directive": "disallow", "value": "/maps/reserve/sellersignup", "raw": "Disallow: /maps/reserve/sellersignup", "user_agent": "Yandex", "path": "/maps/reserve/sellersignup"}, {"line": 217, "directive": "disallow", "value": "/maps/reserve/feedback", "raw": "Disallow: /maps/reserve/feedback", "user_agent": "Yandex", "path": "/maps/reserve/feedback"}, {"line": 218, "directive": "disallow", "value": "/maps/reserve/terms", "raw": "Disallow: /maps/reserve/terms", "user_agent": "Yandex", "path": "/maps/reserve/terms"}, {"line": 219, "directive": "disallow", "value": "/maps/reserve/m/", "raw": "Disallow: /maps/reserve/m/", "user_agent": "Yandex", "path": "/maps/reserve/m/"}, {"line": 220, "directive": "disallow", "value": "/maps/reserve/b/", "raw": "Disallow: /maps/reserve/b/", "user_agent": "Yandex", "path": "/maps/reserve/b/"}, {"line": 221, "directive": "disallow", "value": "/maps/reserve/partner-dashboard", "raw": "Disallow: /maps/reserve/partner-dashboard", "user_agent": "Yandex", "path": "/maps/reserve/partner-dashboard"}, {"line": 222, "directive": "disallow", "value": "/local/cars", "raw": "Disallow: /local/cars", "user_agent": "Yandex", "path": "/local/cars"}, {"line": 223, "directive": "disallow", "value": "/local/dealership/", "raw": "Disallow: /local/dealership/", "user_agent": "Yandex", "path": "/local/dealership/"}, {"line": 224, "directive": "disallow", "value": "/local/dining/", "raw": "Disallow: /local/dining/", "user_agent": "Yandex", "path": "/local/dining/"}, {"line": 225, "directive": "disallow", "value": "/local/place/products/", "raw": "Disallow: /local/place/products/", "user_agent": "Yandex", "path": "/local/place/products/"}, {"line": 226, "directive": "disallow", "value": "/local/place/reviews/", "raw": "Disallow: /local/place/reviews/", "user_agent": "Yandex", "path": "/local/place/reviews/"}, {"line": 227, "directive": "disallow", "value": "/local/place/rap/", "raw": "Disallow: /local/place/rap/", "user_agent": "Yandex", "path": "/local/place/rap/"}, {"line": 228, "directive": "disallow", "value": "/local/tab/", "raw": "Disallow: /local/tab/", "user_agent": "Yandex", "path": "/local/tab/"}, {"line": 229, "directive": "disallow", "value": "/localservices/", "raw": "Disallow: /localservices/", "user_agent": "Yandex", "path": "/localservices/"}, {"line": 230, "directive": "disallow", "value": "/nonprofits/account/", "raw": "Disallow: /nonprofits/account/", "user_agent": "Yandex", "path": "/nonprofits/account/"}, {"line": 231, "directive": "disallow", "value": "/uviewer", "raw": "Disallow: /uviewer", "user_agent": "Yandex", "path": "/uviewer"}, {"line": 232, "directive": "disallow", "value": "/landing/cmsnext-root/", "raw": "Disallow: /landing/cmsnext-root/", "user_agent": "Yandex", "path": "/landing/cmsnext-root/"}, {"line": 235, "directive": "user-agent", "value": "AdsBot-Google", "raw": "User-agent: AdsBot-Google", "user_agent": "AdsBot-Google"}, {"line": 236, "directive": "disallow", "value": "/maps/api/js/", "raw": "Disallow: /maps/api/js/", "user_agent": "AdsBot-Google", "path": "/maps/api/js/"}, {"line": 237, "directive": "allow", "value": "/maps/api/js", "raw": "Allow: /maps/api/js", "user_agent": "AdsBot-Google", "path": "/maps/api/js"}, {"line": 238, "directive": "disallow", "value": "/maps/api/place/js/", "raw": "Disallow: /maps/api/place/js/", "user_agent": "AdsBot-Google", "path": "/maps/api/place/js/"}, {"line": 239, "directive": "disallow", "value": "/maps/api/staticmap", "raw": "Disallow: /maps/api/staticmap", "user_agent": "AdsBot-Google", "path": "/maps/api/staticmap"}, {"line": 240, "directive": "disallow", "value": "/maps/api/streetview", "raw": "Disallow: /maps/api/streetview", "user_agent": "AdsBot-Google", "path": "/maps/api/streetview"}, {"line": 245, "directive": "user-agent", "value": "Yandex", "raw": "User-agent: Yandex", "user_agent": "Yandex"}, {"line": 246, "directive": "disallow", "value": "/about/careers/applications/jobs/results", "raw": "Disallow: /about/careers/applications/jobs/results", "user_agent": "Yandex", "path": "/about/careers/applications/jobs/results"}, {"line": 247, "directive": "disallow", "value": "/about/careers/applications-a/jobs/results", "raw": "Disallow: /about/careers/applications-a/jobs/results", "user_agent": "Yandex", "path": "/about/careers/applications-a/jobs/results"}, {"line": 252, "directive": "user-agent", "value": "facebookexternalhit", "raw": "User-agent: facebookexternalhit", "user_agent": "facebookexternalhit"}, {"line": 253, "directive": "user-agent", "value": "Twitterbot", "raw": "User-agent: Twitterbot", "user_agent": "Twitterbot"}, {"line": 254, "directive": "allow", "value": "/imgres", "raw": "Allow: /imgres", "user_agent": "Twitterbot", "path": "/imgres"}, {"line": 255, "directive": "allow", "value": "/search", "raw": "Allow: /search", "user_agent": "Twitterbot", "path": "/search"}, {"line": 256, "directive": "disallow", "value": "/groups", "raw": "Disallow: /groups", "user_agent": "Twitterbot", "path": "/groups"}, {"line": 257, "directive": "disallow", "value": "/hosted/images/", "raw": "Disallow: /hosted/images/", "user_agent": "Twitterbot", "path": "/hosted/images/"}, {"line": 258, "directive": "disallow", "value": "/m/", "raw": "Disallow: /m/", "user_agent": "Twitterbot", "path": "/m/"}, {"line": 260, "directive": "sitemap", "value": "https://www.google.com/sitemap.xml", "raw": "Sitemap: https://www.google.com/sitemap.xml", "sitemap_url": "https://www.google.com/sitemap.xml"}], "line_count": 260}}], "errors": []}}, {"status": "success", "plugin": "bhp", "type": "active", "target": "google.com", "timestamp": "2026-01-11T21:16:39.026239", "output": {"plugin": "bhp", "results": [{"plugin": "bhp", "type": "filter_summary", "filters_applied": {"show_closed": false, "show_filtered": false, "show_errors": false, "min_port": 1, "max_port": 65535, "display_filter": "open_only"}, "statistics": {"total_scanned": 1000, "displayed": 3, "hidden": 997, "hidden_breakdown": {"closed": 997, "filtered": 0, "error": 0}, "open": 3, "closed": 997, "filtered": 0, "errors": 0, "scan_duration": 185.44}, "notes": "Showing 3 of 1000 ports (997 hidden by filters)"}, {"plugin": "bhp", "port": 80, "protocol": "tcp", "state": "open", "service": "HTTP", "banner": "HTTP/1.0 200 OK\r\nContent-Type: text/html; charset=ISO-8859-1\r\nContent-Security-Policy-Report-Only: object-src 'none';base-uri 'self';script-src 'nonce-rndLQPcye9MWvTYX_zWR7Q' 'strict-dynamic' 'report-sample' 'unsafe-eval' 'unsafe-inline' https: http:;report-uri https://csp.withgoogle.com/csp/gws/other-hp\r\nP3P: CP=\"This is not a P3P policy! See g.co/p3phelp for more info.\"\r\nDate: Sun, 11 Jan 2026 18:13:34 GMT\r\nServer: gws\r\nX-XSS-Protection: 0\r\nX-Frame-Options: SAMEORIGIN\r\nExpires: Sun, 11 Jan 202", "reason": "connected", "latency": 1.4167115688323975, "scan_method": "connect", "should_display": true}, {"plugin": "bhp", "port": 53, "protocol": "tcp", "state": "open", "service": "unknown", "reason": "connected", "latency": 6.190697431564331, "scan_method": "connect", "should_display": true}, {"plugin": "bhp", "port": 443, "protocol": "tcp", "state": "open", "service": "HTTPS", "reason": "connected", "latency": 3.2922561168670654, "scan_method": "connect", "should_display": true}, {"plugin": "bhp", "url": "https://216.58.214.174", "headers": {"Date": "Sun, 11 Jan 2026 18:16:26 GMT", "Expires": "-1", "Cache-Control": "private, max-age=0", "Content-Type": "text/html; charset=ISO-8859-1", "Content-Security-Policy-Report-Only": "object-src 'none';base-uri 'self';script-src 'nonce-IFUnPPyYayqYlh30vUeYnA' 'strict-dynamic' 'report-sample' 'unsafe-eval' 'unsafe-inline' https: http:;report-uri https://csp.withgoogle.com/csp/gws/other-hp", "P3P": "CP=\"This is not a P3P policy! See g.co/p3phelp for more info.\"", "Content-Encoding": "gzip", "Server": "gws", "X-XSS-Protection": "0", "X-Frame-Options": "SAMEORIGIN", "Set-Cookie": "__Secure-STRP=AD6DoguZdedXGPqETXxD-7wE5fghBS_psjdUQ-6vOmQxbRx3zmykqPuRACcU-SYG3fPC2B2m1H2LNzgnoYpz4Nou02btza6KWVvs; expires=Sun, 11-Jan-2026 18:21:26 GMT; path=/; domain=.google.com; Secure; SameSite=strict, AEC=AaJma5uTquEB6eyxk42NSItOOvkpKZtHrlHAZS1xdXaEWgGOZ7P9xTNuuQ; expires=Fri, 10-Jul-2026 18:16:26 GMT; path=/; domain=.google.com; Secure; HttpOnly; SameSite=lax, NID=528=LAr-bOx4bRn4Sxg6Q9VwMovcQjuEqDerPv0WFDZ-IPtsoT5x3mynGrDGGr_opxQ8znOlHeAK02jhxVdyR1NxTXXLv8jy6GVBFinIdi_9vE3hiloUNUc5oFi98LE4jW51dxTPHY_5wgyJnLZ9cSvq2Ym-Cy1rDC48Wmf1iAHQxvhn5hxwVhWfqxX3jnXStRfdEil4pNeRdvpP49iTmzSZy1yEm3d_jb8Y; expires=Mon, 13-Jul-2026 18:16:26 GMT; path=/; domain=.google.com; HttpOnly", "Transfer-Encoding": "chunked"}, "security_score": 26, "missing_security_headers": ["Strict-Transport-Security", "Content-Security-Policy", "X-Content-Type-Options", "Referrer-Policy", "Permissions-Policy", "Cross-Origin-Embedder-Policy", "Cross-Origin-Opener-Policy", "Cross-Origin-Resource-Policy"], "vulnerabilities": ["X-XSS-Protection disabled", "Missing Content-Security-Policy"], "server_info": {"server": "gws"}, "cookie_analysis": {"count": 3, "cookies": [{"name": "__Secure-STRP", "secure": true, "path": "/"}, {"name": "AEC", "secure": true, "path": "/"}, {"name": "NID", "secure": false, "path": "/"}], "security_issues": ["Cookie 'NID' not secure"]}, "redirect_chain": [{"url": "https://216.58.214.174/", "status": 301, "location": "http://www.google.com/"}]}, {"plugin": "bhp", "enhanced_intelligence_report": {"target": "google.com", "ip": "216.58.214.174", "scan_time": "2026-01-11T21:16:39.025936", "filters_applied": {"show_closed": false, "show_filtered": false, "show_errors": false}, "summary": {"total_ports_scanned": 1000, "ports_displayed": 3, "ports_hidden": 997, "hidden_breakdown": {"closed": 997, "filtered": 0, "error": 0}, "open_ports": 3, "closed_ports": 997, "filtered_ports": 0, "vulnerabilities_found": 0, "security_score": 0}, "displayed_open_services": [{"port": 80, "protocol": "tcp", "service": "HTTP", "banner": "HTTP/1.0 200 OK\r\nContent-Type: text/html; charset=ISO-8859-1\r\nContent-Security-Policy-Report-Only: o"}, {"port": 53, "protocol": "tcp", "service": "unknown", "banner": ""}, {"port": 443, "protocol": "tcp", "service": "HTTPS", "banner": ""}], "security_issues": [], "recommendations": ["Improve security headers configuration"], "notes": ["Note: 997 ports hidden by filters (997 closed, 0 filtered)", "Note: 997 closed ports hidden (use --show-closed to view them)"]}}], "errors": []}}, {"status": "success", "plugin": "pingtrace", "type": "active", "target": "google.com", "timestamp": "2026-01-11T21:16:40.485594", "output": {"plugin": "pingtrace", "results": [{"type": "ping_results", "target": "google.com", "target_ip": "216.58.214.174", "config": {"mode": "ping", "protocol": "icmp", "count": 4, "timeout": 2.0, "max_hops": 30, "packet_size": 64, "fast": false, "resolve_dns": true}, "data": [{"sequence": 1, "target": "216.58.214.174", "status": "success", "rtt": 307.2240352630615, "ttl": 67, "protocol": "icmp", "packet_size": 64}, {"sequence": 2, "target": "216.58.214.174", "status": "success", "rtt": 206.81262016296387, "ttl": 67, "protocol": "icmp", "packet_size": 64}, {"sequence": 3, "target": "216.58.214.174", "status": "success", "rtt": 207.14688301086426, "ttl": 67, "protocol": "icmp", "packet_size": 64}, {"sequence": 4, "target": "216.58.214.174", "status": "success", "rtt": 210.33501625061035, "ttl": 67, "protocol": "icmp", "packet_size": 64}]}, {"type": "analysis", "summary": {"target": "google.com", "ip": "216.58.214.174", "mode": "ping", "protocol": "icmp", "ping_stats": {"sent": 4, "received": 4, "rtt_values": [307.2240352630615, 206.81262016296387, 207.14688301086426, 210.33501625061035], "packet_loss": 0.0, "avg_rtt": 232.879638671875, "min_rtt": 206.81262016296387, "max_rtt": 307.2240352630615}, "traceroute_stats": {"total_hops": 0, "successful_hops": 0, "failed_hops": 0, "hops": []}, "issues": ["High latency: 232.9ms"], "recommendations": ["Consider using closer server or CDN"]}}, {"type": "metadata", "scan_duration": "1.46s", "packets_sent": 4, "packets_received": 4, "plugin_version": "1.0.0", "timestamp": "2026-01-11T21:16:40.485430"}], "errors": []}}, {"status": "success", "plugin": "dns", "type": "passive", "target": "google.com", "timestamp": "2026-01-11T21:17:15.845134", "output": {"plugin": "dns", "results": [{"type": "WILDCARD", "name": "google.com", "wildcard_enabled": false, "wildcard_ips": [], "test_name": "g95vutjdna1enub5.google.com", "plugin": "dns"}, {"type": "SOA", "name": "google.com", "ttl": 16, "mname": "ns1.google.com", "rname": "dns-admin.google.com", "serial": 854542603, "plugin": "dns"}, {"type": "NS", "name": "google.com", "ttl": 332675, "target": "ns3.google.com", "plugin": "dns"}, {"type": "NS", "name": "google.com", "ttl": 332675, "target": "ns1.google.com", "plugin": "dns"}, {"type": "NS", "name": "google.com", "ttl": 332675, "target": "ns2.google.com", "plugin": "dns"}, {"type": "NS", "name": "google.com", "ttl": 332675, "target": "ns4.google.com", "plugin": "dns"}, {"type": "MX", "name": "google.com", "ttl": 300, "priority": 10, "target": "smtp.google.com", "plugin": "dns"}, {"type": "A", "name": "google.com", "ttl": 17, "address": "216.58.214.174", "plugin": "dns"}, {"type": "AAAA", "name": "google.com", "ttl": 17, "address": "2a00:1450:4007:80e::200e", "plugin": "dns"}, {"type": "CAA", "name": "google.com", "ttl": 86400, "flags": 0, "tag": "b'issue'", "value": "b'pki.goog'", "plugin": "dns"}, {"type": "RECURSION", "nameserver": "216.239.32.10", "recursive": false, "flags": "QR RD", "plugin": "dns"}, {"type": "BIND_VERSION", "nameserver": "216.239.32.10", "version": "not detected", "plugin": "dns"}, {"type": "NXDOMAIN_HIJACK", "nameserver": "216.239.32.10", "test_name": "1re5t3zeqcy9uv5zksdx.com", "hijack_detected": false, "answers": [], "plugin": "dns"}, {"type": "RECURSION", "nameserver": "216.239.34.10", "recursive": false, "flags": "QR RD", "plugin": "dns"}, {"type": "BIND_VERSION", "nameserver": "216.239.34.10", "version": "not detected", "plugin": "dns"}, {"type": "NXDOMAIN_HIJACK", "nameserver": "216.239.34.10", "test_name": "qkaah508ad317mfal2wv.com", "hijack_detected": false, "answers": [], "plugin": "dns"}, {"type": "RECURSION", "nameserver": "216.239.38.10", "recursive": false, "flags": "QR RD", "plugin": "dns"}, {"type": "BIND_VERSION", "nameserver": "216.239.38.10", "version": "not detected", "plugin": "dns"}, {"type": "NXDOMAIN_HIJACK", "nameserver": "216.239.38.10", "test_name": "ygmnyvy2ky8jrlci29py.com", "hijack_detected": false, "answers": [], "plugin": "dns"}, {"type": "SRV", "name": "_ldap._tcp.google.com", "ttl": 86400, "priority": 5, "weight": 0, "port": 389, "target": "ldap.google.com", "plugin": "dns"}], "errors": []}}, {"status": "success", "plugin": "email", "type": "passive", "target": "google.com", "timestamp": "2026-01-11T21:22:06.695706", "output": {"plugin": "email", "results": [{"plugin": "email", "type": "EMAIL", "domain": "google.com", "email": "press@google.com"}], "errors": []}}, {"status": "success", "plugin": "social", "type": "passive", "target": "google.com", "timestamp": "2026-01-11T21:22:06.697810", "output": {"plugin": "social", "results": [], "errors": ["No social engine modules loaded."]}}, {"status": "success", "plugin": "subdomain", "type": "passive", "target": "google.com", "timestamp": "2026-01-11T21:22:28.381603", "output": {"plugin": "subdomain", "results": [{"plugin": "subdomain", "timestamp": "2026-01-11T18:22:25.616814", "domain": "admin.google.com", "type": "A", "values": ["142.250.75.238"]}, {"plugin": "subdomain", "timestamp": "2026-01-11T18:22:25.822180", "domain": "api.google.com", "type": "A", "values": ["142.251.173.103", "142.251.173.104", "142.251.173.106", "142.251.173.105", "142.251.173.99", "142.251.173.147"]}, {"plugin": "subdomain", "timestamp": "2026-01-11T18:22:25.927704", "domain": "blog.google.com", "type": "A", "values": ["142.250.74.233"]}, {"plugin": "subdomain", "timestamp": "2026-01-11T18:22:26.026514", "domain": "mail.google.com", "type": "A", "values": ["142.251.39.197"]}, {"plugin": "subdomain", "timestamp": "2026-01-11T18:22:26.129017", "domain": "shop.google.com", "type": "A", "values": ["74.125.133.92"]}, {"plugin": "subdomain", "timestamp": "2026-01-11T18:22:28.381502", "domain": "www.google.com", "type": "A", "values": ["216.239.38.120"]}], "errors": []}}, {"status": "success", "plugin": "whois", "type": "passive", "target": "google.com", "timestamp": "2026-01-11T21:22:29.818352", "output": {"plugin": "whois", "results": [{"plugin": "whois", "timestamp": "2026-01-11T18:22:29.818243", "domain": "google.com", "registrant": null, "emails": ["abusecomplaints@markmonitor.com"], "creation_date": "1997-09-15T04:00:00Z", "name_servers": ["NS1.GOOGLE.COM", "NS2.GOOGLE.COM", "NS3.GOOGLE.COM", "NS4.GOOGLE.COM"]}], "errors": []}}]};
+
+    function safe(v) {
+      if (v === null || v === undefined) return "";
+      if (typeof v === "object") return JSON.stringify(v, null, 2);
+      return String(v);
+    }
+
+    function buildSummary(data) {
+      const kv = document.getElementById("kv");
+      kv.innerHTML = "";
+
+      // Try common keys
+      const status = data.status ?? (data.results ? "success" : "unknown");
+      const target = data.target ?? data?.payload?.target ?? "";
+      const ts = data.timestamp ?? data?.payload?.timestamp ?? "";
+
+      document.getElementById("tsPill").textContent = "Timestamp: " + (ts || "—");
+
+      const items = [
+        ["Status", status],
+        ["Target", target],
+      ];
+
+      // AUTO payload has results list
+      if (data.results && Array.isArray(data.results)) {
+        items.push(["Plugins", data.results.length]);
+      }
+
+      // MANUAL payload may have plugin
+      if (data.plugin) items.push(["Plugin", data.plugin]);
+      if (data.type) items.push(["Type", data.type]);
+
+      // render
+      for (const [k, v] of items) {
+        const kEl = document.createElement("div");
+        kEl.innerHTML = "<b>" + k + "</b>";
+        const vEl = document.createElement("div");
+        let vv = safe(v);
+        if (k === "Status") {
+          vEl.innerHTML = "<span class='" + (vv === "success" ? "ok" : "bad") + "'>" + vv + "</span>";
+        } else {
+          vEl.textContent = vv;
+        }
+        kv.appendChild(kEl);
+        kv.appendChild(vEl);
+      }
+    }
+
+    function card(title, tag, obj) {
+      const wrap = document.createElement("div");
+      wrap.className = "card";
+
+      const h = document.createElement("div");
+      h.className = "cardHeader";
+
+      const t = document.createElement("h3");
+      t.className = "cardTitle";
+      t.textContent = title;
+
+      const tg = document.createElement("span");
+      tg.className = "tag";
+      tg.textContent = tag;
+
+      h.appendChild(t);
+      h.appendChild(tg);
+
+      const pre = document.createElement("pre");
+      pre.textContent = JSON.stringify(obj, null, 2);
+
+      wrap.appendChild(h);
+      wrap.appendChild(pre);
+      return wrap;
+    }
+
+    function buildResults(data) {
+      const root = document.getElementById("results");
+      root.innerHTML = "";
+
+      // AUTO report: show each plugin result cleanly
+      if (data.results && Array.isArray(data.results)) {
+        for (const r of data.results) {
+          const title = (r.plugin ? r.plugin : "plugin");
+          const tag = (r.status ? r.status : "result");
+          root.appendChild(card(title, tag, r));
+        }
+        return;
+      }
+
+      // MANUAL: show the whole payload, and if output exists show it separately
+      if (data.output) {
+        root.appendChild(card("Output", "payload", data.output));
+      }
+      root.appendChild(card("Raw", "json", data));
+    }
+
+    buildSummary(DATA);
+    buildResults(DATA);
+  </script>
+</body>
+</html>

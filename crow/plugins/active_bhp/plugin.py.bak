@@ -1020,7 +1020,7 @@ class bhp(ActivePlugin):
         return vulns
 
     def _get_advanced_certificate_info(self, hostname: str, ip: str, port: int) -> Dict[str, Any]:
-        """الحصول على معلومات متقدمة لشهادة SSL"""
+    """الحصول على معلومات متقدمة لشهادة SSL"""
         try:
         
             try:

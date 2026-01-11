@@ -1,0 +1,29 @@
+{
+  "status": "success",
+  "plugin": "whois",
+  "type": "passive",
+  "target": "google.com",
+  "timestamp": "2026-01-11T21:23:50.323036",
+  "output": {
+    "plugin": "whois",
+    "results": [
+      {
+        "plugin": "whois",
+        "timestamp": "2026-01-11T18:23:50.322958",
+        "domain": "google.com",
+        "registrant": null,
+        "emails": [
+          "abusecomplaints@markmonitor.com"
+        ],
+        "creation_date": "1997-09-15T04:00:00Z",
+        "name_servers": [
+          "NS1.GOOGLE.COM",
+          "NS2.GOOGLE.COM",
+          "NS3.GOOGLE.COM",
+          "NS4.GOOGLE.COM"
+        ]
+      }
+    ],
+    "errors": []
+  }
+}

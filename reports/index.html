@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>CROW • Reports</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #0f1730;
+      --panel2: #121c3a;
+      --text: #e8eefc;
+      --muted: #9fb1d1;
+      --border: rgba(255,255,255,.10);
+      --ok: #38d39f;
+      --bad: #ff5a7a;
+      --warn: #ffcc66;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    }
+    html, body {
+      margin: 0; padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      line-height: 1.5;
+    }
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 22px 16px 60px;
+    }
+    .topbar {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .title {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: .2px;
+    }
+    .subtitle {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 4px;
+    }
+    .panel {
+      background: linear-gradient(180deg, var(--panel), var(--panel2));
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+    .grid {
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    @media (min-width: 900px) {
+      .grid.cols2 { grid-template-columns: 1fr 1fr; }
+    }
+    .badge {
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 6px 10px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(255,255,255,.03);
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .dot {
+      width: 10px; height: 10px;
+      border-radius: 999px;
+      background: var(--muted);
+    }
+    .dot.ok { background: var(--ok); }
+    .dot.bad { background: var(--bad); }
+    .dot.warn { background: var(--warn); }
+    .kv {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 12px;
+    }
+    .kv td {
+      border-top: 1px solid var(--border);
+      vertical-align: top;
+      padding: 10px 10px;
+    }
+    .kv tr:first-child td { border-top: none; }
+    .key {
+      width: 220px;
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+    }
+    .val { font-size: 14px; }
+    .mono { font-family: var(--mono); }
+    .muted { color: var(--muted); }
+    .details {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 8px 10px;
+      background: rgba(255,255,255,.02);
+    }
+    summary {
+      cursor: pointer;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .pre {
+      margin-top: 10px;
+      padding: 12px;
+      background: rgba(0,0,0,.25);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: auto;
+      font-family: var(--mono);
+      font-size: 12px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: #d8e6ff;
+    }
+    .ol {
+      margin: 8px 0 0 20px;
+    }
+    .toolbar {
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      justify-content:flex-end;
+      flex-wrap: wrap;
+    }
+    .btn {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      color: var(--text);
+      padding: 8px 10px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 12px;
+    }
+    .btn:hover {
+      background: rgba(255,255,255,.06);
+    }
+    input.search {
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      color: var(--text);
+      padding: 8px 10px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 12px;
+      min-width: 240px;
+      outline: none;
+    }
+    .cards {
+      display:grid;
+      gap: 12px;
+    }
+    .card {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: rgba(255,255,255,.02);
+      padding: 12px;
+    }
+    .card h3 {
+      margin: 0 0 8px 0;
+      font-size: 16px;
+    }
+    .row {
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items:center;
+    }
+    a {
+      color: #9cc0ff;
+      text-decoration: none;
+    }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div>
+        <div class="title">CROW • Reports</div>
+        <div class='subtitle'>Auto + Manual reports dashboard</div>
+      </div>
+      <div class="toolbar">
+        <input class="search" id="search" placeholder="Search inside report..." />
+        <button class="btn" onclick="expandAll()">Expand all</button>
+        <button class="btn" onclick="collapseAll()">Collapse all</button>
+      </div>
+    </div>
+
+    <div class='panel'><h3 style='margin:0 0 10px 0;'>Reports Index</h3><div class='muted'>Project: /home/al-emad/Documents/python/FinalProject/CROW-OSINT</div><div style='margin-top:12px;' class='cards'><div class='card'><h3>AUTO</h3><div class='row'><a href='auto/report.html'>Open AUTO HTML</a> • <a href='auto/report.json'>Open AUTO JSON</a></div></div><div class='card'><h3>MANUAL • subdomain</h3><div class='row'><a href='manual/subdomain.json'>JSON</a></div></div></div></div><div style='margin-top:14px;' class='muted'>Tip: افتح هذا الملف بالمتصفح: reports/index.html</div>
+
+  </div>
+
+  <script>
+    function expandAll(){
+      document.querySelectorAll("details").forEach(d => d.open = true);
+    }
+    function collapseAll(){
+      document.querySelectorAll("details").forEach(d => d.open = false);
+    }
+    const search = document.getElementById("search");
+    if (search){
+      search.addEventListener("input", () => {
+        const q = search.value.toLowerCase();
+        document.querySelectorAll(".card").forEach(card => {
+          const txt = card.innerText.toLowerCase();
+          card.style.display = txt.includes(q) ? "" : "none";
+        });
+      });
+    }
+  </script>
+</body>
+</html>
