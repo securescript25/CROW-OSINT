@@ -1,6 +1,5 @@
 """
 crow/CLI/commands.py
-نظام الأوامر للواجهة غير التفاعلية
 """
 
 import json
