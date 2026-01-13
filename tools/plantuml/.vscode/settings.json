@@ -1,0 +1,6 @@
+{
+  "plantuml.render": "Local",
+  "plantuml.jar": "tools/plantuml/plantuml.jar",
+  "plantuml.diagramRoot": "docs/uml",
+  "plantuml.exportFormat": "svg"
+}

@@ -839,8 +839,8 @@ class CrowConsole(cmd.Cmd):
             print(f"[{i:02d}] {Fore.GREEN}{name:<20}{Style.RESET_ALL} [{ptype:<7}] - {desc}")
 
         print(f"{Fore.YELLOW}{'─' * 90}{Style.RESET_ALL}")
-        print(f"{Fore.YELLOW}Tip:{Style.RESET_ALL} اكتب رقم الأداة لتشغيلها مباشرة (مثال: 02)")
-        print(f"{Fore.YELLOW}Or:{Style.RESET_ALL} back للرجوع\n")
+        print(f"{Fore.YELLOW}Tip:{Style.RESET_ALL}")
+        print(f"{Fore.YELLOW}Or:{Style.RESET_ALL} back\n")
 
     def do_back(self, arg):
         """back: return to HOME"""
@@ -895,7 +895,7 @@ class CrowConsole(cmd.Cmd):
                     plugin_name = self.manual_order[idx - 1]
 
                     try:
-                        target = input(f"{Fore.CYAN}Target (e.g., google.com): {Style.RESET_ALL}").strip()
+                        target = input(f"{Fore.CYAN}Target (e.g., target.com): {Style.RESET_ALL}").strip()
                     except KeyboardInterrupt:
                         print()
                         return

@@ -2888,6 +2888,24 @@ socks = ["PySocks (>=1.5.6,!=1.5.7)"]
 use-chardet-on-py3 = ["chardet (>=3.0.2,<6)"]
 
 [[package]]
+name = "requests-futures"
+version = "1.0.2"
+description = "Asynchronous Python HTTP for Humans."
+optional = false
+python-versions = "*"
+groups = ["main"]
+files = [
+    {file = "requests_futures-1.0.2-py2.py3-none-any.whl", hash = "sha256:a3534af7c2bf670cd7aa730716e9e7d4386497554f87792be7514063b8912897"},
+    {file = "requests_futures-1.0.2.tar.gz", hash = "sha256:6b7eb57940336e800faebc3dab506360edec9478f7b22dc570858ad3aa7458da"},
+]
+
+[package.dependencies]
+requests = ">=1.2.0"
+
+[package.extras]
+dev = ["Werkzeug (>=3.0.6)", "black (>=24.3.0,<25.0.0)", "build (>=0.7.0)", "docutils (<=0.20.1)", "greenlet (<=2.0.2) ; python_version < \"3.12\"", "greenlet (>=3.0.0) ; python_version >= \"3.12.0rc0\"", "isort (>=5.11.4)", "pyflakes (>=2.2.0)", "pytest (>=6.2.5)", "pytest-cov (>=3.0.0)", "pytest-httpbin (>=2.0.0)", "readme-renderer[rst] (>=26.0)", "twine (>=3.4.2)"]
+
+[[package]]
 name = "six"
 version = "1.17.0"
 description = "Python 2 and 3 compatibility utilities"
@@ -3382,4 +3400,4 @@ test = ["pytest"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.9"
-content-hash = "bd59b5cbfc03be4914096176d2444cf22af6bd2765aacd4f7cf91aed8048ed47"
+content-hash = "c748dd30768d2813c8f8303ae5e476aa078c3cc0ee96c41f04443afd54f5926c"

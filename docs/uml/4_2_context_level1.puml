@@ -1,0 +1,37 @@
+@startuml CROW_Context_Level2_AUTO
+left to right direction
+skinparam packageStyle rectangle
+
+actor "User" as U
+rectangle "External Services" as S
+rectangle "Target" as T
+database "reports/auto\nreport.json + report.html" as R
+database "history\n~/.crow_history_<workspace>" as H
+rectangle "Config Sources\nDefaults + YAML + ENV" as CFG
+
+package "AUTO Mode (CrowConsole)" {
+  rectangle "P1: do_auto()" as P1
+  rectangle "P2: load_config()" as P2
+  rectangle "P3: PluginRegistry.autoload()" as P3
+  rectangle "P4: for each plugin\ncreate + run" as P4
+  rectangle "P5: aggregate results\npayload" as P5
+  rectangle "P6: write JSON/HTML\n+ open browser" as P6
+}
+
+U --> P1 : auto <target>\n(or press 1)
+P1 --> P2 : load config
+CFG --> P2 : config values
+P2 --> P1 : config dict
+
+P1 --> P3 : autoload plugins
+P3 --> P4 : plugin list
+P4 --> S : passive queries
+S --> P4 : responses
+P4 --> T : active requests
+T --> P4 : responses
+P4 --> P5 : PluginOutput(s)
+
+P5 --> P6 : JSON-safe payload
+P6 --> R : save report files
+P1 <--> H : read/write history
+@enduml

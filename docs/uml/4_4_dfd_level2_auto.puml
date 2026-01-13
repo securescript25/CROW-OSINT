@@ -1,0 +1,55 @@
+@startuml CROW_DFD_Level2_AUTO
+left to right direction
+skinparam shadowing false
+skinparam packageStyle rectangle
+
+' External Entities
+rectangle "E1: User" as E1
+rectangle "E2: Target\n(Domain/IP/URL)" as E2
+rectangle "E3: OSINT Services" as E3
+
+' Data Stores
+database "D1: Config\n(DEFAULT + YAML + ENV)" as D1
+database "D2: Plugin Registry\n(passive/active list + info)" as D2
+database "D3: AUTO Reports\nreports/auto/\nreport.json + report.html" as D3
+database "D4: History\n~/.crow_history_<workspace>" as D4
+
+' Processes (AUTO)
+rectangle "P2.1: Select AUTO\n(press 1 / auto <target>)" as P21
+rectangle "P2.2: Validate Target" as P22
+rectangle "P2.3: Load Config\n(load_config)" as P23
+rectangle "P2.4: Autoload Plugins\n(PluginRegistry.autoload)" as P24
+rectangle "P2.5: Run ALL Plugins\n(loop create+run)" as P25
+rectangle "P2.6: Aggregate Results\n(payload + json_safe)" as P26
+rectangle "P2.7: Write Reports\n(JSON + HTML)" as P27
+rectangle "P2.8: Open HTML Report\n(webbrowser.open)" as P28
+rectangle "P2.9: Return to Prompt" as P29
+
+' Flows
+E1 --> P21 : Choose AUTO
+P21 --> P22 : Request/Receive target
+E1 --> P22 : Target value
+
+P22 --> P23 : Config request
+P23 <--> D1 : Read config
+P23 --> P24 : Config dict
+
+P24 <--> D2 : Build plugin list\n+ plugin info cache
+P24 --> P25 : Available plugins
+
+P25 --> E3 : Passive queries (optional)
+E3 --> P25 : OSINT data
+P25 --> E2 : Active requests (optional)
+E2 --> P25 : Network responses
+
+P25 --> P26 : PluginOutput list
+P26 --> P27 : Final payload
+
+P27 --> D3 : Save report.json\nSave report.html
+P27 --> P28 : Report path (file://)
+
+P28 --> E1 : Display report in browser
+P21 <--> D4 : Read/Write history (optional)
+P28 --> P29 : Completed
+P29 --> E1 : crow > (ready)
+@enduml

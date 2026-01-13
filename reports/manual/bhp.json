@@ -1,0 +1,126 @@
+{
+  "status": "success",
+  "plugin": "bhp",
+  "type": "active",
+  "target": "google.com",
+  "timestamp": "2026-01-12T14:59:56.452136",
+  "output": {
+    "plugin": "bhp",
+    "results": [
+      {
+        "plugin": "bhp",
+        "type": "filter_summary",
+        "filters_applied": {
+          "show_closed": false,
+          "show_filtered": false,
+          "show_errors": false,
+          "min_port": 1,
+          "max_port": 65535,
+          "display_filter": "open_only"
+        },
+        "statistics": {
+          "total_scanned": 1000,
+          "displayed": 2,
+          "hidden": 998,
+          "hidden_breakdown": {
+            "closed": 998,
+            "filtered": 0,
+            "error": 0
+          },
+          "open": 2,
+          "closed": 998,
+          "filtered": 0,
+          "errors": 0,
+          "scan_duration": 169.31
+        },
+        "notes": "Showing 2 of 1000 ports (998 hidden by filters)"
+      },
+      {
+        "plugin": "bhp",
+        "port": 53,
+        "protocol": "tcp",
+        "state": "open",
+        "service": "unknown",
+        "reason": "connected",
+        "latency": 1.1957118511199951,
+        "scan_method": "connect",
+        "should_display": true
+      },
+      {
+        "plugin": "bhp",
+        "port": 443,
+        "protocol": "tcp",
+        "state": "open",
+        "service": "HTTPS",
+        "reason": "connected",
+        "latency": 7.381511926651001,
+        "scan_method": "connect",
+        "should_display": true
+      },
+      {
+        "plugin": "bhp",
+        "service": "unknown",
+        "raw_banner": "Timeout waiting for response",
+        "parsed_data": {},
+        "vulnerabilities": [],
+        "service_details": {
+          "port": 53,
+          "protocol": "tcp",
+          "detected_by": "port",
+          "confidence": "low"
+        }
+      },
+      {
+        "plugin": "bhp",
+        "enhanced_intelligence_report": {
+          "target": "google.com",
+          "ip": "216.58.214.174",
+          "scan_time": "2026-01-12T14:59:56.451836",
+          "filters_applied": {
+            "show_closed": false,
+            "show_filtered": false,
+            "show_errors": false
+          },
+          "summary": {
+            "total_ports_scanned": 1000,
+            "ports_displayed": 2,
+            "ports_hidden": 998,
+            "hidden_breakdown": {
+              "closed": 998,
+              "filtered": 0,
+              "error": 0
+            },
+            "open_ports": 2,
+            "closed_ports": 998,
+            "filtered_ports": 0,
+            "vulnerabilities_found": 0,
+            "security_score": 0
+          },
+          "displayed_open_services": [
+            {
+              "port": 53,
+              "protocol": "tcp",
+              "service": "unknown",
+              "banner": ""
+            },
+            {
+              "port": 443,
+              "protocol": "tcp",
+              "service": "HTTPS",
+              "banner": ""
+            }
+          ],
+          "security_issues": [],
+          "recommendations": [
+            "Improve security headers configuration"
+          ],
+          "notes": [
+            "Note: 998 ports hidden by filters (998 closed, 0 filtered)",
+            "Note: 998 closed ports hidden (use --show-closed to view them)"
+          ]
+        }
+      }
+    ],
+    "errors": []
+  }
+}

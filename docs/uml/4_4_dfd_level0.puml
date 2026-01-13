@@ -1,0 +1,30 @@
+@startuml CROW_DFD_Level0
+left to right direction
+skinparam shadowing false
+skinparam packageStyle rectangle
+
+' External Entities
+rectangle "E1: User\n(Security Analyst)" as E1
+rectangle "E2: Target\n(Domain/IP/URL)" as E2
+rectangle "E3: External OSINT Services\n(DNS/WHOIS/Search APIs)" as E3
+
+' Process (System)
+rectangle "P0: CROW-OSINT Framework" as P0
+
+' Data Store
+database "D1: Reports Storage\nreports/auto & reports/manual\n(JSON + HTML)" as D1
+
+' Data Flows
+E1 --> P0 : Commands\n(AUTO / MANUAL / target)
+P0 --> E1 : Results + Status\n(Logs / Summary)
+
+P0 --> E2 : Active requests\n(optional)
+E2 --> P0 : Network responses
+
+P0 --> E3 : Passive queries\n(optional)
+E3 --> P0 : OSINT data
+
+P0 --> D1 : Save reports\nreport.json / report.html
+D1 --> P0 : Read previous outputs\n(optional)
+
+@enduml

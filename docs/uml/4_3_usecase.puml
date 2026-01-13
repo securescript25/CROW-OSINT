@@ -1,0 +1,61 @@
+@startuml CROW_UseCase
+left to right direction
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+actor "User\n(Security Analyst)" as U
+actor "External OSINT Services\n(DNS/WHOIS/Search APIs)" as S
+actor "Target System\n(Domain/IP/URL)" as T
+
+rectangle "CROW-OSINT Framework" {
+
+  usecase "Start Console" as UC_Start
+  usecase "View Help" as UC_Help
+  usecase "Exit" as UC_Exit
+
+  usecase "Run AUTO Scan" as UC_Auto
+  usecase "Run MANUAL Scan" as UC_Manual
+
+  usecase "Enter Target" as UC_Target
+  usecase "Load Configuration" as UC_Config
+  usecase "Autoload Plugins" as UC_Autoload
+  usecase "List Plugins (Manual Menu)" as UC_ListPlugins
+  usecase "Select Plugin" as UC_SelectPlugin
+  usecase "Execute Plugin(s)" as UC_Execute
+  usecase "Generate Report\n(JSON + HTML)" as UC_Report
+  usecase "Open HTML Report" as UC_Open
+  usecase "Back to Home" as UC_Back
+}
+
+' --- User interactions ---
+U --> UC_Start
+U --> UC_Help
+U --> UC_Exit
+U --> UC_Auto
+U --> UC_Manual
+U --> UC_Back
+
+' --- Includes (common steps) ---
+UC_Auto .> UC_Target : <<include>>
+UC_Manual .> UC_Target : <<include>>
+
+UC_Auto .> UC_Config : <<include>>
+UC_Manual .> UC_Config : <<include>>
+
+UC_Auto .> UC_Autoload : <<include>>
+UC_Manual .> UC_Autoload : <<include>>
+
+UC_Manual .> UC_ListPlugins : <<include>>
+UC_Manual .> UC_SelectPlugin : <<include>>
+
+UC_Auto .> UC_Execute : <<include>>
+UC_Manual .> UC_Execute : <<include>>
+
+UC_Execute .> UC_Report : <<include>>
+UC_Report .> UC_Open : <<include>>
+
+' --- External actors involved during execution ---
+UC_Execute --> S : Passive queries
+UC_Execute --> T : Active requests
+
+@enduml

@@ -1,0 +1,24 @@
+@startuml CROW_Context_Level0
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Security Analyst\n(User)" as U
+rectangle "Target\nDomain / IP / URL" as T
+rectangle "External OSINT Services\n(DNS, WHOIS, Search APIs)" as S
+database "Local Filesystem\nreports/, output.json,\nconfig.yaml, ~/.crow_history" as F
+rectangle "Environment Variables\nCROW_TIMEOUT\nCROW_RATE_LIMIT\nCROW_OUTPUT_DIR" as E
+
+rectangle "CROW-OSINT Framework" as C
+
+U --> C : CLI commands\n(scan, list, show, console)
+C --> U : Results / JSON / Logs
+
+C --> S : Passive queries
+S --> C : OSINT data
+
+C --> T : Active requests
+T --> C : Network responses
+
+C --> F : Save reports\nRead config/history
+E --> C : Override config
+@enduml

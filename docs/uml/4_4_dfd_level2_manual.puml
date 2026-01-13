@@ -1,0 +1,61 @@
+@startuml CROW_DFD_Level2_MANUAL
+left to right direction
+skinparam shadowing false
+skinparam packageStyle rectangle
+
+' External Entities
+rectangle "E1: User" as E1
+rectangle "E2: Target\n(Domain/IP/URL)" as E2
+rectangle "E3: OSINT Services" as E3
+
+' Data Stores
+database "D1: Config\n(DEFAULT + YAML + ENV)" as D1
+database "D2: Plugin Registry\n(passive/active list + info)" as D2
+database "D3: MANUAL Reports\nreports/manual/\n<plugin>.json + <plugin>.html" as D3
+database "D4: History\n~/.crow_history_<workspace>" as D4
+
+' Processes (MANUAL)
+rectangle "P3.1: Select MANUAL\n(press 2 / manual)" as P31
+rectangle "P3.2: Load Config\n(load_config)" as P32
+rectangle "P3.3: Autoload + List Plugins\n(PluginRegistry.autoload + list)" as P33
+rectangle "P3.4: Display Menu\n(numbered list)" as P34
+rectangle "P3.5: Select Plugin\n(by number)" as P35
+rectangle "P3.6: Input Target" as P36
+rectangle "P3.7: Create Plugin Instance\n(create_passive/create_active)" as P37
+rectangle "P3.8: Run Selected Plugin\n(plugin.run)" as P38
+rectangle "P3.9: Build & Save Report\n(JSON + HTML)" as P39
+rectangle "P3.10: Open HTML Report" as P310
+rectangle "P3.11: Return to Prompt" as P311
+
+' Flows
+E1 --> P31 : Choose MANUAL
+P31 --> P32 : Config request
+P32 <--> D1 : Read config
+P32 --> P33 : Config dict
+
+P33 <--> D2 : Build plugin list\n+ plugin info
+P33 --> P34 : Plugins list (for menu)
+
+P34 --> E1 : Show numbered tools
+E1 --> P35 : Plugin number
+
+P35 --> P36 : Request target
+E1 --> P36 : Target value
+
+P36 --> P37 : Selected plugin + config
+P37 --> P38 : Plugin instance
+
+P38 --> E3 : Passive queries (optional)
+E3 --> P38 : OSINT data
+P38 --> E2 : Active requests (optional)
+E2 --> P38 : Network responses
+
+P38 --> P39 : PluginOutput
+P39 --> D3 : Save <plugin>.json\nSave <plugin>.html
+P39 --> P310 : Report path (file://)
+
+P310 --> E1 : Display report in browser
+P31 <--> D4 : Read/Write history (optional)
+P310 --> P311 : Completed
+P311 --> E1 : crow > (ready)
+@enduml

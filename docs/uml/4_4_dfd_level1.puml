@@ -1,0 +1,51 @@
+@startuml CROW_DFD_Level1
+left to right direction
+skinparam shadowing false
+skinparam packageStyle rectangle
+
+' External Entities
+rectangle "E1: User" as E1
+rectangle "E2: Target" as E2
+rectangle "E3: OSINT Services" as E3
+
+' Data Stores
+database "D1: Config\n(DEFAULT + YAML + ENV)" as D1
+database "D2: Plugin Registry\n(list + info)" as D2
+database "D3: Reports\nreports/auto, reports/manual" as D3
+database "D4: History\n~/.crow_history_<workspace>" as D4
+
+' Processes
+rectangle "P1: Console UI\n(Banner + Mode Select)" as P1
+rectangle "P2: Input Handler\n(Target + Options)" as P2
+rectangle "P3: Load Config\n(load_config)" as P3
+rectangle "P4: Discover Plugins\n(autoload + list)" as P4
+rectangle "P5: Execute Plugins\n(run target)" as P5
+rectangle "P6: Build & Save Report\n(JSON/HTML)" as P6
+
+' Flows
+E1 --> P1 : Start / choose\nAUTO or MANUAL
+P1 --> P2 : Request inputs\n(target / plugin selection)
+E1 --> P2 : Target + selections
+
+P2 --> P3 : Load configuration request
+P3 <--> D1 : Read config\n(default/YAML/ENV)
+P3 --> P2 : Config dict
+
+P2 --> P4 : Autoload plugins
+P4 --> D2 : Store plugin list/info
+D2 --> P4 : Plugin metadata
+P4 --> P2 : Available plugins\n(list for manual)
+
+P2 --> P5 : Execute selected mode\n(AUTO all / MANUAL one)
+P5 --> E3 : Passive queries
+E3 --> P5 : OSINT data
+P5 --> E2 : Active requests
+E2 --> P5 : Responses
+P5 --> P6 : PluginOutput(s)
+
+P6 --> D3 : Write report.json\nWrite report.html
+P6 --> E1 : Open report link\nfile:///.../report.html
+
+P1 <--> D4 : Read/Write history\n(commands)
+
+@enduml

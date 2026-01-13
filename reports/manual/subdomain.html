@@ -1,967 +1,383 @@
 <!doctype html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>MANUAL Report - subdomain</title>
-<style>
-:root{
-  --bg:#0b1020;
-  --card:#111a33;
-  --card2:#0e1630;
-  --text:#e8ecff;
-  --muted:#aab3d6;
-  --accent:#6ee7ff;
-  --accent2:#a78bfa;
-  --border:rgba(255,255,255,.08);
-}
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-  background: radial-gradient(900px 600px at 20% 10%, rgba(110,231,255,.18), transparent),
-              radial-gradient(900px 600px at 80% 20%, rgba(167,139,250,.18), transparent),
-              var(--bg);
-  color:var(--text);
-}
-.container{
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 28px 16px 60px;
-}
-.header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:14px;
-  flex-wrap:wrap;
-  margin-bottom: 18px;
-}
-.logo{
-  font-size: 54px;
-  font-weight: 900;
-  letter-spacing: 2px;
-  line-height:1;
-  background: linear-gradient(90deg, var(--accent), var(--accent2));
-  -webkit-background-clip:text;
-  background-clip:text;
-  color: transparent;
-  position:relative;
-  text-transform:uppercase;
-  animation: glow 2.6s ease-in-out infinite;
-}
-@keyframes glow{
-  0%,100% { filter: drop-shadow(0 0 10px rgba(110,231,255,.15)); transform: translateY(0px); }
-  50%     { filter: drop-shadow(0 0 18px rgba(167,139,250,.20)); transform: translateY(-2px); }
-}
-.badge{
-  padding:8px 12px;
-  border:1px solid var(--border);
-  background: rgba(255,255,255,.03);
-  border-radius:999px;
-  color:var(--muted);
-  font-size: 13px;
-}
-.grid{
-  display:grid;
-  grid-template-columns: 1fr;
-  gap: 14px;
-}
-.card{
-  border: 1px solid var(--border);
-  background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
-  border-radius: 16px;
-  overflow:hidden;
-}
-.card .card-h{
-  padding: 14px 16px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  border-bottom:1px solid var(--border);
-  background: rgba(17,26,51,.35);
-}
-.card .title{
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--text);
-}
-.card .meta{
-  font-size: 12px;
-  color: var(--muted);
-}
-.card .card-b{
-  padding: 14px 16px;
-}
-pre{
-  margin:0;
-  white-space: pre-wrap;
-  word-break: break-word;
-  overflow-wrap:anywhere;
-  font-size: 13px;
-  line-height: 1.45;
-  color: #dbe4ff;
-}
-.kv{
-  display:grid;
-  grid-template-columns: 220px 1fr;
-  gap: 8px 12px;
-}
-@media (max-width: 700px){
-  .logo{font-size:44px}
-  .kv{grid-template-columns: 1fr}
-}
-.k{
-  color: var(--muted);
-  font-size: 13px;
-}
-.v{
-  color: var(--text);
-  font-size: 13px;
-  overflow-wrap:anywhere;
-}
-.pill{
-  display:inline-flex;
-  padding:6px 10px;
-  border-radius:999px;
-  border:1px solid var(--border);
-  background: rgba(255,255,255,.03);
-  color: var(--muted);
-  font-size: 12px;
-}
-hr{
-  border:0;
-  border-top:1px solid var(--border);
-  margin: 14px 0;
-}
-.small{
-  font-size:12px;
-  color:var(--muted);
-}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MANUAL Report — subdomain</title>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --panel: rgba(255,255,255,0.06);
+      --panel2: rgba(255,255,255,0.10);
+      --border: rgba(255,255,255,0.10);
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.65);
+      --accent: #66f;
+      --accent2: #00d4ff;
+      --good: #39d98a;
+      --bad: #ff5c5c;
+      --shadow: 0 20px 60px rgba(0,0,0,0.45);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans Arabic", "Noto Sans", sans-serif;
+      background: radial-gradient(1200px 700px at 80% 10%, rgba(102,102,255,0.22), transparent 60%),
+                  radial-gradient(900px 600px at 10% 70%, rgba(0,212,255,0.18), transparent 55%),
+                  var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* HERO (full first screen) */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 40px 18px;
+      position: relative;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: -200px;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(102,102,255,0.22), transparent 55%),
+        radial-gradient(circle at 35% 60%, rgba(0,212,255,0.18), transparent 60%);
+      filter: blur(40px);
+      opacity: 0.8;
+      animation: floatGlow 10s ease-in-out infinite;
+    }
+    @keyframes floatGlow {
+      0%,100% { transform: translateY(0px); }
+      50% { transform: translateY(18px); }
+    }
+
+    .logoWrap {
+      position: relative;
+      text-align: center;
+      z-index: 2;
+      max-width: 980px;
+      width: 100%;
+    }
+
+    .logo {
+      font-size: clamp(72px, 14vw, 160px);
+      font-weight: 900;
+      letter-spacing: 2px;
+      margin: 0;
+      line-height: 0.95;
+      background: linear-gradient(90deg, #fff, rgba(255,255,255,0.55), #fff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      position: relative;
+      display: inline-block;
+      text-shadow: 0 0 40px rgba(102,102,255,0.35);
+      animation: shimmer 2.8s ease-in-out infinite;
+    }
+    @keyframes shimmer {
+      0% { filter: drop-shadow(0 0 0 rgba(102,102,255,0.0)); transform: translateY(0); }
+      50% { filter: drop-shadow(0 0 20px rgba(0,212,255,0.35)); transform: translateY(-6px); }
+      100% { filter: drop-shadow(0 0 0 rgba(102,102,255,0.0)); transform: translateY(0); }
+    }
+
+    .subtitle {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .heroCard {
+      margin-top: 26px;
+      display: inline-flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .pill {
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .btn {
+      cursor: pointer;
+      user-select: none;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: linear-gradient(135deg, rgba(102,102,255,0.35), rgba(0,212,255,0.22));
+      color: #fff;
+      font-weight: 700;
+      transition: transform .15s ease, filter .15s ease;
+    }
+    .btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+
+    /* CONTENT */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 18px 80px;
+    }
+
+    .sectionTitle {
+      margin: 0 0 14px;
+      font-size: 18px;
+      color: rgba(255,255,255,0.9);
+    }
+
+    .layout {
+      position: relative;
+      margin-top: 30px;
+      padding-top: 10px;
+    }
+
+    /* Results is the "background" */
+    .results {
+      border: 1px solid var(--border);
+      background: var(--panel);
+      border-radius: 20px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    /* Summary overlays results */
+    .summary {
+      position: absolute;
+      top: -22px;
+      left: 18px; /* RTL: keep it visually nice; still left side overlay */
+      width: min(420px, calc(100% - 36px));
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.06));
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+      z-index: 2;
+      backdrop-filter: blur(8px);
+    }
+
+    .kv {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 8px 12px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .kv b { color: var(--text); font-weight: 700; }
+    .kv .ok { color: var(--good); }
+    .kv .bad { color: var(--bad); }
+
+    .resultsInner {
+      padding-top: 130px; /* leave space for summary overlay */
+      display: grid;
+      gap: 14px;
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      border-radius: 18px;
+      padding: 14px;
+      overflow: hidden;
+    }
+    .cardHeader {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .tag {
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.05);
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .cardTitle {
+      font-weight: 900;
+      font-size: 15px;
+      color: rgba(255,255,255,0.92);
+      margin: 0;
+    }
+
+    pre {
+      margin: 0;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,0.25);
+      overflow: auto;
+      direction: ltr;
+      text-align: left;
+      font-size: 12px;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.88);
+      max-width: 100%;
+    }
+
+    .footer {
+      margin-top: 26px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    @media (max-width: 720px) {
+      .summary {
+        position: static;
+        width: 100%;
+        margin-bottom: 14px;
+      }
+      .resultsInner { padding-top: 0; }
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <div class="logo">CROW</div>
-      <div class="badge">MANUAL Report - subdomain</div>
-    </div>
-
-    <div class="grid">
-      <div class="card">
-        <div class="card-h">
-          <div class="title">Summary</div>
-          <div class="meta" id="meta"></div>
-        </div>
-        <div class="card-b">
-          <div class="kv" id="summary"></div>
-        </div>
+  <section class="hero">
+    <div class="logoWrap">
+      <h1 class="logo">CROW</h1>
+      <div class="subtitle">
+       MANUAL Report — subdomain 
       </div>
-
-      <div class="card">
-        <div class="card-h">
-          <div class="title">Results</div>
-          <div class="meta" id="count"></div>
-        </div>
-        <div class="card-b">
-          <pre id="json"></pre>
-          <div class="small" style="margin-top:10px">Tip: This view is generated locally from JSON.</div>
-        </div>
+      <div class="heroCard">
+        <span class="pill">Project: /home/al-emad/Documents/python/FinalProject/CROW-OSINT</span>
+        <span class="pill">Workspace: default</span>
+        <span class="pill" id="tsPill">Timestamp: —</span>
+        <span class="btn" onclick="document.getElementById('report').scrollIntoView({behavior:'smooth'})">عرض التقرير</span>
       </div>
     </div>
+  </section>
+
+  <div class="container" id="report">
+    <div class="layout">
+      <div class="summary" id="summary">
+        <div class="sectionTitle">Summary</div>
+        <div class="kv" id="kv"></div>
+      </div>
+
+      <div class="results">
+        <div class="sectionTitle">Results</div>
+        <div class="resultsInner" id="results"></div>
+      </div>
+    </div>
+
+    <div class="footer">Generated by CROW • 2026-01-13 14:59:00</div>
   </div>
 
-<script id="DATA" type="application/json">{
-  "framework": "CROW",
-  "version": "1.0.0",
-  "workspace": "default",
-  "mode": "manual",
-  "plugin": "subdomain",
-  "target": "google.com",
-  "timestamp": "20260111_181601",
-  "results": [
-    {
-      "status": "success",
-      "plugin": "subdomain",
-      "type": "passive",
-      "target": "google.com",
-      "timestamp": "2026-01-11T18:16:01.313353",
-      "output": {
-        "plugin": "subdomain",
-        "results": [
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:14:56.200181",
-            "domain": "accounts.google.com",
-            "type": "A",
-            "values": [
-              "192.178.223.84"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:14:56.260385",
-            "domain": "admin.google.com",
-            "type": "A",
-            "values": [
-              "142.250.74.238"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:14:56.530134",
-            "domain": "adwords.google.com",
-            "type": "A",
-            "values": [
-              "192.178.223.100",
-              "192.178.223.113",
-              "192.178.223.102",
-              "192.178.223.138",
-              "192.178.223.139",
-              "192.178.223.101"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:14:56.730719",
-            "domain": "alt1.aspmx.l.google.com",
-            "type": "A",
-            "values": [
-              "142.250.102.26"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:14:56.934279",
-            "domain": "alt1.gmail-smtp-in.l.google.com",
-            "type": "A",
-            "values": [
-              "142.250.102.27"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:14:57.130014",
-            "domain": "alt1.gmr-smtp-in.l.google.com",
-            "type": "A",
-            "values": [
-              "142.250.102.14"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:14:57.421534",
-            "domain": "alt2.aspmx.l.google.com",
-            "type": "A",
-            "values": [
-              "192.178.213.27"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:14:57.728768",
-            "domain": "alt2.gmail-smtp-in.l.google.com",
-            "type": "A",
-            "values": [
-              "192.178.213.27"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:14:57.933394",
-            "domain": "alt2.gmr-smtp-in.l.google.com",
-            "type": "A",
-            "values": [
-              "192.178.213.14"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:14:58.138021",
-            "domain": "alt3.aspmx.l.google.com",
-            "type": "A",
-            "values": [
-              "142.250.147.27"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:14:58.445262",
-            "domain": "alt3.gmail-smtp-in.l.google.com",
-            "type": "A",
-            "values": [
-              "142.250.147.27"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:14:58.752586",
-            "domain": "alt3.gmr-smtp-in.l.google.com",
-            "type": "A",
-            "values": [
-              "142.250.147.14"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:14:58.957267",
-            "domain": "alt4.aspmx.l.google.com",
-            "type": "A",
-            "values": [
-              "172.253.130.27"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:14:59.162011",
-            "domain": "alt4.gmail-smtp-in.l.google.com",
-            "type": "A",
-            "values": [
-              "172.253.130.26"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:14:59.468992",
-            "domain": "alt4.gmr-smtp-in.l.google.com",
-            "type": "A",
-            "values": [
-              "172.253.130.14"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:14:59.677261",
-            "domain": "answers.google.com",
-            "type": "A",
-            "values": [
-              "216.58.213.78"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:14:59.776488",
-            "domain": "api.google.com",
-            "type": "A",
-            "values": [
-              "216.58.214.164"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:00.390934",
-            "domain": "appengine.google.com",
-            "type": "A",
-            "values": [
-              "216.58.213.78"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:01.005914",
-            "domain": "aspmx.l.google.com",
-            "type": "A",
-            "values": [
-              "192.178.223.26"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:01.517203",
-            "domain": "audioads.google.com",
-            "type": "A",
-            "values": [
-              "216.58.214.78"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:02.336111",
-            "domain": "bigstore.corp.google.com",
-            "type": "A",
-            "values": [
-              "142.250.102.129"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:02.441958",
-            "domain": "blog.google.com",
-            "type": "A",
-            "values": [
-              "142.250.74.233"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:13.496136",
-            "domain": "cert-test.sandbox.google.com",
-            "type": "A",
-            "values": [
-              "192.178.223.90"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:13.906016",
-            "domain": "chrome.google.com",
-            "type": "A",
-            "values": [
-              "216.58.213.78"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:14.314925",
-            "domain": "client-channel.google.com",
-            "type": "A",
-            "values": [
-              "216.58.215.46"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:14.519653",
-            "domain": "cloud.google.com",
-            "type": "A",
-            "values": [
-              "142.250.75.238"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:14.827086",
-            "domain": "cod.ext.google.com",
-            "type": "A",
-            "values": [
-              "216.239.44.73"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:14.929480",
-            "domain": "code.google.com",
-            "type": "A",
-            "values": [
-              "142.250.179.110"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:15.338496",
-            "domain": "corp.google.com",
-            "type": "A",
-            "values": [
-              "142.250.27.129"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:15.956034",
-            "domain": "dasher-qa.corp.google.com",
-            "type": "A",
-            "values": [
-              "142.250.102.129"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:16.158446",
-            "domain": "dasher.corp.google.com",
-            "type": "A",
-            "values": [
-              "142.250.102.129"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:16.882413",
-            "domain": "devconsole-testers.sandbox.google.com",
-            "type": "A",
-            "values": [
-              "192.178.223.81"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:16.935396",
-            "domain": "developer.google.com",
-            "type": "A",
-            "values": [
-              "216.58.214.174"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:16.990904",
-            "domain": "developers.google.com",
-            "type": "A",
-            "values": [
-              "172.217.20.46"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:17.334622",
-            "domain": "dg.video.google.com",
-            "type": "A",
-            "values": [
-              "173.194.76.176"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:17.533337",
-            "domain": "docs-dev.corp.google.com",
-            "type": "A",
-            "values": [
-              "142.250.102.129"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:18.132803",
-            "domain": "docs-qa.corp.google.com",
-            "type": "A",
-            "values": [
-              "142.250.102.129"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:18.204699",
-            "domain": "docs.google.com",
-            "type": "A",
-            "values": [
-              "172.217.20.46"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:18.406785",
-            "domain": "docs.sandbox.google.com",
-            "type": "A",
-            "values": [
-              "192.178.223.81"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:18.922502",
-            "domain": "drive.google.com",
-            "type": "A",
-            "values": [
-              "142.251.39.206"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:19.229324",
-            "domain": "drive.sandbox.google.com",
-            "type": "A",
-            "values": [
-              "192.178.223.81"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:19.843625",
-            "domain": "ecc-test.sandbox.google.com",
-            "type": "A",
-            "values": [
-              "192.178.223.81"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:20.154098",
-            "domain": "eggroll.ext.google.com",
-            "type": "A",
-            "values": [
-              "216.239.44.90"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:24.163663",
-            "domain": "friendconnect.google.com",
-            "type": "A",
-            "values": [
-              "216.58.213.78"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:25.270375",
-            "domain": "git.corp.google.com",
-            "type": "A",
-            "values": [
-              "142.250.102.129"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:26.703385",
-            "domain": "gmail-smtp-in.l.google.com",
-            "type": "A",
-            "values": [
-              "192.178.223.26"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:26.890948",
-            "domain": "gmail.google.com",
-            "type": "A",
-            "values": [
-              "216.58.213.78"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:27.214969",
-            "domain": "gmr-smtp-in.l.google.com",
-            "type": "A",
-            "values": [
-              "192.178.223.14"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:31.106132",
-            "domain": "jmt0.google.com",
-            "type": "A",
-            "values": [
-              "216.58.213.78"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:31.618261",
-            "domain": "login.corp.google.com",
-            "type": "A",
-            "values": [
-              "142.250.102.129"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:32.024942",
-            "domain": "m.google.com",
-            "type": "A",
-            "values": [
-              "142.250.178.139"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:32.437183",
-            "domain": "m.guts.corp.google.com",
-            "type": "A",
-            "values": [
-              "142.250.102.129"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:32.744740",
-            "domain": "m.gutsdev.corp.google.com",
-            "type": "A",
-            "values": [
-              "142.250.102.129"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:33.460821",
-            "domain": "mail.google.com",
-            "type": "A",
-            "values": [
-              "142.251.39.197"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:34.484785",
-            "domain": "mtalk.google.com",
-            "type": "A",
-            "values": [
-              "66.102.1.188"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:35.405981",
-            "domain": "mtv-da.ext.google.com",
-            "type": "A",
-            "values": [
-              "216.239.45.170"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:40.730128",
-            "domain": "photos.google.com",
-            "type": "A",
-            "values": [
-              "216.58.214.174"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:44.006811",
-            "domain": "plus.google.com",
-            "type": "A",
-            "values": [
-              "142.251.39.206"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:46.054451",
-            "domain": "prom-test.sandbox.google.com",
-            "type": "A",
-            "values": [
-              "172.217.76.81"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:46.337945",
-            "domain": "prom.corp.google.com",
-            "type": "A",
-            "values": [
-              "142.250.102.129"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:46.669123",
-            "domain": "proxyconfig.corp.google.com",
-            "type": "A",
-            "values": [
-              "142.250.102.129"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:47.283077",
-            "domain": "sandbox.google.com",
-            "type": "A",
-            "values": [
-              "172.217.76.81"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:47.590249",
-            "domain": "script.sandbox.google.com",
-            "type": "A",
-            "values": [
-              "192.178.223.81"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:47.897611",
-            "domain": "search.corp.google.com",
-            "type": "A",
-            "values": [
-              "142.250.102.129"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:48.614437",
-            "domain": "services.google.com",
-            "type": "A",
-            "values": [
-              "216.58.213.78"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:48.716187",
-            "domain": "shop.google.com",
-            "type": "A",
-            "values": [
-              "172.217.76.92"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:51.688588",
-            "domain": "sites.google.com",
-            "type": "A",
-            "values": [
-              "142.250.75.238"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:51.890015",
-            "domain": "sites.sandbox.google.com",
-            "type": "A",
-            "values": [
-              "192.178.223.81"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:52.357679",
-            "domain": "soaproxyprod01.ext.google.com",
-            "type": "A",
-            "values": [
-              "72.14.225.70"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:52.606496",
-            "domain": "soaproxytest01.ext.google.com",
-            "type": "A",
-            "values": [
-              "216.239.44.94"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:55.099941",
-            "domain": "staging-git.corp.google.com",
-            "type": "A",
-            "values": [
-              "142.250.102.129"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:56.372450",
-            "domain": "talkgadget.google.com",
-            "type": "A",
-            "values": [
-              "216.58.213.78"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:56.907641",
-            "domain": "twd-da.ext.google.com",
-            "type": "A",
-            "values": [
-              "72.14.229.178"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:58.204133",
-            "domain": "uberproxy.corp.google.com",
-            "type": "A",
-            "values": [
-              "142.250.102.129"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:58.340610",
-            "domain": "upload.google.com",
-            "type": "A",
-            "values": [
-              "142.250.75.239"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:58.750902",
-            "domain": "upload.video.google.com",
-            "type": "A",
-            "values": [
-              "172.217.18.207"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:15:59.979076",
-            "domain": "webdrive-test-canary.corp.google.com",
-            "type": "A",
-            "values": [
-              "142.250.102.129"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:16:00.285522",
-            "domain": "webdrive-test-prod.corp.google.com",
-            "type": "A",
-            "values": [
-              "142.250.102.129"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:16:00.593235",
-            "domain": "wifi.google.com",
-            "type": "A",
-            "values": [
-              "74.125.71.123"
-            ]
-          },
-          {
-            "plugin": "subdomain",
-            "timestamp": "2026-01-11T15:16:01.313116",
-            "domain": "www.google.com",
-            "type": "A",
-            "values": [
-              "216.239.38.120"
-            ]
-          }
-        ],
-        "errors": []
+  <script>
+    const DATA = {"status": "success", "plugin": "subdomain", "type": "passive", "target": "tesla.com", "timestamp": "2026-01-13T14:59:00.236805", "output": {"plugin": "subdomain", "results": [{"plugin": "subdomain", "timestamp": "2026-01-13T11:59:00.233674", "domain": "shop.tesla.com", "type": "A", "values": ["23.193.108.68"]}, {"plugin": "subdomain", "timestamp": "2026-01-13T11:59:00.236660", "domain": "www.tesla.com", "type": "A", "values": ["23.193.108.68"]}], "errors": []}};
+
+    function safe(v) {
+      if (v === null || v === undefined) return "";
+      if (typeof v === "object") return JSON.stringify(v, null, 2);
+      return String(v);
+    }
+
+    function buildSummary(data) {
+      const kv = document.getElementById("kv");
+      kv.innerHTML = "";
+
+      // Try common keys
+      const status = data.status ?? (data.results ? "success" : "unknown");
+      const target = data.target ?? data?.payload?.target ?? "";
+      const ts = data.timestamp ?? data?.payload?.timestamp ?? "";
+
+      document.getElementById("tsPill").textContent = "Timestamp: " + (ts || "—");
+
+      const items = [
+        ["Status", status],
+        ["Target", target],
+      ];
+
+      // AUTO payload has results list
+      if (data.results && Array.isArray(data.results)) {
+        items.push(["Plugins", data.results.length]);
+      }
+
+      // MANUAL payload may have plugin
+      if (data.plugin) items.push(["Plugin", data.plugin]);
+      if (data.type) items.push(["Type", data.type]);
+
+      // render
+      for (const [k, v] of items) {
+        const kEl = document.createElement("div");
+        kEl.innerHTML = "<b>" + k + "</b>";
+        const vEl = document.createElement("div");
+        let vv = safe(v);
+        if (k === "Status") {
+          vEl.innerHTML = "<span class='" + (vv === "success" ? "ok" : "bad") + "'>" + vv + "</span>";
+        } else {
+          vEl.textContent = vv;
+        }
+        kv.appendChild(kEl);
+        kv.appendChild(vEl);
       }
     }
-  ]
-}</script>
-<script>
-const data = JSON.parse(document.getElementById("DATA").textContent);
 
-function safe(v){
-  if (v === null || v === undefined) return "";
-  if (typeof v === "string") return v;
-  try { return JSON.stringify(v, null, 2); } catch(e){ return String(v); }
-}
+    function card(title, tag, obj) {
+      const wrap = document.createElement("div");
+      wrap.className = "card";
 
-function setSummary(k, v){
-  const wrap = document.getElementById("summary");
-  const kEl = document.createElement("div");
-  kEl.className = "k";
-  kEl.textContent = k;
+      const h = document.createElement("div");
+      h.className = "cardHeader";
 
-  const vEl = document.createElement("div");
-  vEl.className = "v";
-  vEl.textContent = safe(v);
+      const t = document.createElement("h3");
+      t.className = "cardTitle";
+      t.textContent = title;
 
-  wrap.appendChild(kEl);
-  wrap.appendChild(vEl);
-}
+      const tg = document.createElement("span");
+      tg.className = "tag";
+      tg.textContent = tag;
 
-document.getElementById("json").textContent = JSON.stringify(data, null, 2);
+      h.appendChild(t);
+      h.appendChild(tg);
 
-document.getElementById("meta").textContent =
-  (data.framework ? data.framework + " " : "") +
-  (data.version ? "v" + data.version + " " : "") +
-  (data.workspace ? " | workspace: " + data.workspace : "");
+      const pre = document.createElement("pre");
+      pre.textContent = JSON.stringify(obj, null, 2);
 
-if (data.mode) setSummary("Mode", data.mode);
-if (data.target) setSummary("Target", data.target);
-if (data.timestamp) setSummary("Timestamp", data.timestamp);
+      wrap.appendChild(h);
+      wrap.appendChild(pre);
+      return wrap;
+    }
 
-let results = data.results;
-if (!results && data.output) results = [data];
-if (Array.isArray(results)){
-  document.getElementById("count").textContent = "Items: " + results.length;
-} else {
-  document.getElementById("count").textContent = "";
-}
-</script>
+    function buildResults(data) {
+      const root = document.getElementById("results");
+      root.innerHTML = "";
+
+      // AUTO report: show each plugin result cleanly
+      if (data.results && Array.isArray(data.results)) {
+        for (const r of data.results) {
+          const title = (r.plugin ? r.plugin : "plugin");
+          const tag = (r.status ? r.status : "result");
+          root.appendChild(card(title, tag, r));
+        }
+        return;
+      }
+
+      // MANUAL: show the whole payload, and if output exists show it separately
+      if (data.output) {
+        root.appendChild(card("Output", "payload", data.output));
+      }
+      root.appendChild(card("Raw", "json", data));
+    }
+
+    buildSummary(DATA);
+    buildResults(DATA);
+  </script>
 </body>
 </html>

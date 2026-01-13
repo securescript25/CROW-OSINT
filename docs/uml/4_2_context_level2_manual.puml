@@ -1,0 +1,45 @@
+@startuml CROW_Context_Level2_MANUAL
+left to right direction
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+actor "User\n(Security Analyst)" as U
+
+rectangle "CROW Console\n(CrowConsole)" as CONS
+rectangle "Config Loader\n(load_config)" as CFG
+rectangle "Plugin Registry\n(PluginRegistry)" as REG
+rectangle "Selected Plugin\n(passive/active)" as PL
+rectangle "Report Builder\n(JSON Safe + HTML Writer)" as REP
+
+rectangle "Target\nDomain/IP/URL" as T
+rectangle "External OSINT Services\n(DNS/WHOIS/Search APIs)" as S
+database "Filesystem\nreports/manual/\n<plugin>.json + <plugin>.html" as FS
+
+U --> CONS : Select MANUAL (2)
+
+CONS --> CFG : Load configuration
+CFG --> CONS : config dict
+
+CONS --> REG : Autoload plugins\nList passive + active
+REG --> CONS : Plugins list\n(numbered menu)
+
+U --> CONS : Choose plugin number\n(e.g., 04 dns / 08 whois)
+CONS --> U : Ask for target
+U --> CONS : Enter target
+
+CONS --> REG : create_passive/create_active\n(plugin, config, logger)
+REG --> PL : Plugin instance
+
+CONS --> PL : Run plugin\nplugin.run(target)
+PL --> S : Passive queries (optional)
+S --> PL : OSINT data
+PL --> T : Active requests (optional)
+T --> PL : Responses
+PL --> CONS : PluginOutput (results/errors)
+
+CONS --> REP : Build payload + json_safe
+REP --> FS : Save <plugin>.json\nSave <plugin>.html
+REP --> U : Open report in browser\nfile:///.../reports/manual/<plugin>.html
+
+CONS --> U : Back to prompt\ncrow >
+@enduml

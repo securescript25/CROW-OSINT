@@ -1,0 +1,38 @@
+@startuml CROW_Context_Level2_AUTO
+left to right direction
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+actor "User\n(Security Analyst)" as U
+
+rectangle "CROW Console\n(CrowConsole)" as CONS
+rectangle "Config Loader\n(load_config)" as CFG
+rectangle "Plugin Registry\n(PluginRegistry)" as REG
+rectangle "Plugins\n(passive + active)" as PL
+rectangle "Report Builder\n(JSON Safe + HTML Writer)" as REP
+
+rectangle "Target\nDomain/IP/URL" as T
+rectangle "External OSINT Services\n(DNS/WHOIS/Search APIs)" as S
+database "Filesystem\nreports/auto/\nreport.json + report.html" as FS
+
+U --> CONS : Select AUTO (1)\nEnter target (e.g., ust.edu.ye)
+
+CONS --> CFG : Load configuration\n(default + YAML + ENV)
+CFG --> CONS : config dict
+
+CONS --> REG : Autoload plugins
+REG --> PL : Create instances\n(passive/active)
+
+CONS --> PL : Run each plugin\n(plugin.run(target))
+PL --> S : Passive queries (optional)
+S --> PL : OSINT data
+PL --> T : Active requests (optional)
+T --> PL : Responses
+PL --> CONS : PluginOutput (results/errors)
+
+CONS --> REP : Aggregate results\nBuild payload + json_safe
+REP --> FS : Save report.json\nSave report.html
+REP --> U : Open report in browser\nfile:///.../reports/auto/report.html
+
+CONS --> U : Back to prompt\ncrow >
+@enduml

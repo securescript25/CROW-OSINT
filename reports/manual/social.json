@@ -1,0 +1,105 @@
+{
+  "status": "success",
+  "plugin": "social",
+  "type": "passive",
+  "target": "tesla.com",
+  "timestamp": "2026-01-13T19:22:43.247230",
+  "output": {
+    "plugin": "social",
+    "results": [
+      {
+        "plugin": "social",
+        "type": "SOCIAL",
+        "engine": "site_extract",
+        "platform": "Twitter",
+        "url": "https://twitter.com/Tesla",
+        "username": null,
+        "exists": true,
+        "status_code": 200,
+        "response_time": 0,
+        "source": "site"
+      },
+      {
+        "plugin": "social",
+        "type": "SOCIAL",
+        "engine": "guess",
+        "platform": "Twitter",
+        "url": "https://twitter.com/tesla",
+        "username": null,
+        "exists": true,
+        "status_code": 200,
+        "response_time": 0,
+        "source": "guess"
+      },
+      {
+        "plugin": "social",
+        "type": "SOCIAL",
+        "engine": "guess",
+        "platform": "Instagram",
+        "url": "https://instagram.com/tesla",
+        "username": null,
+        "exists": true,
+        "status_code": 200,
+        "response_time": 0,
+        "source": "guess"
+      },
+      {
+        "plugin": "social",
+        "type": "SOCIAL",
+        "engine": "guess",
+        "platform": "LinkedIn",
+        "url": "https://www.linkedin.com/company/tesla/",
+        "username": null,
+        "exists": true,
+        "status_code": 200,
+        "response_time": 0,
+        "source": "guess"
+      },
+      {
+        "plugin": "social",
+        "type": "SOCIAL",
+        "engine": "guess",
+        "platform": "Facebook",
+        "url": "https://facebook.com/tesla",
+        "username": null,
+        "exists": true,
+        "status_code": 200,
+        "response_time": 0,
+        "source": "guess"
+      },
+      {
+        "plugin": "social",
+        "type": "SOCIAL",
+        "engine": "guess",
+        "platform": "YouTube",
+        "url": "https://youtube.com/@tesla",
+        "username": null,
+        "exists": true,
+        "status_code": 200,
+        "response_time": 0,
+        "source": "guess"
+      },
+      {
+        "plugin": "social",
+        "type": "SOCIAL",
+        "engine": "guess",
+        "platform": "GitHub",
+        "url": "https://github.com/tesla",
+        "username": null,
+        "exists": true,
+        "status_code": 200,
+        "response_time": 0,
+        "source": "guess"
+      }
+    ],
+    "errors": [
+      "DEBUG: engines_loaded=['site_extract', 'bing_search', 'guess']",
+      "DEBUG: running_engine=site_extract domain=tesla.com brand=tesla",
+      "DEBUG: engine=site_extract returned=1",
+      "DEBUG: running_engine=bing_search domain=tesla.com brand=tesla",
+      "DEBUG: engine=bing_search returned=0",
+      "DEBUG: running_engine=guess domain=tesla.com brand=tesla",
+      "DEBUG: engine=guess returned=6"
+    ]
+  }
+}

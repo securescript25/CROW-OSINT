@@ -1,0 +1,215 @@
+{
+  "status": "success",
+  "plugin": "dns",
+  "type": "passive",
+  "target": "facebook.com",
+  "timestamp": "2026-01-12T22:25:13.319253",
+  "output": {
+    "plugin": "dns",
+    "results": [
+      {
+        "type": "WILDCARD",
+        "name": "facebook.com",
+        "wildcard_enabled": false,
+        "wildcard_ips": [],
+        "test_name": "j4l00q4xpo6hcw7y.facebook.com",
+        "plugin": "dns"
+      },
+      {
+        "type": "SOA",
+        "name": "facebook.com",
+        "ttl": 3600,
+        "mname": "a.ns.facebook.com",
+        "rname": "dns.facebook.com",
+        "serial": 4207849484,
+        "plugin": "dns"
+      },
+      {
+        "type": "NS",
+        "name": "facebook.com",
+        "ttl": 172800,
+        "target": "c.ns.facebook.com",
+        "plugin": "dns"
+      },
+      {
+        "type": "NS",
+        "name": "facebook.com",
+        "ttl": 172800,
+        "target": "d.ns.facebook.com",
+        "plugin": "dns"
+      },
+      {
+        "type": "NS",
+        "name": "facebook.com",
+        "ttl": 172800,
+        "target": "b.ns.facebook.com",
+        "plugin": "dns"
+      },
+      {
+        "type": "NS",
+        "name": "facebook.com",
+        "ttl": 172800,
+        "target": "a.ns.facebook.com",
+        "plugin": "dns"
+      },
+      {
+        "type": "MX",
+        "name": "facebook.com",
+        "ttl": 3600,
+        "priority": 10,
+        "target": "smtpin.vvv.facebook.com",
+        "plugin": "dns"
+      },
+      {
+        "type": "A",
+        "name": "facebook.com",
+        "ttl": 46,
+        "address": "163.70.128.35",
+        "plugin": "dns"
+      },
+      {
+        "type": "AAAA",
+        "name": "facebook.com",
+        "ttl": 36,
+        "address": "2a03:2880:f17b:283:face:b00c:0:25de",
+        "plugin": "dns"
+      },
+      {
+        "type": "TXT",
+        "name": "facebook.com",
+        "ttl": 3600,
+        "strings": "facebook-domain-verification=y7isfmi3kzyg1r4wophh9vyb6pgbda",
+        "plugin": "dns"
+      },
+      {
+        "type": "TXT",
+        "name": "facebook.com",
+        "ttl": 3600,
+        "strings": "zoom-domain-verification=4b2ef4e1-6dee-4483-9869-9bef353fd147",
+        "plugin": "dns"
+      },
+      {
+        "type": "TXT",
+        "name": "facebook.com",
+        "ttl": 3600,
+        "strings": "v=spf1 redirect=_spf.facebook.com",
+        "plugin": "dns"
+      },
+      {
+        "type": "TXT",
+        "name": "facebook.com",
+        "ttl": 3600,
+        "strings": "google-site-verification=sK6uY9x7eaMoEMfn3OILqwTFYgaNp4llmguKI-C3_iA",
+        "plugin": "dns"
+      },
+      {
+        "type": "TXT",
+        "name": "facebook.com",
+        "ttl": 3600,
+        "strings": "google-site-verification=A2WZWCNQHrGV_TWwKh6KHY90tY0SHZo_RnyMJoDaG0s",
+        "plugin": "dns"
+      },
+      {
+        "type": "TXT",
+        "name": "facebook.com",
+        "ttl": 3600,
+        "strings": "google-site-verification=wdH5DTJTc9AYNwVunSVFeK0hYDGUIEOGb-RReU6pJlY",
+        "plugin": "dns"
+      },
+      {
+        "type": "CAA",
+        "name": "facebook.com",
+        "ttl": 3600,
+        "flags": 0,
+        "tag": "b'issue'",
+        "value": "b'digicert.com; account=271b0beda0771d006aa3a6c11b05187d456d6c239b46cb5241196095b09c92af'",
+        "plugin": "dns"
+      },
+      {
+        "type": "RECURSION",
+        "nameserver": "129.134.30.12",
+        "recursive": false,
+        "flags": "QR RD",
+        "plugin": "dns"
+      },
+      {
+        "type": "BIND_VERSION",
+        "nameserver": "129.134.30.12",
+        "version": "not detected",
+        "plugin": "dns"
+      },
+      {
+        "type": "NXDOMAIN_HIJACK",
+        "nameserver": "129.134.30.12",
+        "test_name": "zuxxz8tjxygpte6n3qlb.com",
+        "hijack_detected": false,
+        "answers": [],
+        "plugin": "dns"
+      },
+      {
+        "type": "RECURSION",
+        "nameserver": "129.134.31.12",
+        "recursive": false,
+        "flags": "QR RD",
+        "plugin": "dns"
+      },
+      {
+        "type": "BIND_VERSION",
+        "nameserver": "129.134.31.12",
+        "version": "not detected",
+        "plugin": "dns"
+      },
+      {
+        "type": "NXDOMAIN_HIJACK",
+        "nameserver": "129.134.31.12",
+        "test_name": "2288f1duvxordc28ncvl.com",
+        "hijack_detected": false,
+        "answers": [],
+        "plugin": "dns"
+      },
+      {
+        "type": "RECURSION",
+        "nameserver": "185.89.218.12",
+        "recursive": false,
+        "flags": "QR RD",
+        "plugin": "dns"
+      },
+      {
+        "type": "BIND_VERSION",
+        "nameserver": "185.89.218.12",
+        "version": "not detected",
+        "plugin": "dns"
+      },
+      {
+        "type": "NXDOMAIN_HIJACK",
+        "nameserver": "185.89.218.12",
+        "test_name": "278tt64dr5b2w3omc7gg.com",
+        "hijack_detected": false,
+        "answers": [],
+        "plugin": "dns"
+      },
+      {
+        "type": "RECURSION",
+        "nameserver": "185.89.219.12",
+        "recursive": false,
+        "flags": "QR RD",
+        "plugin": "dns"
+      },
+      {
+        "type": "BIND_VERSION",
+        "nameserver": "185.89.219.12",
+        "version": "not detected",
+        "plugin": "dns"
+      },
+      {
+        "type": "NXDOMAIN_HIJACK",
+        "nameserver": "185.89.219.12",
+        "test_name": "eeuecc4xxlympi9zpt7k.com",
+        "hijack_detected": false,
+        "answers": [],
+        "plugin": "dns"
+      }
+    ],
+    "errors": []
+  }
+}

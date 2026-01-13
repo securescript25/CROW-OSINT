@@ -3,60 +3,42 @@
     "url": "https://twitter.com/{}",
     "urlMain": "https://twitter.com/",
     "errorType": "status_code",
-    "errorCode": 404
-  },
-  "GitHub": {
-    "url": "https://github.com/{}",
-    "urlMain": "https://github.com/",
-    "errorType": "status_code",
-    "errorCode": 404
+    "errorCode": [404],
+    "priority": 10
   },
   "Instagram": {
     "url": "https://instagram.com/{}",
     "urlMain": "https://instagram.com/",
     "errorType": "status_code",
-    "errorCode": 404
+    "errorCode": [404],
+    "priority": 10
   },
   "LinkedIn": {
     "url": "https://linkedin.com/in/{}",
     "urlMain": "https://linkedin.com/",
     "errorType": "status_code",
-    "errorCode": 404
+    "errorCode": [404],
+    "priority": 9
+  },
+  "GitHub": {
+    "url": "https://github.com/{}",
+    "urlMain": "https://github.com/",
+    "errorType": "status_code",
+    "errorCode": [404],
+    "priority": 8
   },
   "Facebook": {
     "url": "https://facebook.com/{}",
     "urlMain": "https://facebook.com/",
     "errorType": "status_code",
-    "errorCode": 404
+    "errorCode": [404],
+    "priority": 7
   },
   "YouTube": {
     "url": "https://youtube.com/@{}",
     "urlMain": "https://youtube.com/",
     "errorType": "status_code",
-    "errorCode": 404
-  },
-  "Reddit": {
-    "url": "https://reddit.com/user/{}",
-    "urlMain": "https://reddit.com/",
-    "errorType": "status_code",
-    "errorCode": 404
-  },
-  "TikTok": {
-    "url": "https://tiktok.com/@{}",
-    "urlMain": "https://tiktok.com/",
-    "errorType": "status_code",
-    "errorCode": 404
-  },
-  "Pinterest": {
-    "url": "https://pinterest.com/{}",
-    "urlMain": "https://pinterest.com/",
-    "errorType": "status_code",
-    "errorCode": 404
-  },
-  "Snapchat": {
-    "url": "https://snapchat.com/add/{}",
-    "urlMain": "https://snapchat.com/",
-    "errorType": "status_code",
-    "errorCode": 404
+    "errorCode": [404],
+    "priority": 6
   }
 }
