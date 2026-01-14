@@ -16,7 +16,6 @@ class PluginRegistry:
     _active: Dict[str, Type[ActivePlugin]] = {}
     _reporters: Dict[str, Type[ReporterPlugin]] = {}
 
-    # Plugin information cache
     _plugin_info: Dict[str, Dict[str, Any]] = {}
 
     @classmethod
@@ -42,22 +41,18 @@ class PluginRegistry:
         """
         mods: List[Any] = []
 
-        # 1) plugin.py first (IMPORTANT)
         m = cls._safe_import(f"crow.plugins.{plugin_dir}.plugin")
         if m is not None:
             mods.append(m)
 
-        # 2) package
         m = cls._safe_import(f"crow.plugins.{plugin_dir}")
         if m is not None:
             mods.append(m)
 
-        # 3) direct module named as folder
         m = cls._safe_import(f"crow.plugins.{plugin_dir}.{plugin_dir}")
         if m is not None:
             mods.append(m)
 
-        # remove duplicates by object id
         uniq: List[Any] = []
         seen: Set[int] = set()
         for mm in mods:
@@ -83,7 +78,6 @@ class PluginRegistry:
         """Auto-discover and register all plugins."""
         pkg = importlib.import_module("crow.plugins")
 
-        # Clear existing registries
         cls._passive.clear()
         cls._active.clear()
         cls._reporters.clear()
@@ -113,11 +107,9 @@ class PluginRegistry:
 
             found_any = False
 
-            # Inspect all candidate modules for this plugin_dir
             for module in modules:
                 try:
                     for _, obj in inspect.getmembers(module, inspect.isclass):
-                        # Only allow classes that belong to this plugin package
                         obj_mod = getattr(obj, "__module__", "") or ""
                         if not obj_mod.startswith(f"crow.plugins.{plugin_dir}"):
                             continue
@@ -130,7 +122,6 @@ class PluginRegistry:
                         ):
                             pname = obj.name
 
-                            # ✅ prevent duplicates (plugin.py first wins)
                             if pname in cls._passive:
                                 continue
 
@@ -143,7 +134,6 @@ class PluginRegistry:
                             found_any = True
                             continue
 
-                        # Active
                         if (
                             issubclass(obj, ActivePlugin)
                             and obj is not ActivePlugin
@@ -151,7 +141,6 @@ class PluginRegistry:
                         ):
                             pname = obj.name
 
-                            # ✅ prevent duplicates (plugin.py first wins)
                             if pname in cls._active:
                                 continue
 
@@ -172,7 +161,6 @@ class PluginRegistry:
             if not found_any:
                 logger.warning(f"No plugin classes found in: {plugin_dir}")
 
-        # Load reporter plugins
         try:
             rep_pkg = importlib.import_module("crow.reporters")
             logger.debug("Loading reporter plugins...")
