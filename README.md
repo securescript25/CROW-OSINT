@@ -3,7 +3,7 @@ Crow Recon OSINT Framework – Modular & Open Source.
 
 ## Quick Start
 ```bash
-pip install crow-osint
-crow passive example.com -o out.json
+git clone https://github.com/securescript25/CROW-OSINT.git
+poetry run crow
 
 
