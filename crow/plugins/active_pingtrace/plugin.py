@@ -1,6 +1,5 @@
 """
 active_pingtrace/plugin.py - Advanced Ping & Traceroute Plugin
-أداة متقدمة لاختبار الاتصال وتتبع المسار مع تحليل شبكي متكامل
 """
 
 import sys
@@ -25,7 +24,6 @@ from crow.core.models import PluginOutput
 # ====================== ENUMS ======================
 
 class ProtocolType(str, Enum):
-    """أنواع البروتوكولات المدعومة"""
     ICMP = "icmp"
     TCP = "tcp"
     UDP = "udp"
@@ -34,7 +32,6 @@ class ProtocolType(str, Enum):
 
 
 class PacketStatus(str, Enum):
-    """حالات الحزمة"""
     SUCCESS = "success"
     TIMEOUT = "timeout"
     UNREACHABLE = "unreachable"
@@ -43,7 +40,6 @@ class PacketStatus(str, Enum):
 
 
 class ScanMode(str, Enum):
-    """أنواع المسح"""
     PING = "ping"
     TRACEROUTE = "traceroute"
     BOTH = "both"
@@ -53,12 +49,11 @@ class ScanMode(str, Enum):
 
 @dataclass
 class PingResult:
-    """نتيجة اختبار Ping"""
     sequence: int
     target: str
     ip: str
     status: PacketStatus
-    rtt: float  # Round Trip Time in ms
+    rtt: float  
     ttl: Optional[int] = None
     packet_size: int = 64
     protocol: ProtocolType = ProtocolType.ICMP
@@ -72,7 +67,6 @@ class PingResult:
 
 @dataclass
 class HopResult:
-    """نتيجة قفزة في Traceroute"""
     hop_number: int
     ip_address: Optional[str]
     hostname: Optional[str]
@@ -92,7 +86,6 @@ class HopResult:
 
 @dataclass
 class ScanSummary:
-    """ملخص المسح"""
     target: str
     ip: str
     mode: str
@@ -116,7 +109,6 @@ class ScanSummary:
 # ====================== ICMP ENGINE ======================
 
 class ICMPSocket:
-    """مدير ICMP Socket مع دعم متعدد الأنظمة"""
     
     def __init__(self, timeout=2.0, ttl=64):
         self.timeout = timeout
@@ -149,7 +141,6 @@ class ICMPSocket:
             self.socket.settimeout(self.timeout)
             return True
         except PermissionError:
-            # إذا لم تكن هناك صلاحيات root، استخدم ping command
             return False
         except Exception as e:
             return False
@@ -192,13 +183,11 @@ class ICMPSocket:
             
             self.socket.sendto(packet, (target_ip, 0))
             
-            # استقبال الرد
             ready = select.select([self.socket], [], [], self.timeout)
             if ready[0]:
                 response, addr = self.socket.recvfrom(1024)
-                rtt = (time.time() - start_time) * 1000  # تحويل لـ milliseconds
+                rtt = (time.time() - start_time) * 1000  
                 
-                # استخراج TTL من IP header
                 ttl = response[8] if len(response) > 8 else None
                 
                 return True, rtt, ttl
@@ -219,13 +208,12 @@ class ICMPSocket:
 # ====================== SYSTEM PING FALLBACK ======================
 
 class SystemPing:
-    """استخدام system ping command كبديل"""
+    """ system ping command """
     
     def __init__(self):
         self.is_windows = sys.platform.startswith('win')
     
     def ping(self, target: str, count: int = 4, timeout: int = 2) -> List[Dict]:
-        """تنفيذ ping باستخدام الأمر النظامي"""
         try:
             if self.is_windows:
                 cmd = ['ping', '-n', str(count), '-w', str(timeout * 1000), target]
@@ -242,24 +230,20 @@ class SystemPing:
             return [{"status": "error", "target": target, "error": str(e)}]
     
     def parse_ping_output(self, output: str, target: str) -> List[Dict]:
-        """تحليل مخرجات أمر ping"""
         results = []
         lines = output.split('\n')
         
         for line in lines:
             line = line.strip()
             
-            # البحث عن سطور الرد
             if 'time=' in line.lower() or 'ttl=' in line.lower():
                 try:
-                    # استخراج RTT
                     if 'time=' in line:
                         time_part = line.split('time=')[1].split()[0]
                         rtt = float(time_part.replace('ms', '').replace('ms<', ''))
                     else:
                         rtt = 0
                     
-                    # استخراج TTL
                     if 'ttl=' in line:
                         ttl_part = line.split('ttl=')[1].split()[0]
                         ttl = int(ttl_part)
@@ -283,12 +267,11 @@ class SystemPing:
 # ====================== TRACEROUTE ENGINE ======================
 
 class TracerouteEngine:
-    """محرك Traceroute متعدد البروتوكولات"""
     
     def __init__(self, timeout=1.0, max_hops=30):
         self.timeout = timeout
         self.max_hops = max_hops
-        self.port = 33434  # المنفذ الافتراضي لـ traceroute
+        self.port = 33434  
         self.is_windows = sys.platform.startswith('win')
     
     def icmp_traceroute(self, target_ip: str) -> List[Dict]:
@@ -297,7 +280,7 @@ class TracerouteEngine:
         
         for ttl in range(1, self.max_hops + 1):
             try:
-                # إنشاء raw socket للـ ICMP
+                
                 if self.is_windows:
                     sock = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_ICMP)
                 else:
@@ -306,7 +289,7 @@ class TracerouteEngine:
                 sock.setsockopt(socket.SOL_IP, socket.IP_TTL, ttl)
                 sock.settimeout(self.timeout)
                 
-                # بناء حزمة ICMP
+               
                 packet_id = 12345
                 checksum = 0
                 header = struct.pack('!BBHHH', 8, 0, checksum, packet_id, ttl)
@@ -322,7 +305,7 @@ class TracerouteEngine:
                     response, addr = sock.recvfrom(1024)
                     rtt = (time.time() - start_time) * 1000
                     
-                    # تحليل الرد
+                    
                     hop_ip = addr[0]
                     hop_hostname = self._reverse_dns(hop_ip) if hop_ip else None
                     
@@ -334,7 +317,6 @@ class TracerouteEngine:
                         "status": "success"
                     })
                     
-                    # إذا وصلنا للهدف، توقف
                     if hop_ip == target_ip:
                         break
                         
@@ -367,21 +349,17 @@ class TracerouteEngine:
         
         for ttl in range(1, self.max_hops + 1):
             try:
-                # إنشاء UDP socket
                 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
                 sock.setsockopt(socket.SOL_IP, socket.IP_TTL, ttl)
                 sock.settimeout(self.timeout)
                 
-                # إرسال بيانات UDP
                 data = b'CROW-UDP-TRACE'
                 start_time = time.time()
                 
                 try:
-                    # إرسال إلى منفذ غير مستخدم (قد يسبب ICMP Port Unreachable)
                     sock.sendto(data, (target_ip, self.port))
                     
                     try:
-                        # محاولة استقبال الرد (ICMP Time Exceeded)
                         response, addr = sock.recvfrom(1024)
                         rtt = (time.time() - start_time) * 1000
                         hop_ip = addr[0]
@@ -397,7 +375,6 @@ class TracerouteEngine:
                             break
                             
                     except socket.timeout:
-                        # لم نحصل على رد ICMP
                         hops.append({
                             "hop": ttl,
                             "ip": None,
@@ -428,7 +405,6 @@ class TracerouteEngine:
         return hops
     
     def system_traceroute(self, target: str) -> List[Dict]:
-        """استخدام system traceroute command"""
         try:
             if self.is_windows:
                 cmd = ['tracert', '-h', str(self.max_hops), '-w', str(int(self.timeout * 1000)), target]
@@ -453,24 +429,20 @@ class TracerouteEngine:
         for line in lines:
             line = line.strip()
             
-            # تخطي الأسطر الفارغة والرأسية
             if not line or 'traceroute' in line.lower() or 'tracing route' in line.lower():
                 continue
             
             try:
-                # البحث عن نمط القفزة (مثل: "1  192.168.1.1  1.234 ms")
                 parts = line.split()
                 if len(parts) >= 2:
                     hop_num = int(parts[0])
                     
-                    # البحث عن IP
                     ip = None
                     for part in parts[1:]:
                         if self._is_ip_address(part):
                             ip = part
                             break
                     
-                    # البحث عن RTT
                     rtt = None
                     for part in parts:
                         if 'ms' in part:
@@ -493,7 +465,6 @@ class TracerouteEngine:
         return hops
     
     def _calculate_checksum(self, data: bytes) -> int:
-        """حساب checksum"""
         if len(data) % 2:
             data += b'\x00'
         
@@ -506,14 +477,12 @@ class TracerouteEngine:
         return ~checksum & 0xffff
     
     def _reverse_dns(self, ip: str) -> Optional[str]:
-        """DNS عكسي"""
         try:
             return socket.gethostbyaddr(ip)[0]
         except:
             return None
     
     def _is_ip_address(self, text: str) -> bool:
-        """التحقق إذا كان النص عنوان IP"""
         try:
             ipaddress.ip_address(text)
             return True
@@ -526,7 +495,6 @@ class TracerouteEngine:
 class pingtrace(ActivePlugin):
     """
     Advanced Active Ping & Traceroute Plugin
-    أداة متقدمة لاختبار الاتصال وتتبع المسار مع تحليل شبكي متكامل
     """
     
     name = "pingtrace"
@@ -539,12 +507,10 @@ class pingtrace(ActivePlugin):
         self.system_ping = SystemPing()
         self.traceroute = TracerouteEngine()
         
-        # إحصائيات
         self.packets_sent = 0
         self.packets_received = 0
         
     def _create_default_logger(self):
-        """إنشاء logger افتراضي"""
         import logging
         logger = logging.getLogger("pingtrace")
         if not logger.handlers:
@@ -556,23 +522,19 @@ class pingtrace(ActivePlugin):
         return logger
     
     def _resolve_target(self, target: str) -> Optional[str]:
-        """تحليل الهدف إلى IP"""
         try:
-            # تنظيف الهدف
             clean_target = target.strip()
             if clean_target.startswith(('http://', 'https://')):
                 clean_target = clean_target.split('://')[1]
             
             clean_target = clean_target.split('/')[0].split(':')[0]
             
-            # إذا كان IP بالفعل
             try:
                 ipaddress.ip_address(clean_target)
                 return clean_target
             except ValueError:
                 pass
             
-            # تحليل DNS
             return socket.gethostbyname(clean_target)
             
         except socket.gaierror:
@@ -597,10 +559,8 @@ class pingtrace(ActivePlugin):
         
         parsed = defaults.copy()
         
-        # تحويل kwargs
         for key, value in kwargs.items():
             if key in parsed:
-                # تحويل الأنواع
                 if key in ['count', 'max_hops', 'packet_size']:
                     try:
                         parsed[key] = int(value)
@@ -625,7 +585,6 @@ class pingtrace(ActivePlugin):
         results = []
         
         if config['protocol'] == 'icmp':
-            # محاولة ICMP مباشرة أولاً
             try:
                 with ICMPSocket(timeout=config['timeout']) as icmp_sock:
                     if icmp_sock.socket:
@@ -647,9 +606,8 @@ class pingtrace(ActivePlugin):
                             if success:
                                 self.packets_received += 1
                             
-                            time.sleep(0.1)  # تأخير بين الحزم
+                            time.sleep(0.1)  
                     else:
-                        # Fallback إلى system ping
                         self.logger.warning("ICMP socket failed, using system ping")
                         results = self.system_ping.ping(target_ip, config['count'], config['timeout'])
             except Exception as e:
@@ -657,13 +615,12 @@ class pingtrace(ActivePlugin):
                 results = self.system_ping.ping(target_ip, config['count'], config['timeout'])
         
         elif config['protocol'] == 'tcp':
-            # TCP ping (connect/close)
             for seq in range(config['count']):
                 try:
                     start_time = time.time()
                     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                     sock.settimeout(config['timeout'])
-                    sock.connect((target_ip, 80))  # محاولة HTTP port
+                    sock.connect((target_ip, 80))  
                     rtt = (time.time() - start_time) * 1000
                     sock.close()
                     
@@ -702,7 +659,6 @@ class pingtrace(ActivePlugin):
         self.logger.info(f"Performing traceroute to {target_ip} with protocol: {config['protocol']}")
         
         if config['protocol'] == 'icmp':
-            # محاولة ICMP traceroute
             try:
                 return self.traceroute.icmp_traceroute(target_ip)
             except Exception as e:
@@ -713,14 +669,11 @@ class pingtrace(ActivePlugin):
             return self.traceroute.udp_traceroute(target_ip)
         
         else:
-            # استخدام system traceroute
             return self.traceroute.system_traceroute(target_ip)
     
     def _analyze_results(self, ping_results: List[Dict], trace_results: List[Dict], 
                         target: str, target_ip: str, config: Dict) -> Dict:
-        """تحليل النتائج وإنشاء الملخص"""
         
-        # تحليل ping
         ping_stats = {
             "sent": len(ping_results),
             "received": sum(1 for r in ping_results if r.get("status") == "success"),
@@ -739,7 +692,6 @@ class pingtrace(ActivePlugin):
             ping_stats["min_rtt"] = min(ping_stats["rtt_values"])
             ping_stats["max_rtt"] = max(ping_stats["rtt_values"])
         
-        # تحليل traceroute
         trace_stats = {
             "total_hops": len(trace_results),
             "successful_hops": sum(1 for r in trace_results if r.get("status") == "success"),
@@ -747,7 +699,6 @@ class pingtrace(ActivePlugin):
             "hops": trace_results
         }
         
-        # إنشاء الملخص
         summary = {
             "target": target,
             "ip": target_ip,
@@ -759,12 +710,11 @@ class pingtrace(ActivePlugin):
             "recommendations": []
         }
         
-        # اكتشاف المشاكل
         if ping_stats["packet_loss"] > 20:
             summary["issues"].append(f"High packet loss: {ping_stats['packet_loss']:.1f}%")
             summary["recommendations"].append("Check network connectivity and firewall rules")
         
-        if ping_stats["avg_rtt"] > 200:  # أكثر من 200ms
+        if ping_stats["avg_rtt"] > 200: 
             summary["issues"].append(f"High latency: {ping_stats['avg_rtt']:.1f}ms")
             summary["recommendations"].append("Consider using closer server or CDN")
         
@@ -776,7 +726,6 @@ class pingtrace(ActivePlugin):
     
     def run(self, target: str, port: int = None, **kwargs) -> PluginOutput:
         """
-        تشغيل البلوقين الرئيسي
         
         Args:
             target: الهدف (IP أو hostname)
@@ -798,7 +747,6 @@ class pingtrace(ActivePlugin):
         try:
             self.logger.info(f"Starting pingtrace scan for: {target}")
             
-            # تحليل الهدف
             target_ip = self._resolve_target(target)
             if not target_ip:
                 errors.append(f"Failed to resolve target: {target}")
@@ -806,13 +754,11 @@ class pingtrace(ActivePlugin):
             
             self.logger.info(f"Resolved {target} → {target_ip}")
             
-            # تحليل المعلمات
             config = self._parse_kwargs(kwargs)
             
             ping_results = []
             trace_results = []
             
-            # تنفيذ حسب النوع
             if config['mode'] in ['ping', 'both']:
                 ping_results = self._perform_ping(target_ip, config)
                 results.append({
@@ -833,7 +779,6 @@ class pingtrace(ActivePlugin):
                     "data": trace_results
                 })
             
-            # تحليل النتائج
             if ping_results or trace_results:
                 analysis = self._analyze_results(ping_results, trace_results, target, target_ip, config)
                 results.append({
@@ -843,7 +788,6 @@ class pingtrace(ActivePlugin):
             
             scan_duration = time.time() - start_time
             
-            # إضافة metadata
             results.append({
                 "type": "metadata",
                 "scan_duration": f"{scan_duration:.2f}s",
