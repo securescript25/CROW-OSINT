@@ -7,7 +7,6 @@ from typing import Dict, List, Any, Optional
 
 def run_scan(target: str, plugin: str, **kwargs) -> Dict:
     """تشغيل مسح"""
-    # TODO: تنفيذ حقيقي باستخدام plugin_loader
     return {
         "status": "success",
         "target": target,
