@@ -18,7 +18,6 @@ def main():
     
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
     
-    # 1. أوامر المسح (Scan)
     scan_parser = subparsers.add_parser("scan", help="Run a scan")
     scan_parser.add_argument("-t", "--target", required=True, help="Target to scan")
     scan_parser.add_argument("-p", "--plugin", required=True, help="Plugin to use")
@@ -27,22 +26,18 @@ def main():
     scan_parser.add_argument("--timeout", type=int, default=5, help="Timeout in seconds")
     scan_parser.add_argument("--output", help="Output file")
     
-    # 2. أوامر القائمة (List)
     list_parser = subparsers.add_parser("list", help="List available items")
     list_parser.add_argument("type", choices=["plugins", "results", "sessions"], 
                            help="Type of items to list")
     
-    # 3. أوامر العرض (Show)
     show_parser = subparsers.add_parser("show", help="Show detailed information")
     show_parser.add_argument("type", choices=["plugin", "result", "session"], 
                            help="Type of information to show")
     show_parser.add_argument("name", help="Name of the item")
     
-    # 4. أوامر الواجهة التفاعلية (Console)
     console_parser = subparsers.add_parser("console", help="Start interactive console")
     console_parser.add_argument("--workspace", default="default", help="Workspace name")
     
-    # 5. أوامر المساعدة (Help)
     help_parser = subparsers.add_parser("help", help="Show help")
     help_parser.add_argument("command", nargs="?", help="Command to get help for")
     
@@ -54,11 +49,9 @@ def main():
     
     try:
         if args.command == "console":
-            # تشغيل الواجهة التفاعلية
             console = CrowConsole(workspace=args.workspace)
             console.start()
         elif args.command == "scan":
-            # تنفيذ المسح مباشرة
             from .commands import run_scan
             result = run_scan(
                 target=args.target,
