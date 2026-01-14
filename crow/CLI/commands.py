@@ -6,7 +6,6 @@ import json
 from typing import Dict, List, Any, Optional
 
 def run_scan(target: str, plugin: str, **kwargs) -> Dict:
-    """تشغيل مسح"""
     return {
         "status": "success",
         "target": target,
@@ -16,8 +15,6 @@ def run_scan(target: str, plugin: str, **kwargs) -> Dict:
     }
 
 def list_items(item_type: str) -> List[str]:
-    """عرض قائمة"""
-    # TODO: تنفيذ حقيقي
     if item_type == "plugins":
         return ["bhp", "active_robots", "passive_subdomain"]
     elif item_type == "results":
@@ -27,8 +24,6 @@ def list_items(item_type: str) -> List[str]:
     return []
 
 def show_item(item_type: str, name: str) -> Dict:
-    """عرض تفاصيل عنصر"""
-    # TODO: تنفيذ حقيقي
     return {
         "type": item_type,
         "name": name,
