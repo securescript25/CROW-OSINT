@@ -29,7 +29,6 @@ from crow.core.models import PluginOutput
 # ====================== ENUMS ======================
 
 class PortState(str, Enum):
-    """حالات المنافذ"""
     UNKNOWN = "unknown"
     OPEN = "open"
     CLOSED = "closed"
@@ -39,12 +38,11 @@ class PortState(str, Enum):
 
 
 class DisplayFilter(str, Enum):
-    """أنواع التصفية للعرض"""
     ALL = "all"
     OPEN_ONLY = "open_only"
     OPEN_CLOSED = "open_closed"
     OPEN_FILTERED = "open_filtered"
-    NONE = "none"  # لا تصفية
+    NONE = "none"  
 
 
 # ====================== MODELS ======================
@@ -73,11 +71,9 @@ class PortScanResult:
         """
         تحديد إذا كان يجب عرض هذه النتيجة بناءً على عوامل التصفية
         """
-        # 1. تصفية نطاق المنافذ
         if not (min_port <= self.port <= max_port):
             return False
         
-        # 2. تصفية الحالات
         if self.state == PortState.OPEN:
             return True
         
@@ -90,13 +86,11 @@ class PortScanResult:
         if self.state == PortState.ERROR and not show_errors:
             return False
         
-        # 3. إذا وصلنا هنا، يعني يجب العرض
         return True
 
 
 @dataclass
 class BannerInfo:
-    """معلومات البانر المستخرجة"""
     plugin: str
     service: str
     raw_banner: str
@@ -108,7 +102,6 @@ class BannerInfo:
 
 @dataclass
 class HeaderAnalysis:
-    """تحليل رؤوس HTTP"""
     plugin: str
     url: str
     headers: Dict[str, str] = field(default_factory=dict)
@@ -122,16 +115,15 @@ class HeaderAnalysis:
 
 @dataclass
 class ScanStatistics:
-    """إحصائيات المسح مع تفاصيل التصفية"""
     total_scanned: int = 0
     open_count: int = 0
     closed_count: int = 0
     filtered_count: int = 0
     error_count: int = 0
-    hidden_count: int = 0  # 🔥 جديد: عدد المنافذ المخفية
-    hidden_details: Dict[str, int] = field(default_factory=dict)  # تفاصيل المنافذ المخفية
+    hidden_count: int = 0  
+    hidden_details: Dict[str, int] = field(default_factory=dict)  
     scan_duration: float = 0.0
-    display_count: int = 0  # عدد المنافذ المعروضة فعلياً
+    display_count: int = 0 
 
 
 @dataclass
@@ -155,10 +147,8 @@ class bhp(ActivePlugin):
 
     name = "bhp"
     description = "Black Hat Python - Advanced Active Reconnaissance with Port Filtering"
-    version = "3.0.0"  # 🔥 تحديث الإصدار
-
-    # قواعد بيانات الخدمات الموسعة
-    SERVICE_DB = {
+    version = "3.0.0"  
+       SERVICE_DB = {
         # TCP Services
         20: ("FTP Data", "ftp"),
         21: ("FTP Control", "ftp"),
@@ -210,7 +200,6 @@ class bhp(ActivePlugin):
         self.config = config
         self.logger = logger_obj or default_logger
 
-        # إعدادات المسح الأساسية
         self.timeout = self._cfg_get("timeout", 3)
         self.max_workers = self._cfg_get("max_workers", 100)
         self.user_agent = self._cfg_get(
@@ -218,17 +207,14 @@ class bhp(ActivePlugin):
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
         )
         
-        # إعدادات التخفي والأداء
         self.scan_delay = self._cfg_get("scan_delay", 0.05)
         self.stealth_mode = self._cfg_get("stealth_mode", False)
         self.max_ports_per_scan = self._cfg_get("max_ports_per_scan", 1000)
         
-        # 🔥 إعدادات التصفية الجديدة
         self.default_show_closed = self._cfg_get("show_closed", False)
         self.default_show_filtered = self._cfg_get("show_filtered", False)
         self.default_show_errors = self._cfg_get("show_errors", False)
         
-        # رؤوس الأمان للفحص
         self.security_headers = [
             "Strict-Transport-Security",
             "Content-Security-Policy",
@@ -246,7 +232,6 @@ class bhp(ActivePlugin):
 
     def run(self, target: str, port: int = None, **kwargs) -> PluginOutput:
         """
-        تشغيل البلوقين الرئيسي مع دعم التصفية المتقدمة
         
         kwargs الجديدة:
           - show_closed: bool = False     # عرض المنافذ المغلقة
@@ -260,10 +245,8 @@ class bhp(ActivePlugin):
           - only_open: bool = True       # فقط المنافذ المفتوحة (اختصار)
           - verbose: bool = False        # عرض كل شيء
         """
-        # 🔥 تحليل معاملات التصفية الجديدة
         filter_config = self._parse_filter_parameters(kwargs)
         
-        # تحليل المعاملات الأصلية
         mode = (kwargs.get("mode") or "all").lower()
         protocol = (kwargs.get("protocol") or "tcp").lower()
         scan_method = kwargs.get("scan_method", "connect")
@@ -272,11 +255,9 @@ class bhp(ActivePlugin):
         if custom_timeout:
             self.timeout = float(custom_timeout)
         
-        # تحليل قائمة المنافذ مع التصفية المسبقة
         ports_input = kwargs.get("ports")
         if ports_input:
             raw_ports = self._parse_ports_input(ports_input)
-            # 🔥 تصفية أولية بناءً على min_port و max_port
             ports = [p for p in raw_ports if filter_config.min_port <= p <= filter_config.max_port]
             if len(ports) < len(raw_ports):
                 self.logger.info(f"[bhp] Ports filtered: {len(raw_ports)} -> {len(ports)} "
@@ -288,12 +269,10 @@ class bhp(ActivePlugin):
             ports = self._get_default_tcp_ports()
             ports = [p for p in ports if filter_config.min_port <= p <= filter_config.max_port]
         
-        # تقليل عدد المنافذ إذا تجاوز الحد
         if len(ports) > self.max_ports_per_scan:
             self.logger.warning(f"[bhp] Reducing ports from {len(ports)} to {self.max_ports_per_scan}")
             ports = ports[:self.max_ports_per_scan]
         
-        # تحليل الهدف
         ip, all_ips = self._resolve_target(target)
         if not ip:
             return PluginOutput(
@@ -315,14 +294,12 @@ class bhp(ActivePlugin):
             
             # === MODE: PORTSCAN or ALL ===
             if mode in ("portscan", "all", "udp"):
-                # 🔥 المسح مع تمرير إعدادات التصفية
                 if protocol in ("tcp", "both"):
                     tcp_results, tcp_stats = self._advanced_port_scan_with_filters(
                         target, ip, ports, "tcp", scan_method, filter_config
                     )
                     scan_stats = self._merge_statistics(scan_stats, tcp_stats)
                     
-                    # 🔥 تصفية النتائج قبل الإضافة
                     filtered_tcp = self._filter_port_results(tcp_results, filter_config)
                     results.extend([self._to_dict_with_filters(x, filter_config) for x in filtered_tcp])
                 
@@ -332,13 +309,11 @@ class bhp(ActivePlugin):
                     )
                     scan_stats = self._merge_statistics(scan_stats, udp_stats)
                     
-                    # 🔥 تصفية النتائج
                     filtered_udp = self._filter_port_results(udp_results, filter_config)
                     results.extend([self._to_dict_with_filters(x, filter_config) for x in filtered_udp])
             
             # === MODE: BANNER or ALL (if ports open) ===
             if mode in ("banner", "all"):
-                # 🔥 استخراج المنافذ المفتوحة من النتائج المصفاة
                 open_ports = []
                 for item in results:
                     if isinstance(item, dict) and item.get("state") == PortState.OPEN:
@@ -351,7 +326,6 @@ class bhp(ActivePlugin):
                     banner_results = self._advanced_banner_grab(target, ip, open_ports)
                     results.extend([self._to_dict(x) for x in banner_results])
                 elif mode == "banner":
-                    # 🔥 مسح سريع مع التصفية
                     self.logger.info("[bhp] Quick scan for banner grabbing")
                     quick_scan, _ = self._quick_port_scan_with_filters(
                         target, ip, ports[:50], filter_config
@@ -374,13 +348,11 @@ class bhp(ActivePlugin):
             self.logger.error(f"[bhp] {error_msg}")
             errors.append(error_msg)
         
-        # 🔥 إضافة تقرير استخباراتي معدل مع إحصائيات التصفية
         if results and mode == "all":
             results.append(self._generate_enhanced_intelligence_report(
                 target, ip, results, scan_stats, filter_config
             ))
         
-        # 🔥 إضافة ملخص التصفية إلى النتائج
         results.insert(0, self._create_filter_summary(scan_stats, filter_config))
         
         return PluginOutput(
@@ -393,7 +365,6 @@ class bhp(ActivePlugin):
 
     def _parse_filter_parameters(self, kwargs: Dict) -> FilterConfig:
         """تحليل معاملات التصفية"""
-        # 🔥 الاختصارات السريعة
         only_open = kwargs.get("only_open", False)
         verbose = kwargs.get("verbose", False)
         
@@ -412,14 +383,12 @@ class bhp(ActivePlugin):
                 display_filter=DisplayFilter.ALL
             )
         
-        # 🔥 المعاملات المفصلة
         show_closed = kwargs.get("show_closed", self.default_show_closed)
         show_filtered = kwargs.get("show_filtered", self.default_show_filtered)
         show_errors = kwargs.get("show_errors", self.default_show_errors)
         min_port = kwargs.get("min_port", 1)
         max_port = kwargs.get("max_port", 65535)
         
-        # 🔥 تحديد نوع التصفية بناءً على الإعدادات
         if show_closed and show_filtered and show_errors:
             display_filter = DisplayFilter.ALL
         elif show_closed and not show_filtered:
@@ -443,7 +412,6 @@ class bhp(ActivePlugin):
     def _filter_port_results(self, 
                            results: List[PortScanResult], 
                            filters: FilterConfig) -> List[PortScanResult]:
-        """تصفية نتائج المسح بناءً على الإعدادات"""
         filtered = []
         
         for result in results:
@@ -461,9 +429,7 @@ class bhp(ActivePlugin):
     def _to_dict_with_filters(self, 
                             obj: Any, 
                             filters: FilterConfig) -> Any:
-        """تحويل الكائن إلى dict مع تطبيق التصفية"""
         if isinstance(obj, PortScanResult):
-            # 🔥 التحقق من قابلية العرض
             if not obj.is_displayable(
                 show_closed=filters.show_closed,
                 show_filtered=filters.show_filtered,
@@ -471,7 +437,7 @@ class bhp(ActivePlugin):
                 min_port=filters.min_port,
                 max_port=filters.max_port
             ):
-                return None  # سيتم تجاهله لاحقاً
+                return None  
         
         return self._to_dict(obj)
 
@@ -497,7 +463,6 @@ class bhp(ActivePlugin):
             future_to_port = {}
             
             for port in ports:
-                # 🔥 التخطي المبكر للمنافذ خارج النطاق
                 if not (filters.min_port <= port <= filters.max_port):
                     continue
                 
@@ -515,7 +480,6 @@ class bhp(ActivePlugin):
                 if self.stealth_mode and len(future_to_port) % 10 == 0:
                     time.sleep(self.scan_delay)
             
-            # جمع النتائج
             for future in as_completed(future_to_port):
                 port = future_to_port[future]
                 try:
@@ -534,7 +498,6 @@ class bhp(ActivePlugin):
                     results.append(error_result)
                     stats.error_count += 1
         
-        # 🔥 حساب الإحصائيات بعد التصفية
         self._update_display_stats(results, stats, filters)
         
         return results, stats
@@ -551,7 +514,6 @@ class bhp(ActivePlugin):
             result = self._scan_tcp_port(ip, port, method)
             result.latency = time.time() - start_time
             
-            # 🔥 تحديث الإحصائيات
             if result.state == PortState.OPEN:
                 stats.open_count += 1
             elif result.state == PortState.CLOSED:
@@ -580,10 +542,8 @@ class bhp(ActivePlugin):
                                  ip: str, 
                                  port: int,
                                  stats: ScanStatistics) -> PortScanResult:
-        """مسح منفذ UDP مع تحديث الإحصائيات"""
         result = self._smart_udp_probe(hostname, ip, port)
         
-        # 🔥 تحديث الإحصائيات
         if result.state == PortState.OPEN:
             stats.open_count += 1
         elif result.state == PortState.CLOSED:
@@ -602,7 +562,6 @@ class bhp(ActivePlugin):
                                       ip: str, 
                                       ports: List[int],
                                       filters: FilterConfig) -> Tuple[List[PortScanResult], ScanStatistics]:
-        """مسح UDP متقدم مع التصفية"""
         results: List[PortScanResult] = []
         stats = ScanStatistics()
         stats.total_scanned = len(ports)
@@ -615,7 +574,6 @@ class bhp(ActivePlugin):
             future_to_port = {}
             
             for port in ports:
-                # 🔥 التخطي المبكر للمنافذ خارج النطاق
                 if not (filters.min_port <= port <= filters.max_port):
                     continue
                 
@@ -637,7 +595,6 @@ class bhp(ActivePlugin):
                     results.append(error_result)
                     stats.error_count += 1
         
-        # 🔥 حساب الإحصائيات بعد التصفية
         self._update_display_stats(results, stats, filters)
         
         return results, stats
@@ -650,7 +607,6 @@ class bhp(ActivePlugin):
         """مسبار UDP مع تحديث الإحصائيات"""
         result = self._smart_udp_probe(hostname, ip, port)
         
-        # 🔥 تحديث الإحصائيات
         if result.state == PortState.OPEN:
             stats.open_count += 1
         elif result.state == PortState.CLOSED:
@@ -714,7 +670,6 @@ class bhp(ActivePlugin):
         )
 
     def _create_filter_summary(self, stats: ScanStatistics, filters: FilterConfig) -> Dict[str, Any]:
-        """إنشاء ملخص التصفية"""
         return {
             "plugin": self.name,
             "type": "filter_summary",
@@ -748,7 +703,6 @@ class bhp(ActivePlugin):
                                              stats: ScanStatistics,
                                              filters: FilterConfig) -> Dict[str, Any]:
         """توليد تقرير استخباراتي مع مراعاة التصفية"""
-        # 🔥 استخراج النتائج المعروضة فقط
         displayed_results = []
         for item in results:
             if isinstance(item, dict) and item.get("state"):
@@ -780,7 +734,6 @@ class bhp(ActivePlugin):
             "notes": []
         }
         
-        # تحليل النتائج المعروضة
         for item in displayed_results:
             if isinstance(item, dict) and "state" in item:
                 if item["state"] == PortState.OPEN:
@@ -792,19 +745,16 @@ class bhp(ActivePlugin):
                     }
                     report["displayed_open_services"].append(service_info)
             
-            # جمع الثغرات
             if isinstance(item, dict) and "vulnerabilities" in item and item["vulnerabilities"]:
                 report["summary"]["vulnerabilities_found"] += len(item["vulnerabilities"])
                 report["security_issues"].extend(item["vulnerabilities"])
             
-            # جمع نقاط الأمان
             if isinstance(item, dict) and "security_score" in item:
                 report["summary"]["security_score"] = max(
                     report["summary"]["security_score"],
                     item["security_score"]
                 )
         
-        # 🔥 توليد توصيات بناءً على التصفية
         if stats.hidden_count > 0:
             report["notes"].append(
                 f"Note: {stats.hidden_count} ports hidden by filters "
@@ -812,7 +762,6 @@ class bhp(ActivePlugin):
                 f"{stats.hidden_details.get('filtered', 0)} filtered)"
             )
         
-        # توصيات أمنية (بناءً على المنافذ المعروضة فقط)
         if stats.open_count > 10:
             report["recommendations"].append("Reduce number of open ports")
         
@@ -822,7 +771,6 @@ class bhp(ActivePlugin):
         if any("CVE-" in str(issue) for issue in report["security_issues"]):
             report["recommendations"].append("Apply security patches for discovered vulnerabilities")
         
-        # 🔥 توصيات خاصة بالتصفية
         if not filters.show_closed and stats.closed_count > 100:
             report["notes"].append(
                 f"Note: {stats.closed_count} closed ports hidden "
@@ -838,7 +786,6 @@ class bhp(ActivePlugin):
                                     ip: str, 
                                     ports: List[int],
                                     filters: FilterConfig) -> Tuple[List[PortScanResult], ScanStatistics]:
-        """مسح سريع مع دعم التصفية"""
         quick_results = []
         stats = ScanStatistics()
         
@@ -919,7 +866,6 @@ class bhp(ActivePlugin):
         return sorted(ports)
 
     def _get_default_tcp_ports(self) -> List[int]:
-        """الحصول على قائمة المنافذ TCP الافتراضية"""
         common_ports = [
             *range(1, 1025),
             1433, 1521, 1723, 2049, 3306, 3389, 5432, 5900, 6000,
@@ -929,14 +875,12 @@ class bhp(ActivePlugin):
         return sorted(set(common_ports))
 
     def _get_default_udp_ports(self) -> List[int]:
-        """الحصول على قائمة المنافذ UDP الافتراضية"""
         common_udp = [53, 67, 68, 69, 123, 135, 137, 138, 139, 
                      161, 162, 445, 500, 514, 520, 1900, 4500, 
                      5353, 4789]
         return common_udp
 
     def _get_service_info(self, port: int, protocol: str) -> Optional[Tuple[str, str]]:
-        """الحصول على معلومات الخدمة"""
         if port in self.SERVICE_DB:
             service_name, service_type = self.SERVICE_DB[port]
             if protocol == "udp" and port in [53, 67, 68, 69, 123, 161, 162]:
@@ -946,7 +890,6 @@ class bhp(ActivePlugin):
         return None
 
     def _analyze_service(self, port: int, banner: str) -> Dict[str, Any]:
-        """تحليل الخدمة من البانر"""
         result = {
             "name": "unknown",
             "version": "unknown",
@@ -986,7 +929,6 @@ class bhp(ActivePlugin):
         return result
 
     def _check_advanced_vulnerabilities(self, service: str, version: str) -> List[str]:
-        """التحقق من الثغرات المتقدمة"""
         vulns = []
         
         vulnerability_db = {
@@ -1020,12 +962,11 @@ class bhp(ActivePlugin):
         return vulns
 
     def _get_advanced_certificate_info(self, hostname: str, ip: str, port: int) -> Dict[str, Any]:
-        """الحصول على معلومات متقدمة لشهادة SSL"""
         try:
         
             try:
-                from cryptography import x509  # type: ignore
-                from cryptography.hazmat.backends import default_backend  # type: ignore
+                from cryptography import x509  
+                from cryptography.hazmat.backends import default_backend 
             except ModuleNotFoundError:
                 return {
                     "error": "Missing dependency: cryptography (install with: poetry add cryptography)",
@@ -1085,7 +1026,6 @@ class bhp(ActivePlugin):
 
 
     def _resolve_target(self, target: str) -> Tuple[Optional[str], List[str]]:
-        """تحليل الهدف إلى IP"""
         if not target:
             return None, []
         
@@ -1115,7 +1055,6 @@ class bhp(ActivePlugin):
         
 
     def _cfg_get(self, key: str, default: Any) -> Any:
-        """استخراج قيمة من الإعدادات"""
         if self.config is None:
             return default
         
@@ -1143,7 +1082,6 @@ class bhp(ActivePlugin):
     # ====================== LEGACY METHODS (للتوافق) ======================
 
     def _scan_tcp_port(self, ip: str, port: int, method: str) -> PortScanResult:
-        """طريقة قديمة للتوافق - مسح TCP"""
         try:
             if method == "connect":
                 return self._tcp_connect_scan(ip, port)
@@ -1163,7 +1101,6 @@ class bhp(ActivePlugin):
             )
 
     def _tcp_connect_scan(self, ip: str, port: int) -> PortScanResult:
-        """مسح TCP باستخدام connect"""
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.settimeout(self.timeout)
@@ -1230,7 +1167,6 @@ class bhp(ActivePlugin):
             )
 
     def _tcp_syn_scan(self, ip: str, port: int) -> PortScanResult:
-        """محاولة مسح SYN"""
         try:
             return self._tcp_connect_scan(ip, port)
         except Exception as e:
@@ -1244,7 +1180,6 @@ class bhp(ActivePlugin):
             )
 
     def _smart_udp_probe(self, hostname: str, ip: str, port: int) -> PortScanResult:
-        """مسبار UDP ذكي"""
         start_time = time.time()
         
         service_info = self._get_service_info(port, "udp")
@@ -1275,7 +1210,6 @@ class bhp(ActivePlugin):
             )
 
     def _probe_dns_udp(self, hostname: str, ip: str, port: int, start_time: float) -> PortScanResult:
-        """مسبار DNS UDP"""
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             sock.settimeout(self.timeout)
@@ -1320,7 +1254,6 @@ class bhp(ActivePlugin):
             )
 
     def _generic_udp_scan(self, ip: str, port: int, start_time: float, service_name: str) -> PortScanResult:
-        """فحص UDP عام"""
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             sock.settimeout(self.timeout)
@@ -1391,7 +1324,6 @@ class bhp(ActivePlugin):
         return header + question
 
     def _advanced_banner_grab(self, hostname: str, ip: str, ports: List[int]) -> List[BannerInfo]:
-        """استخراج البانر متقدم"""
         results: List[BannerInfo] = []
         
         for port in ports:
@@ -1435,7 +1367,6 @@ class bhp(ActivePlugin):
         return results
 
     def _smart_banner_grab(self, hostname: str, ip: str, port: int) -> Dict[str, Any]:
-        """استخراج ذكي للبانر"""
         result = {"raw": "", "parsed": {}, "protocol": "tcp"}
         
         try:
@@ -1502,7 +1433,6 @@ class bhp(ActivePlugin):
         return result
 
     def _parse_http_response(self, raw_response: str, result: Dict[str, Any]):
-        """تحليل استجابة HTTP"""
         lines = raw_response.split('\n')
         if lines:
             result["parsed"]["status"] = lines[0].strip()
@@ -1515,7 +1445,6 @@ class bhp(ActivePlugin):
                     result["parsed"]["headers"][key.strip()] = value.strip()
 
     def _advanced_header_analysis(self, hostname: str, ip: str) -> List[HeaderAnalysis]:
-        """تحليل متقدم لرؤوس HTTP/HTTPS"""
         results: List[HeaderAnalysis] = []
         
         urls_to_check = [
@@ -1589,7 +1518,6 @@ class bhp(ActivePlugin):
         return results
 
     def _analyze_security_configuration(self, headers: Dict[str, str], url: str) -> Dict[str, Any]:
-        """تحليل إعدادات الأمان المتقدمة"""
         analysis = {"issues": [], "recommendations": []}
         
         hsts = headers.get("Strict-Transport-Security", "")
@@ -1620,7 +1548,6 @@ class bhp(ActivePlugin):
         return analysis
 
     def _analyze_security_headers(self, headers: Dict[str, str]) -> Tuple[int, List[str], List[str]]:
-        """تحليل رؤوس الأمان"""
         score = 100
         missing: List[str] = []
         vulnerabilities: List[str] = []
@@ -1651,7 +1578,6 @@ class bhp(ActivePlugin):
         return max(0, score), missing, vulnerabilities
 
     def _extract_server_info(self, headers: Dict[str, str]) -> Dict[str, Any]:
-        """استخراج معلومات الخادم"""
         info: Dict[str, Any] = {}
         
         server = headers.get("Server")
@@ -1678,7 +1604,6 @@ class bhp(ActivePlugin):
         return info
 
     def _analyze_cookies(self, response: requests.Response) -> Dict[str, Any]:
-        """تحليل الكوكيز"""
         analysis = {"count": 0, "cookies": [], "security_issues": []}
         
         try:
@@ -1704,7 +1629,6 @@ class bhp(ActivePlugin):
     # ====================== LEGACY WRAPPER METHODS ======================
 
     def _port_scan(self, ip: str, ports: List[int], protocol: str = "tcp") -> List[PortScanResult]:
-        """طريقة قديمة للتوافق"""
         results, _ = self._advanced_port_scan_with_filters(
             "unknown", ip, ports, protocol, "connect", 
             FilterConfig(show_closed=True, show_filtered=True, show_errors=True)
@@ -1712,22 +1636,18 @@ class bhp(ActivePlugin):
         return results
 
     def _banner_grab(self, hostname: str, ip: str, ports: List[int]) -> List[BannerInfo]:
-        """طريقة قديمة للتوافق"""
         return self._advanced_banner_grab(hostname, ip, ports)
 
     def _analyze_headers(self, target: str) -> List[HeaderAnalysis]:
-        """طريقة قديمة للتوافق"""
         ip, _ = self._resolve_target(target)
         if ip:
             return self._advanced_header_analysis(target, ip)
         return []
 
     def _scan_udp_port(self, ip: str, port: int) -> PortScanResult:
-        """طريقة قديمة لفحص UDP"""
         return self._smart_udp_probe("unknown", ip, port)
 
     def _get_ssl_certificate(self, hostname: str, ip: str, port: int) -> Dict[str, Any]:
-        """طريقة قديمة للحصول على الشهادة"""
         return self._get_advanced_certificate_info(hostname, ip, port)
 
 

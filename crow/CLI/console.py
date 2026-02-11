@@ -1,6 +1,5 @@
 """
 crow/CLI/console.py
-Interactive console (MSFconsole-style) for CROW
 """
 
 from __future__ import annotations

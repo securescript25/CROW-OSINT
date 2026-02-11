@@ -13,7 +13,6 @@ class PassivePlugin(ABC):
     version: str = "1.0.0"
 
     def __init__(self, config: Any = None, logger: Any = None):
-        # مهم: البلوقنز تعتمد على هذي القيم
         self.config = config
         self.logger = logger
 
@@ -31,7 +30,6 @@ class ActivePlugin(ABC):
     version: str = "1.0.0"
 
     def __init__(self, config: Any = None, logger: Any = None):
-        # مهم: البلوقنز الـ Active (مثل bhp) تمرر (config, logger)
         self.config = config
         self.logger = logger
 

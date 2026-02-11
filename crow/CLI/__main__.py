@@ -1,6 +1,5 @@
 """
 crow/CLI/main.py
-نقطة الدخول الرئيسية لواجهة سطر الأوامر
 """
 
 import sys
@@ -25,7 +24,6 @@ Examples:
         metavar="COMMAND"
     )
     
-    # أوامر المسح
     scan_parser = subparsers.add_parser(
         "scan",
         help="Run a reconnaissance scan"
@@ -72,7 +70,6 @@ Examples:
         help="Verbose output"
     )
     
-    # أوامر القائمة
     list_parser = subparsers.add_parser(
         "list",
         help="List available items"
@@ -83,7 +80,6 @@ Examples:
         help="Type of items to list"
     )
     
-    # أوامر المعلومات
     info_parser = subparsers.add_parser(
         "info",
         help="Show information about a plugin"
@@ -93,7 +89,6 @@ Examples:
         help="Plugin name"
     )
     
-    # أوامر الواجهة التفاعلية
     console_parser = subparsers.add_parser(
         "console",
         help="Start interactive console (MSFconsole-style)"
@@ -104,7 +99,6 @@ Examples:
         help="Workspace name"
     )
     
-    # أوامر المساعدة
     help_parser = subparsers.add_parser(
         "help",
         help="Show help information"
@@ -115,16 +109,13 @@ Examples:
         help="Command to get help for"
     )
     
-    # تحليل الوسائط
     if len(sys.argv) == 1:
-        # إذا لم يكن هناك وسائط، عرض الواجهة التفاعلية
         from .console import start_console
         start_console()
         return
     
     args = parser.parse_args()
     
-    # تنفيذ الأمر المحدد
     try:
         if args.command == "console":
             from .console import start_console
@@ -142,14 +133,12 @@ Examples:
                 verbose=args.verbose
             )
             
-            # حفظ النتائج إذا طُلب
             if args.output:
                 import json
                 with open(args.output, 'w', encoding='utf-8') as f:
                     json.dump(result, f, indent=2, ensure_ascii=False)
                 print(f"Results saved to: {args.output}")
             else:
-                # عرض النتائج بشكل مقروء
                 from .utils import display_results
                 display_results(result)
                 
@@ -173,7 +162,6 @@ Examples:
                 
         elif args.command == "help":
             if args.command:
-                # عرض مساعدة للأمر المحدد
                 parser.parse_args([args.command, "--help"])
             else:
                 parser.print_help()

@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field
 
 
 class BaseRecord(BaseModel):
-    model_config = {"extra": "allow"}  # ← أهم تعديل
+    model_config = {"extra": "allow"} 
 
     plugin: str
     timestamp: datetime = Field(default_factory=datetime.utcnow)
@@ -22,5 +22,5 @@ class WHOISRecord(BaseRecord):
 
 class PluginOutput(BaseModel):
     plugin: str
-    results: List[Any] = Field(default_factory=list)  # ← ثاني أهم تعديل
+    results: List[Any] = Field(default_factory=list) 
     errors: List[str] = Field(default_factory=list)
