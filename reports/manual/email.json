@@ -1,0 +1,43 @@
+{
+  "status": "success",
+  "plugin": "email",
+  "type": "passive",
+  "target": "tryhackme.com",
+  "timestamp": "2026-01-14T14:44:31.809230",
+  "output": {
+    "plugin": "email",
+    "results": [
+      {
+        "plugin": "email",
+        "type": "EMAIL",
+        "domain": "tryhackme.com",
+        "email": "aleksandra@tryhackme.com"
+      },
+      {
+        "plugin": "email",
+        "type": "EMAIL",
+        "domain": "tryhackme.com",
+        "email": "ryan.simpson@tryhackme.com"
+      },
+      {
+        "plugin": "email",
+        "type": "EMAIL",
+        "domain": "tryhackme.com",
+        "email": "adil.harti@tryhackme.com"
+      },
+      {
+        "plugin": "email",
+        "type": "EMAIL",
+        "domain": "tryhackme.com",
+        "email": "jonathan.martins@tryhackme.com"
+      },
+      {
+        "plugin": "email",
+        "type": "EMAIL",
+        "domain": "tryhackme.com",
+        "email": "nicolaas.botha@tryhackme.com"
+      }
+    ],
+    "errors": []
+  }
+}

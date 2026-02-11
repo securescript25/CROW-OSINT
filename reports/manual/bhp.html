@@ -5,375 +5,467 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>MANUAL Report — bhp</title>
   <style>
-    :root {
-      --bg: #0b0f19;
-      --panel: rgba(255,255,255,0.06);
-      --panel2: rgba(255,255,255,0.10);
-      --border: rgba(255,255,255,0.10);
-      --text: rgba(255,255,255,0.92);
-      --muted: rgba(255,255,255,0.65);
-      --accent: #66f;
-      --accent2: #00d4ff;
-      --good: #39d98a;
-      --bad: #ff5c5c;
-      --shadow: 0 20px 60px rgba(0,0,0,0.45);
+    :root{
+      --bg:#0b0f19;
+      --panel:rgba(255,255,255,0.07);
+      --border:rgba(255,255,255,0.14);
+      --text:rgba(255,255,255,0.96);
+      --muted:rgba(255,255,255,0.70);
+      --good:#39d98a;
+      --bad:#ff5c5c;
+      --shadow:0 22px 70px rgba(0,0,0,0.55);
     }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans Arabic", "Noto Sans", sans-serif;
-      background: radial-gradient(1200px 700px at 80% 10%, rgba(102,102,255,0.22), transparent 60%),
-                  radial-gradient(900px 600px at 10% 70%, rgba(0,212,255,0.18), transparent 55%),
-                  var(--bg);
-      color: var(--text);
-      overflow-x: hidden;
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,"Noto Sans Arabic",sans-serif;
+      background:
+        radial-gradient(1200px 700px at 70% 15%, rgba(120,120,255,0.18), transparent 62%),
+        radial-gradient(900px 600px at 15% 75%, rgba(0,212,255,0.14), transparent 58%),
+        var(--bg);
+      color:var(--text);
+      overflow-x:hidden;
     }
 
-    /* HERO (full first screen) */
-    .hero {
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      padding: 40px 18px;
-      position: relative;
+    .hero{
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      padding:42px 18px;
+      position:relative;
+      perspective:1100px;
     }
-    .hero::before {
-      content: "";
-      position: absolute;
-      inset: -200px;
+
+    /* ✅ Comfort glow: less opacity + softer background */
+    .hero::before{
+      content:"";
+      position:absolute;
+      inset:-220px;
       background:
-        radial-gradient(circle at 50% 50%, rgba(102,102,255,0.22), transparent 55%),
-        radial-gradient(circle at 35% 60%, rgba(0,212,255,0.18), transparent 60%);
-      filter: blur(40px);
-      opacity: 0.8;
+        radial-gradient(circle at 50% 50%, rgba(120,120,255,0.16), transparent 60%),
+        radial-gradient(circle at 35% 60%, rgba(0,212,255,0.12), transparent 64%);
+      filter: blur(58px);
+      opacity:.75;
       animation: floatGlow 10s ease-in-out infinite;
     }
-    @keyframes floatGlow {
-      0%,100% { transform: translateY(0px); }
-      50% { transform: translateY(18px); }
+
+    @keyframes floatGlow{
+      0%,100%{transform:translateY(0)}
+      50%{transform:translateY(18px)}
     }
 
-    .logoWrap {
-      position: relative;
-      text-align: center;
-      z-index: 2;
-      max-width: 980px;
-      width: 100%;
+    .heroWrap{
+      position:relative;
+      z-index:2;
+      text-align:center;
+      width:100%;
+      max-width:1100px;
+      transform-style:preserve-3d;
     }
 
-    .logo {
-      font-size: clamp(72px, 14vw, 160px);
-      font-weight: 900;
-      letter-spacing: 2px;
-      margin: 0;
-      line-height: 0.95;
-      background: linear-gradient(90deg, #fff, rgba(255,255,255,0.55), #fff);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      position: relative;
-      display: inline-block;
-      text-shadow: 0 0 40px rgba(102,102,255,0.35);
-      animation: shimmer 2.8s ease-in-out infinite;
-    }
-    @keyframes shimmer {
-      0% { filter: drop-shadow(0 0 0 rgba(102,102,255,0.0)); transform: translateY(0); }
-      50% { filter: drop-shadow(0 0 20px rgba(0,212,255,0.35)); transform: translateY(-6px); }
-      100% { filter: drop-shadow(0 0 0 rgba(102,102,255,0.0)); transform: translateY(0); }
+    /* LOGO: PURE WHITE + EYE-COMFORT GLOW */
+    .heroLogo{
+      font-size:clamp(78px, 15vw, 190px);
+      font-weight:1000;
+      margin:0;
+      line-height:.92;
+      letter-spacing:10px;
+      position:relative;
+      display:inline-block;
+
+      --rx:0deg;
+      --ry:0deg;
+      --tz:0px;
+
+      color:#ffffff !important;
+      background:none !important;
+      -webkit-text-fill-color:#ffffff !important;
+      -webkit-text-stroke:1px rgba(255,255,255,0.22);
+      text-rendering:geometricPrecision;
+      -webkit-font-smoothing:antialiased;
+
+      transform-style:preserve-3d;
+      transform:perspective(1100px) rotateX(var(--rx)) rotateY(var(--ry)) translateZ(var(--tz));
+      will-change:transform,filter;
+
+      /* ✅ Reduced glow */
+      filter:
+        drop-shadow(0 10px 22px rgba(0,0,0,0.55))
+        drop-shadow(0 0 34px rgba(255,255,255,0.12))
+        drop-shadow(0 0 44px rgba(130,130,255,0.34))
+        drop-shadow(0 0 26px rgba(0,212,255,0.22));
+
+      animation:
+        logoFloat 4.6s ease-in-out infinite,
+        logoPulse 3.6s ease-in-out infinite;
     }
 
-    .subtitle {
-      margin-top: 18px;
-      color: var(--muted);
-      font-size: 16px;
-      line-height: 1.7;
+    /* ✅ Softer aura behind text */
+    .heroLogo::before{
+      content:"CROW";
+      position:absolute;
+      inset:0;
+      z-index:-1;
+      transform:translateZ(-60px);
+      color:rgba(170,210,255,0.18);
+      filter:blur(10px);
+      opacity:.55;
+      animation:auraBreath 3.4s ease-in-out infinite;
     }
 
-    .heroCard {
-      margin-top: 26px;
-      display: inline-flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: center;
-      padding: 14px 16px;
-      border: 1px solid var(--border);
-      background: var(--panel);
-      border-radius: 18px;
-      box-shadow: var(--shadow);
+    /* ✅ Reduce scan overlay */
+    .heroLogo::after{
+      content:"";
+      position:absolute;
+      inset:-34px -48px;
+      pointer-events:none;
+      background:
+        linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.06) 45%, transparent 72%),
+        linear-gradient(90deg, transparent 0%, rgba(0,212,255,0.10) 48%, transparent 60%);
+      mix-blend-mode:screen;
+      opacity:.12;
+      transform:translateZ(55px);
+      animation:scanMove 2.6s linear infinite;
+      border-radius:24px;
     }
 
-    .pill {
-      padding: 10px 12px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.05);
-      color: var(--text);
-      font-size: 13px;
-      white-space: nowrap;
+    @keyframes logoFloat{
+      0%,100%{transform:perspective(1100px) rotateX(var(--rx)) rotateY(var(--ry)) translateZ(var(--tz)) translateY(0)}
+      50%{transform:perspective(1100px) rotateX(var(--rx)) rotateY(var(--ry)) translateZ(var(--tz)) translateY(-12px)}
     }
 
-    .btn {
-      cursor: pointer;
-      user-select: none;
-      padding: 12px 14px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      background: linear-gradient(135deg, rgba(102,102,255,0.35), rgba(0,212,255,0.22));
-      color: #fff;
-      font-weight: 700;
-      transition: transform .15s ease, filter .15s ease;
-    }
-    .btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
-
-    /* CONTENT */
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 18px 80px;
-    }
-
-    .sectionTitle {
-      margin: 0 0 14px;
-      font-size: 18px;
-      color: rgba(255,255,255,0.9);
-    }
-
-    .layout {
-      position: relative;
-      margin-top: 30px;
-      padding-top: 10px;
-    }
-
-    /* Results is the "background" */
-    .results {
-      border: 1px solid var(--border);
-      background: var(--panel);
-      border-radius: 20px;
-      padding: 18px;
-      box-shadow: var(--shadow);
-    }
-
-    /* Summary overlays results */
-    .summary {
-      position: absolute;
-      top: -22px;
-      left: 18px; /* RTL: keep it visually nice; still left side overlay */
-      width: min(420px, calc(100% - 36px));
-      border: 1px solid var(--border);
-      background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.06));
-      border-radius: 20px;
-      padding: 16px;
-      box-shadow: var(--shadow);
-      z-index: 2;
-      backdrop-filter: blur(8px);
-    }
-
-    .kv {
-      display: grid;
-      grid-template-columns: 120px 1fr;
-      gap: 8px 12px;
-      font-size: 13px;
-      color: var(--muted);
-    }
-    .kv b { color: var(--text); font-weight: 700; }
-    .kv .ok { color: var(--good); }
-    .kv .bad { color: var(--bad); }
-
-    .resultsInner {
-      padding-top: 130px; /* leave space for summary overlay */
-      display: grid;
-      gap: 14px;
-    }
-
-    .card {
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.04);
-      border-radius: 18px;
-      padding: 14px;
-      overflow: hidden;
-    }
-    .cardHeader {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-    .tag {
-      font-size: 12px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.05);
-      color: var(--muted);
-      white-space: nowrap;
-    }
-    .cardTitle {
-      font-weight: 900;
-      font-size: 15px;
-      color: rgba(255,255,255,0.92);
-      margin: 0;
-    }
-
-    pre {
-      margin: 0;
-      padding: 12px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      background: rgba(0,0,0,0.25);
-      overflow: auto;
-      direction: ltr;
-      text-align: left;
-      font-size: 12px;
-      line-height: 1.6;
-      color: rgba(255,255,255,0.88);
-      max-width: 100%;
-    }
-
-    .footer {
-      margin-top: 26px;
-      color: var(--muted);
-      font-size: 12px;
-      text-align: center;
-    }
-
-    @media (max-width: 720px) {
-      .summary {
-        position: static;
-        width: 100%;
-        margin-bottom: 14px;
+    /* ✅ Gentle pulse only */
+    @keyframes logoPulse{
+      0%,100%{
+        filter:
+          drop-shadow(0 10px 22px rgba(0,0,0,0.55))
+          drop-shadow(0 0 30px rgba(255,255,255,0.10))
+          drop-shadow(0 0 40px rgba(130,130,255,0.30))
+          drop-shadow(0 0 24px rgba(0,212,255,0.20));
       }
-      .resultsInner { padding-top: 0; }
+      50%{
+        filter:
+          drop-shadow(0 12px 26px rgba(0,0,0,0.58))
+          drop-shadow(0 0 42px rgba(255,255,255,0.14))
+          drop-shadow(0 0 58px rgba(150,150,255,0.44))
+          drop-shadow(0 0 32px rgba(0,212,255,0.28));
+      }
+    }
+
+    @keyframes auraBreath{
+      0%,100%{opacity:.45; transform:translateZ(-60px) scale(1)}
+      50%{opacity:.70; transform:translateZ(-60px) scale(1.05)}
+    }
+
+    @keyframes scanMove{
+      0%{transform:translateZ(55px) translateY(-48px)}
+      100%{transform:translateZ(55px) translateY(48px)}
+    }
+
+    .heroSub{
+      margin-top:14px;
+      color:var(--muted);
+      font-size:14px;
+      transform:translateZ(20px);
+    }
+
+    .heroBar{
+      margin:28px auto 0;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      justify-content:center;
+      align-items:center;
+      padding:14px 16px;
+      border:1px solid var(--border);
+      background:var(--panel);
+      border-radius:18px;
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(8px);
+      transform:translateZ(10px);
+    }
+    .heroRow{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      justify-content:center;
+      align-items:center;
+      width:100%;
+    }
+    .pill{
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,0.05);
+      color:var(--text);
+      font-size:13px;
+      white-space:nowrap;
+      max-width:100%;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      direction:ltr;
+      text-align:left;
+    }
+    .btn{
+      cursor:pointer;
+      user-select:none;
+      padding:12px 14px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background:linear-gradient(135deg, rgba(102,102,255,0.42), rgba(0,212,255,0.26));
+      color:#fff;
+      font-weight:1000;
+      letter-spacing:.3px;
+      transition:transform .15s ease, filter .15s ease;
+    }
+    .btn:hover{transform:translateY(-2px);filter:brightness(1.06)}
+
+    .wrap{max-width:1200px;margin:0 auto;padding:22px 14px 60px}
+    .top{
+      border:1px solid var(--border);
+      background:var(--panel);
+      border-radius:14px;
+      padding:16px;
+      margin-bottom:16px;
+      box-shadow:var(--shadow);
+    }
+    h2.pageTitle{margin:0 0 10px;font-size:18px}
+    .kv{
+      display:grid;
+      grid-template-columns:160px 1fr;
+      gap:8px 12px;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .kv b{color:var(--text)}
+    .ok{color:var(--good);font-weight:1000}
+    .bad{color:var(--bad);font-weight:1000}
+
+    .card{
+      border:1px solid var(--border);
+      background:var(--panel);
+      border-radius:14px;
+      padding:14px;
+      margin-bottom:14px;
+      box-shadow:var(--shadow);
+    }
+    .cardHeader{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:10px;
+    }
+    .title{font-size:15px;font-weight:1000;margin:0}
+    .tag{
+      font-size:12px;
+      padding:6px 10px;
+      border:1px solid var(--border);
+      border-radius:999px;
+      color:var(--muted);
+      direction:ltr;
+    }
+
+    pre{
+      margin:12px 0 0;
+      padding:14px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background:rgba(0,0,0,0.26);
+      overflow:auto;
+      white-space:pre;
+      font-size:12px;
+      line-height:1.65;
+      color:rgba(255,255,255,0.93);
+      direction:ltr;
+      text-align:left;
+      max-height:560px;
+    }
+
+    .footer{margin-top:18px;color:var(--muted);font-size:12px;text-align:center}
+    @media (max-width:700px){
+      .kv{grid-template-columns:120px 1fr}
+      .heroLogo{letter-spacing:6px}
+    }
+  
+    @media print{
+      .no-print{display:none !important}
+
+      pre{
+        max-height: none !important;
+        overflow: visible !important;
+        white-space: pre-wrap !important;
+        word-break: break-word !important;
+      }
+
+      .card{
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+
+      *{animation:none !important; transition:none !important}
+      body{overflow: visible !important}
     }
   </style>
 </head>
 <body>
-  <section class="hero">
-    <div class="logoWrap">
-      <h1 class="logo">CROW</h1>
-      <div class="subtitle">
-       MANUAL Report — bhp 
-      </div>
-      <div class="heroCard">
-        <span class="pill">Project: /home/al-emad/Documents/python/FinalProject/CROW-OSINT</span>
-        <span class="pill">Workspace: default</span>
-        <span class="pill" id="tsPill">Timestamp: —</span>
-        <span class="btn" onclick="document.getElementById('report').scrollIntoView({behavior:'smooth'})">عرض التقرير</span>
+
+  <section class="hero" id="hero">
+    <div class="heroWrap" id="heroWrap">
+      <h1 class="heroLogo" id="heroLogo">CROW</h1>
+      <div class="heroSub">MANUAL Report — bhp</div>
+
+      <div class="heroBar">
+        <div class="heroRow">
+          <span class="pill" id="pillTs">Timestamp: —</span>
+          <span class="pill">Workspace: default</span>
+        </div>
+        <div class="heroRow">
+          <button class="btn no-print" onclick="document.getElementById('report').scrollIntoView({behavior:'smooth'})">View Report</button><button class="btn no-print" onclick="window.print()">Save as PDF</button>
+        </div>
       </div>
     </div>
   </section>
 
-  <div class="container" id="report">
-    <div class="layout">
-      <div class="summary" id="summary">
-        <div class="sectionTitle">Summary</div>
-        <div class="kv" id="kv"></div>
-      </div>
-
-      <div class="results">
-        <div class="sectionTitle">Results</div>
-        <div class="resultsInner" id="results"></div>
-      </div>
+  <div class="wrap" id="report">
+    <div class="top">
+      <h2 class="pageTitle">MANUAL Report — bhp</h2>
+      <div class="kv" id="summaryKV"></div>
     </div>
 
-    <div class="footer">Generated by CROW • 2026-01-12 14:59:56</div>
+    <div id="cards"></div>
+
+    <div class="footer">Generated by CROW • 2026-02-08 14:34:32</div>
   </div>
 
   <script>
-    const DATA = {"status": "success", "plugin": "bhp", "type": "active", "target": "google.com", "timestamp": "2026-01-12T14:59:56.452136", "output": {"plugin": "bhp", "results": [{"plugin": "bhp", "type": "filter_summary", "filters_applied": {"show_closed": false, "show_filtered": false, "show_errors": false, "min_port": 1, "max_port": 65535, "display_filter": "open_only"}, "statistics": {"total_scanned": 1000, "displayed": 2, "hidden": 998, "hidden_breakdown": {"closed": 998, "filtered": 0, "error": 0}, "open": 2, "closed": 998, "filtered": 0, "errors": 0, "scan_duration": 169.31}, "notes": "Showing 2 of 1000 ports (998 hidden by filters)"}, {"plugin": "bhp", "port": 53, "protocol": "tcp", "state": "open", "service": "unknown", "reason": "connected", "latency": 1.1957118511199951, "scan_method": "connect", "should_display": true}, {"plugin": "bhp", "port": 443, "protocol": "tcp", "state": "open", "service": "HTTPS", "reason": "connected", "latency": 7.381511926651001, "scan_method": "connect", "should_display": true}, {"plugin": "bhp", "service": "unknown", "raw_banner": "Timeout waiting for response", "parsed_data": {}, "vulnerabilities": [], "service_details": {"port": 53, "protocol": "tcp", "detected_by": "port", "confidence": "low"}}, {"plugin": "bhp", "enhanced_intelligence_report": {"target": "google.com", "ip": "216.58.214.174", "scan_time": "2026-01-12T14:59:56.451836", "filters_applied": {"show_closed": false, "show_filtered": false, "show_errors": false}, "summary": {"total_ports_scanned": 1000, "ports_displayed": 2, "ports_hidden": 998, "hidden_breakdown": {"closed": 998, "filtered": 0, "error": 0}, "open_ports": 2, "closed_ports": 998, "filtered_ports": 0, "vulnerabilities_found": 0, "security_score": 0}, "displayed_open_services": [{"port": 53, "protocol": "tcp", "service": "unknown", "banner": ""}, {"port": 443, "protocol": "tcp", "service": "HTTPS", "banner": ""}], "security_issues": [], "recommendations": ["Improve security headers configuration"], "notes": ["Note: 998 ports hidden by filters (998 closed, 0 filtered)", "Note: 998 closed ports hidden (use --show-closed to view them)"]}}], "errors": []}};
+    const DATA = {"status": "success", "plugin": "bhp", "type": "active", "target": "tesla.com", "timestamp": "2026-02-08T14:34:32.273611", "output": {"plugin": "bhp", "results": [{"plugin": "bhp", "type": "filter_summary", "filters_applied": {"show_closed": false, "show_filtered": false, "show_errors": false, "min_port": 1, "max_port": 65535, "display_filter": "open_only"}, "statistics": {"total_scanned": 1000, "displayed": 3, "hidden": 997, "hidden_breakdown": {"closed": 997, "filtered": 0, "error": 0}, "open": 3, "closed": 997, "filtered": 0, "errors": 0, "scan_duration": 211.08}, "notes": "Showing 3 of 1000 ports (997 hidden by filters)"}, {"plugin": "bhp", "port": 80, "protocol": "tcp", "state": "open", "service": "HTTP", "banner": "HTTP/1.0 400 Bad Request\r\nServer: AkamaiGHost\r\nMime-Version: 1.0\r\nContent-Type: text/html\r\nContent-Length: 326\r\nExpires: Sun, 08 Feb 2026 11:31:01 GMT\r\nDate: Sun, 08 Feb 2026 11:31:01 GMT\r\nConnection: close", "reason": "connected", "latency": 1.0058417320251465, "scan_method": "connect", "should_display": true}, {"plugin": "bhp", "port": 53, "protocol": "tcp", "state": "open", "service": "unknown", "reason": "connected", "latency": 1.2758560180664062, "scan_method": "connect", "should_display": true}, {"plugin": "bhp", "port": 443, "protocol": "tcp", "state": "open", "service": "HTTPS", "reason": "connected", "latency": 0.6322154998779297, "scan_method": "connect", "should_display": true}, {"plugin": "bhp", "service": "HTTP", "raw_banner": "HTTP/1.0 403 Forbidden\r\nServer: AkamaiGHost\r\nMime-Version: 1.0\r\nContent-Type: text/html\r\nContent-Length: 359\r\nExpires: Sun, 08 Feb 2026 11:32:42 GMT\r\nX-Reference-Error: 18.699eb252.1770550362.ab6df1a2\r\nDate: Sun, 08 Feb 2026 11:32:42 GMT\r\nConnection: close\r\nX-AK-Cache: Error from child\r\nPermissions-Policy: interest-cohort=()", "parsed_data": {"status": "HTTP/1.0 403 Forbidden", "headers": {"Server": "AkamaiGHost", "Mime-Version": "1.0", "Content-Type": "text/html", "Content-Length": "359", "Expires": "Sun, 08 Feb 2026 11:32:42 GMT", "X-Reference-Error": "18.699eb252.1770550362.ab6df1a2", "Date": "Sun, 08 Feb 2026 11:32:42 GMT", "Connection": "close", "X-AK-Cache": "Error from child", "Permissions-Policy": "interest-cohort=()"}}, "vulnerabilities": [], "service_details": {"port": 80, "protocol": "tcp", "detected_by": "port_db", "confidence": "high"}}, {"plugin": "bhp", "service": "unknown", "raw_banner": "Timeout waiting for response", "parsed_data": {}, "vulnerabilities": [], "service_details": {"port": 53, "protocol": "tcp", "detected_by": "port", "confidence": "low"}}, {"plugin": "bhp", "url": "http://tesla.com", "headers": {"X-Cache-UUID": "e42f2cc6-6607-4e52-87eb-387548601829", "Content-Type": "text/html; charset=UTF-8", "X-Drupal-Dynamic-Cache": "MISS", "X-UA-Compatible": "IE=edge", "Content-Language": "en", "Last-Modified": "Fri, 06 Feb 2026 22:07:12 GMT", "ETag": "\"1770415632\"", "X-Generator": "Drupal 9 (https://www.drupal.org)", "X-Drupal-Cache": "HIT", "Cache-Control": "max-age=10", "X-TZLA-EDGE-HOSTNAME-VCL": "drupal8-prod", "X-TZLA-EDGE-Age": "60.000", "X-TZLA-EDGE-BACKEND-REASON": "OK", "X-TZLA-EDGE-BACKEND-STATUS": "200", "X-Varnish": "631206166 700042556", "X-Frame-Options": "SAMEORIGIN", "X-Content-Type-Options": "nosniff", "X-TZLA-EDGE-Cache-Hit": "Hit", "X-TZLA-EDGE-TTL": "6.128", "X-TZLA-EDGE-Server": "sjc04p1tegvr69.teslamotors.com", "X-TZLA-EDGE-Cache-Hits": "1", "Accept-Ranges": "bytes", "X-Akamai-Transformed": "0 - 0 -", "Vary": "Accept-Encoding", "Content-Encoding": "br", "Date": "Sun, 08 Feb 2026 11:32:48 GMT", "Transfer-Encoding": "chunked", "Connection": "keep-alive, Transfer-Encoding", "Alt-Svc": "h3=\":443\"; ma=93600", "Strict-Transport-Security": "max-age=15768000", "X-AK-Cache": "RefreshHit from child, Hit from parent", "Permissions-Policy": "interest-cohort=()", "Set-Cookie": "bm_s=YAAQXJ6yUlORrB6cAQAAkJkGPQRNlYCMef4SW3t9eeR2z0S27O7zRDenyPDLZQJ6e2sMaZnWuK+BuQMAxPoPX2JYqASJC+qb62qov1ixCW2PO7s+T3TH77zVTVkR0NRMi4tu5uwY/DIkdVq8NQYuwfFlTqncLapL6SLYeyOx2ZigB5tdVWsrDlwcRaKg6uT4u2gveYdCX7bCNSjNPy19uVQ+c2qrnmF1VuI92Q8eQFITRdmXBMB3zdZ9JPKW1oJP1R4aZw5pLRQBYJOwZDcblHBHGtMMtMksJCWWaG198/JGiyxisUdzkvVIbR4fNYEe6wpMZP3OtTYRQi4i053ntYr6AtXkUSRdJAL0/44DLdT+lE3LAS1OuImJSlrQ/s16wLi1Do9LBISzY9cseydUAIGII0qFw6u9Ca1WCFgJH/DuaLLktkZvIo5xnX1l/rXweZA4CfbkdAJOvVe3TL7kXr8RB3FhqjUzNKw7ll09dbSJAEwgr/nwyv6OfJSLV00EdCEc2xqIefoEKxtDUeEv38ltdLXmc0YBu0iBfrZJVaBZqrmu8aSj598mWFmYslWVEQSmdBSYFUw=; Domain=.tesla.com; Path=/; Expires=Wed, 11 Mar 2026 11:32:48 GMT; Max-Age=2678400; Secure; HttpOnly"}, "security_score": 52, "missing_security_headers": ["Content-Security-Policy", "Referrer-Policy", "X-XSS-Protection", "Cross-Origin-Embedder-Policy", "Cross-Origin-Opener-Policy", "Cross-Origin-Resource-Policy"], "vulnerabilities": ["HSTS max-age too low: 15768000", "Missing Content-Security-Policy"], "server_info": {}, "cookie_analysis": {"count": 1, "cookies": [{"name": "bm_s", "secure": true, "path": "/"}], "security_issues": []}, "redirect_chain": [{"url": "http://tesla.com/", "status": 301, "location": "http://www.tesla.com/"}, {"url": "http://www.tesla.com/", "status": 301, "location": "https://www.tesla.com/"}]}, {"plugin": "bhp", "url": "https://tesla.com", "headers": {"Server": "AkamaiGHost", "Mime-Version": "1.0", "Content-Type": "text/html", "Content-Length": "359", "Expires": "Sun, 08 Feb 2026 11:32:50 GMT", "X-Reference-Error": "18.689eb252.1770550370.9631266b", "Date": "Sun, 08 Feb 2026 11:32:50 GMT", "Connection": "close", "Strict-Transport-Security": "max-age=15768000", "X-AK-Cache": "Error from child", "Permissions-Policy": "interest-cohort=()"}, "security_score": 36, "missing_security_headers": ["Content-Security-Policy", "X-Frame-Options", "X-Content-Type-Options", "Referrer-Policy", "X-XSS-Protection", "Cross-Origin-Embedder-Policy", "Cross-Origin-Opener-Policy", "Cross-Origin-Resource-Policy"], "vulnerabilities": ["HSTS max-age too low: 15768000", "Missing Content-Security-Policy"], "server_info": {"server": "AkamaiGHost"}, "cookie_analysis": {"count": 0, "cookies": [], "security_issues": []}, "redirect_chain": []}, {"plugin": "bhp", "url": "http://2.18.53.207", "headers": {"Server": "AkamaiGHost", "Mime-Version": "1.0", "Content-Type": "text/html", "Content-Length": "326", "Expires": "Sun, 08 Feb 2026 11:32:51 GMT", "Date": "Sun, 08 Feb 2026 11:32:51 GMT", "Connection": "close"}, "security_score": 20, "missing_security_headers": ["Strict-Transport-Security", "Content-Security-Policy", "X-Frame-Options", "X-Content-Type-Options", "Referrer-Policy", "Permissions-Policy", "X-XSS-Protection", "Cross-Origin-Embedder-Policy", "Cross-Origin-Opener-Policy", "Cross-Origin-Resource-Policy"], "vulnerabilities": ["Missing Content-Security-Policy"], "server_info": {"server": "AkamaiGHost"}, "cookie_analysis": {"count": 0, "cookies": [], "security_issues": []}, "redirect_chain": []}, {"plugin": "bhp", "enhanced_intelligence_report": {"target": "tesla.com", "ip": "2.18.53.207", "scan_time": "2026-02-08T14:34:32.269553", "filters_applied": {"show_closed": false, "show_filtered": false, "show_errors": false}, "summary": {"total_ports_scanned": 1000, "ports_displayed": 3, "ports_hidden": 997, "hidden_breakdown": {"closed": 997, "filtered": 0, "error": 0}, "open_ports": 3, "closed_ports": 997, "filtered_ports": 0, "vulnerabilities_found": 0, "security_score": 0}, "displayed_open_services": [{"port": 80, "protocol": "tcp", "service": "HTTP", "banner": "HTTP/1.0 400 Bad Request\r\nServer: AkamaiGHost\r\nMime-Version: 1.0\r\nContent-Type: text/html\r\nContent-L"}, {"port": 53, "protocol": "tcp", "service": "unknown", "banner": ""}, {"port": 443, "protocol": "tcp", "service": "HTTPS", "banner": ""}], "security_issues": [], "recommendations": ["Improve security headers configuration"], "notes": ["Note: 997 ports hidden by filters (997 closed, 0 filtered)", "Note: 997 closed ports hidden (use --show-closed to view them)"]}}], "errors": []}};
 
-    function safe(v) {
+    function pretty(v){
       if (v === null || v === undefined) return "";
-      if (typeof v === "object") return JSON.stringify(v, null, 2);
-      return String(v);
+      if (typeof v === "string") return v;
+      try { return JSON.stringify(v, null, 2); } catch(e){ return String(v); }
     }
 
-    function buildSummary(data) {
-      const kv = document.getElementById("kv");
-      kv.innerHTML = "";
+    function addSummaryRow(k, v, cls=""){
+      const root = document.getElementById("summaryKV");
+      const kEl = document.createElement("div");
+      kEl.innerHTML = "<b>" + k + "</b>";
+      const vEl = document.createElement("div");
+      if (cls) vEl.innerHTML = "<span class='" + cls + "'>" + v + "</span>";
+      else vEl.textContent = v;
+      root.appendChild(kEl);
+      root.appendChild(vEl);
+    }
 
-      // Try common keys
-      const status = data.status ?? (data.results ? "success" : "unknown");
-      const target = data.target ?? data?.payload?.target ?? "";
-      const ts = data.timestamp ?? data?.payload?.timestamp ?? "";
+    function buildSummary(data){
+      const target = data.target ?? "-";
+      const ts = data.timestamp ?? "-";
 
-      document.getElementById("tsPill").textContent = "Timestamp: " + (ts || "—");
+      const pill = document.getElementById("pillTs");
+      if (pill) pill.textContent = "Timestamp: " + String(ts);
 
-      const items = [
-        ["Status", status],
-        ["Target", target],
-      ];
+      let plugins = 0, ok = 0, bad = 0;
 
-      // AUTO payload has results list
-      if (data.results && Array.isArray(data.results)) {
-        items.push(["Plugins", data.results.length]);
-      }
-
-      // MANUAL payload may have plugin
-      if (data.plugin) items.push(["Plugin", data.plugin]);
-      if (data.type) items.push(["Type", data.type]);
-
-      // render
-      for (const [k, v] of items) {
-        const kEl = document.createElement("div");
-        kEl.innerHTML = "<b>" + k + "</b>";
-        const vEl = document.createElement("div");
-        let vv = safe(v);
-        if (k === "Status") {
-          vEl.innerHTML = "<span class='" + (vv === "success" ? "ok" : "bad") + "'>" + vv + "</span>";
-        } else {
-          vEl.textContent = vv;
+      if (Array.isArray(data.results)){
+        plugins = data.results.length;
+        for (const r of data.results){
+          const st = String(r.status ?? "unknown").toLowerCase();
+          if (st === "success") ok++; else bad++;
         }
-        kv.appendChild(kEl);
-        kv.appendChild(vEl);
+      } else {
+        plugins = 1;
+        const st = String(data.status ?? "unknown").toLowerCase();
+        if (st === "success") ok = 1; else bad = 1;
       }
+
+      addSummaryRow("Target", String(target));
+      addSummaryRow("Timestamp", String(ts));
+      addSummaryRow("Plugins", String(plugins));
+      addSummaryRow("Success", String(ok), "ok");
+      addSummaryRow("Errors", String(bad), "bad");
     }
 
-    function card(title, tag, obj) {
-      const wrap = document.createElement("div");
-      wrap.className = "card";
+    function onMove(e){
+      const hero = document.getElementById("hero");
+      const logo = document.getElementById("heroLogo");
+      if (!hero || !logo) return;
 
-      const h = document.createElement("div");
-      h.className = "cardHeader";
+      const r = hero.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width;
+      const y = (e.clientY - r.top) / r.height;
 
-      const t = document.createElement("h3");
-      t.className = "cardTitle";
-      t.textContent = title;
+      const ry = (x - 0.5) * 26;
+      const rx = (0.5 - y) * 20;
+      const tz = 34;
 
-      const tg = document.createElement("span");
-      tg.className = "tag";
-      tg.textContent = tag;
+      logo.style.setProperty("--rx", rx.toFixed(2) + "deg");
+      logo.style.setProperty("--ry", ry.toFixed(2) + "deg");
+      logo.style.setProperty("--tz", tz + "px");
+    }
 
-      h.appendChild(t);
-      h.appendChild(tg);
+    function resetTilt(){
+      const logo = document.getElementById("heroLogo");
+      if (!logo) return;
+      logo.style.setProperty("--rx", "0deg");
+      logo.style.setProperty("--ry", "0deg");
+      logo.style.setProperty("--tz", "0px");
+    }
+
+    (function(){
+      const hero = document.getElementById("hero");
+      if (!hero) return;
+      hero.addEventListener("mousemove", onMove, {passive:true});
+      hero.addEventListener("mouseleave", resetTilt, {passive:true});
+      hero.addEventListener("touchend", resetTilt, {passive:true});
+    })();
+
+    function renderCard(r){
+      const card = document.createElement("div");
+      card.className = "card";
+
+      const header = document.createElement("div");
+      header.className = "cardHeader";
+
+      const title = document.createElement("h3");
+      title.className = "title";
+      title.textContent = String(r.plugin ?? "plugin");
+
+      const st = String(r.status ?? "unknown").toLowerCase();
+      const tag = document.createElement("span");
+      tag.className = "tag";
+      tag.innerHTML = "status: <span class='" + (st === "success" ? "ok" : "bad") + "'>" + st + "</span>";
+
+      header.appendChild(title);
+      header.appendChild(tag);
+      card.appendChild(header);
 
       const pre = document.createElement("pre");
-      pre.textContent = JSON.stringify(obj, null, 2);
+      pre.textContent = pretty(r.output);
+      card.appendChild(pre);
 
-      wrap.appendChild(h);
-      wrap.appendChild(pre);
-      return wrap;
+      if (r.error){
+        const pre2 = document.createElement("pre");
+        pre2.textContent = pretty(r.error);
+        card.appendChild(pre2);
+      }
+
+      return card;
     }
 
-    function buildResults(data) {
-      const root = document.getElementById("results");
+    function buildResults(data){
+      const root = document.getElementById("cards");
       root.innerHTML = "";
 
-      // AUTO report: show each plugin result cleanly
-      if (data.results && Array.isArray(data.results)) {
-        for (const r of data.results) {
-          const title = (r.plugin ? r.plugin : "plugin");
-          const tag = (r.status ? r.status : "result");
-          root.appendChild(card(title, tag, r));
+      if (Array.isArray(data.results)){
+        for (const r of data.results){
+          root.appendChild(renderCard(r));
         }
         return;
       }
 
-      // MANUAL: show the whole payload, and if output exists show it separately
-      if (data.output) {
-        root.appendChild(card("Output", "payload", data.output));
-      }
-      root.appendChild(card("Raw", "json", data));
+      root.appendChild(renderCard(data));
     }
 
     buildSummary(DATA);

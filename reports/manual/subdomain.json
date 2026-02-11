@@ -3,13 +3,13 @@
   "plugin": "subdomain",
   "type": "passive",
   "target": "tesla.com",
-  "timestamp": "2026-01-13T14:59:00.236805",
+  "timestamp": "2026-01-14T14:50:20.253487",
   "output": {
     "plugin": "subdomain",
     "results": [
       {
         "plugin": "subdomain",
-        "timestamp": "2026-01-13T11:59:00.233674",
+        "timestamp": "2026-01-14T11:50:20.246612",
         "domain": "shop.tesla.com",
         "type": "A",
         "values": [
@@ -18,7 +18,7 @@
       },
       {
         "plugin": "subdomain",
-        "timestamp": "2026-01-13T11:59:00.236660",
+        "timestamp": "2026-01-14T11:50:20.253416",
         "domain": "www.tesla.com",
         "type": "A",
         "values": [

@@ -2,25 +2,31 @@
   "status": "success",
   "plugin": "whois",
   "type": "passive",
-  "target": "google.com",
-  "timestamp": "2026-01-12T19:45:12.330225",
+  "target": "tesla.com",
+  "timestamp": "2026-02-08T10:03:30.382048",
   "output": {
     "plugin": "whois",
     "results": [
       {
         "plugin": "whois",
-        "timestamp": "2026-01-12T16:45:12.330060",
-        "domain": "google.com",
+        "timestamp": "2026-02-08T07:03:30.380447",
+        "domain": "tesla.com",
         "registrant": null,
         "emails": [
           "abusecomplaints@markmonitor.com"
         ],
-        "creation_date": "1997-09-15T04:00:00Z",
+        "creation_date": "1992-11-04T05:00:00Z",
         "name_servers": [
-          "NS1.GOOGLE.COM",
-          "NS2.GOOGLE.COM",
-          "NS3.GOOGLE.COM",
-          "NS4.GOOGLE.COM"
+          "A1-12.AKAM.NET",
+          "A10-67.AKAM.NET",
+          "A12-64.AKAM.NET",
+          "A28-65.AKAM.NET",
+          "A7-66.AKAM.NET",
+          "A9-67.AKAM.NET",
+          "EDNS69.ULTRADNS.BIZ",
+          "EDNS69.ULTRADNS.COM",
+          "EDNS69.ULTRADNS.NET",
+          "EDNS69.ULTRADNS.ORG"
         ]
       }
     ],

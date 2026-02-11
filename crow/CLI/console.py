@@ -10,7 +10,6 @@ import readline
 import os
 import sys
 import json
-import shlex
 import contextlib
 import io
 import webbrowser
@@ -207,7 +206,6 @@ class CrowConsole(cmd.Cmd):
             return {str(k): self._json_safe(v) for k, v in obj.items()}
         if isinstance(obj, (list, tuple, set)):
             return [self._json_safe(x) for x in obj]
-        # pydantic/dataclasses-like
         if hasattr(obj, "model_dump"):
             try:
                 return self._json_safe(obj.model_dump())
@@ -220,6 +218,21 @@ class CrowConsole(cmd.Cmd):
                 pass
         return str(obj)
 
+    # ---------------- HTML helpers ----------------
+
+    def _html_escape(self, s: Any) -> str:
+        s = "" if s is None else str(s)
+        return (
+            s.replace("&", "&amp;")
+            .replace("<", "&lt;")
+            .replace(">", "&gt;")
+            .replace('"', "&quot;")
+            .replace("'", "&#39;")
+        )
+
+    def _json_for_script(self, data_json: str) -> str:
+        return data_json.replace("</", "<\\/")
+
     # ---------------- Plugin loading ----------------
 
     def _load_plugins(self) -> Dict[str, Any]:
@@ -227,7 +240,6 @@ class CrowConsole(cmd.Cmd):
         if not HAS_CROW or PluginRegistry is None:
             return plugins
 
-        # silence autoload noise
         self._silence_logger_temporarily("CRITICAL")
         try:
             PluginRegistry.autoload()
@@ -335,392 +347,460 @@ class CrowConsole(cmd.Cmd):
             json.dump(safe, f, indent=2, ensure_ascii=False)
 
     def _write_html_report(self, path: Path, title: str, payload: Dict[str, Any]):
-        """
-        Single-page HTML report (RTL) with animated big CROW hero + clean layout.
-        - No "Finding"
-        - Summary card overlays Results (behind it)
-        - Responsive / no ugly right overflow
-        """
         safe = self._json_safe(payload)
         data_json = json.dumps(safe, ensure_ascii=False)
+        data_json = self._json_for_script(data_json)
 
-        html = f"""<!doctype html>
+        html = r"""<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>{title}</title>
+  <title>__TITLE__</title>
   <style>
-    :root {{
-      --bg: #0b0f19;
-      --panel: rgba(255,255,255,0.06);
-      --panel2: rgba(255,255,255,0.10);
-      --border: rgba(255,255,255,0.10);
-      --text: rgba(255,255,255,0.92);
-      --muted: rgba(255,255,255,0.65);
-      --accent: #66f;
-      --accent2: #00d4ff;
-      --good: #39d98a;
-      --bad: #ff5c5c;
-      --shadow: 0 20px 60px rgba(0,0,0,0.45);
-    }}
-    * {{ box-sizing: border-box; }}
-    body {{
-      margin: 0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans Arabic", "Noto Sans", sans-serif;
-      background: radial-gradient(1200px 700px at 80% 10%, rgba(102,102,255,0.22), transparent 60%),
-                  radial-gradient(900px 600px at 10% 70%, rgba(0,212,255,0.18), transparent 55%),
-                  var(--bg);
-      color: var(--text);
-      overflow-x: hidden;
-    }}
-
-    /* HERO (full first screen) */
-    .hero {{
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      padding: 40px 18px;
-      position: relative;
-    }}
-    .hero::before {{
-      content: "";
-      position: absolute;
-      inset: -200px;
+    :root{
+      --bg:#0b0f19;
+      --panel:rgba(255,255,255,0.07);
+      --border:rgba(255,255,255,0.14);
+      --text:rgba(255,255,255,0.96);
+      --muted:rgba(255,255,255,0.70);
+      --good:#39d98a;
+      --bad:#ff5c5c;
+      --shadow:0 22px 70px rgba(0,0,0,0.55);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,"Noto Sans Arabic",sans-serif;
       background:
-        radial-gradient(circle at 50% 50%, rgba(102,102,255,0.22), transparent 55%),
-        radial-gradient(circle at 35% 60%, rgba(0,212,255,0.18), transparent 60%);
-      filter: blur(40px);
-      opacity: 0.8;
+        radial-gradient(1200px 700px at 70% 15%, rgba(120,120,255,0.18), transparent 62%),
+        radial-gradient(900px 600px at 15% 75%, rgba(0,212,255,0.14), transparent 58%),
+        var(--bg);
+      color:var(--text);
+      overflow-x:hidden;
+    }
+
+    .hero{
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      padding:42px 18px;
+      position:relative;
+      perspective:1100px;
+    }
+
+    /* ✅ Comfort glow: less opacity + softer background */
+    .hero::before{
+      content:"";
+      position:absolute;
+      inset:-220px;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(120,120,255,0.16), transparent 60%),
+        radial-gradient(circle at 35% 60%, rgba(0,212,255,0.12), transparent 64%);
+      filter: blur(58px);
+      opacity:.75;
       animation: floatGlow 10s ease-in-out infinite;
-    }}
-    @keyframes floatGlow {{
-      0%,100% {{ transform: translateY(0px); }}
-      50% {{ transform: translateY(18px); }}
-    }}
+    }
 
-    .logoWrap {{
-      position: relative;
-      text-align: center;
-      z-index: 2;
-      max-width: 980px;
-      width: 100%;
-    }}
+    @keyframes floatGlow{
+      0%,100%{transform:translateY(0)}
+      50%{transform:translateY(18px)}
+    }
 
-    .logo {{
-      font-size: clamp(72px, 14vw, 160px);
-      font-weight: 900;
-      letter-spacing: 2px;
-      margin: 0;
-      line-height: 0.95;
-      background: linear-gradient(90deg, #fff, rgba(255,255,255,0.55), #fff);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      position: relative;
-      display: inline-block;
-      text-shadow: 0 0 40px rgba(102,102,255,0.35);
-      animation: shimmer 2.8s ease-in-out infinite;
-    }}
-    @keyframes shimmer {{
-      0% {{ filter: drop-shadow(0 0 0 rgba(102,102,255,0.0)); transform: translateY(0); }}
-      50% {{ filter: drop-shadow(0 0 20px rgba(0,212,255,0.35)); transform: translateY(-6px); }}
-      100% {{ filter: drop-shadow(0 0 0 rgba(102,102,255,0.0)); transform: translateY(0); }}
-    }}
+    .heroWrap{
+      position:relative;
+      z-index:2;
+      text-align:center;
+      width:100%;
+      max-width:1100px;
+      transform-style:preserve-3d;
+    }
 
-    .subtitle {{
-      margin-top: 18px;
-      color: var(--muted);
-      font-size: 16px;
-      line-height: 1.7;
-    }}
+    /* LOGO: PURE WHITE + EYE-COMFORT GLOW */
+    .heroLogo{
+      font-size:clamp(78px, 15vw, 190px);
+      font-weight:1000;
+      margin:0;
+      line-height:.92;
+      letter-spacing:10px;
+      position:relative;
+      display:inline-block;
 
-    .heroCard {{
-      margin-top: 26px;
-      display: inline-flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: center;
-      padding: 14px 16px;
-      border: 1px solid var(--border);
-      background: var(--panel);
-      border-radius: 18px;
-      box-shadow: var(--shadow);
-    }}
+      --rx:0deg;
+      --ry:0deg;
+      --tz:0px;
 
-    .pill {{
-      padding: 10px 12px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.05);
-      color: var(--text);
-      font-size: 13px;
-      white-space: nowrap;
-    }}
+      color:#ffffff !important;
+      background:none !important;
+      -webkit-text-fill-color:#ffffff !important;
+      -webkit-text-stroke:1px rgba(255,255,255,0.22);
+      text-rendering:geometricPrecision;
+      -webkit-font-smoothing:antialiased;
 
-    .btn {{
-      cursor: pointer;
-      user-select: none;
-      padding: 12px 14px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      background: linear-gradient(135deg, rgba(102,102,255,0.35), rgba(0,212,255,0.22));
-      color: #fff;
-      font-weight: 700;
-      transition: transform .15s ease, filter .15s ease;
-    }}
-    .btn:hover {{ transform: translateY(-2px); filter: brightness(1.1); }}
+      transform-style:preserve-3d;
+      transform:perspective(1100px) rotateX(var(--rx)) rotateY(var(--ry)) translateZ(var(--tz));
+      will-change:transform,filter;
 
-    /* CONTENT */
-    .container {{
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 18px 80px;
-    }}
+      /* ✅ Reduced glow */
+      filter:
+        drop-shadow(0 10px 22px rgba(0,0,0,0.55))
+        drop-shadow(0 0 34px rgba(255,255,255,0.12))
+        drop-shadow(0 0 44px rgba(130,130,255,0.34))
+        drop-shadow(0 0 26px rgba(0,212,255,0.22));
 
-    .sectionTitle {{
-      margin: 0 0 14px;
-      font-size: 18px;
-      color: rgba(255,255,255,0.9);
-    }}
+      animation:
+        logoFloat 4.6s ease-in-out infinite,
+        logoPulse 3.6s ease-in-out infinite;
+    }
 
-    .layout {{
-      position: relative;
-      margin-top: 30px;
-      padding-top: 10px;
-    }}
+    /* ✅ Softer aura behind text */
+    .heroLogo::before{
+      content:"CROW";
+      position:absolute;
+      inset:0;
+      z-index:-1;
+      transform:translateZ(-60px);
+      color:rgba(170,210,255,0.18);
+      filter:blur(10px);
+      opacity:.55;
+      animation:auraBreath 3.4s ease-in-out infinite;
+    }
 
-    /* Results is the "background" */
-    .results {{
-      border: 1px solid var(--border);
-      background: var(--panel);
-      border-radius: 20px;
-      padding: 18px;
-      box-shadow: var(--shadow);
-    }}
+    /* ✅ Reduce scan overlay */
+    .heroLogo::after{
+      content:"";
+      position:absolute;
+      inset:-34px -48px;
+      pointer-events:none;
+      background:
+        linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.06) 45%, transparent 72%),
+        linear-gradient(90deg, transparent 0%, rgba(0,212,255,0.10) 48%, transparent 60%);
+      mix-blend-mode:screen;
+      opacity:.12;
+      transform:translateZ(55px);
+      animation:scanMove 2.6s linear infinite;
+      border-radius:24px;
+    }
 
-    /* Summary overlays results */
-    .summary {{
-      position: absolute;
-      top: -22px;
-      left: 18px; /* RTL: keep it visually nice; still left side overlay */
-      width: min(420px, calc(100% - 36px));
-      border: 1px solid var(--border);
-      background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.06));
-      border-radius: 20px;
-      padding: 16px;
-      box-shadow: var(--shadow);
-      z-index: 2;
-      backdrop-filter: blur(8px);
-    }}
+    @keyframes logoFloat{
+      0%,100%{transform:perspective(1100px) rotateX(var(--rx)) rotateY(var(--ry)) translateZ(var(--tz)) translateY(0)}
+      50%{transform:perspective(1100px) rotateX(var(--rx)) rotateY(var(--ry)) translateZ(var(--tz)) translateY(-12px)}
+    }
 
-    .kv {{
-      display: grid;
-      grid-template-columns: 120px 1fr;
-      gap: 8px 12px;
-      font-size: 13px;
-      color: var(--muted);
-    }}
-    .kv b {{ color: var(--text); font-weight: 700; }}
-    .kv .ok {{ color: var(--good); }}
-    .kv .bad {{ color: var(--bad); }}
+    /* ✅ Gentle pulse only */
+    @keyframes logoPulse{
+      0%,100%{
+        filter:
+          drop-shadow(0 10px 22px rgba(0,0,0,0.55))
+          drop-shadow(0 0 30px rgba(255,255,255,0.10))
+          drop-shadow(0 0 40px rgba(130,130,255,0.30))
+          drop-shadow(0 0 24px rgba(0,212,255,0.20));
+      }
+      50%{
+        filter:
+          drop-shadow(0 12px 26px rgba(0,0,0,0.58))
+          drop-shadow(0 0 42px rgba(255,255,255,0.14))
+          drop-shadow(0 0 58px rgba(150,150,255,0.44))
+          drop-shadow(0 0 32px rgba(0,212,255,0.28));
+      }
+    }
 
-    .resultsInner {{
-      padding-top: 130px; /* leave space for summary overlay */
-      display: grid;
-      gap: 14px;
-    }}
+    @keyframes auraBreath{
+      0%,100%{opacity:.45; transform:translateZ(-60px) scale(1)}
+      50%{opacity:.70; transform:translateZ(-60px) scale(1.05)}
+    }
 
-    .card {{
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.04);
-      border-radius: 18px;
-      padding: 14px;
-      overflow: hidden;
-    }}
-    .cardHeader {{
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 10px;
-    }}
-    .tag {{
-      font-size: 12px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.05);
-      color: var(--muted);
-      white-space: nowrap;
-    }}
-    .cardTitle {{
-      font-weight: 900;
-      font-size: 15px;
-      color: rgba(255,255,255,0.92);
-      margin: 0;
-    }}
+    @keyframes scanMove{
+      0%{transform:translateZ(55px) translateY(-48px)}
+      100%{transform:translateZ(55px) translateY(48px)}
+    }
 
-    pre {{
-      margin: 0;
-      padding: 12px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      background: rgba(0,0,0,0.25);
-      overflow: auto;
-      direction: ltr;
-      text-align: left;
-      font-size: 12px;
-      line-height: 1.6;
-      color: rgba(255,255,255,0.88);
-      max-width: 100%;
-    }}
+    .heroSub{
+      margin-top:14px;
+      color:var(--muted);
+      font-size:14px;
+      transform:translateZ(20px);
+    }
 
-    .footer {{
-      margin-top: 26px;
-      color: var(--muted);
-      font-size: 12px;
-      text-align: center;
-    }}
+    .heroBar{
+      margin:28px auto 0;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      justify-content:center;
+      align-items:center;
+      padding:14px 16px;
+      border:1px solid var(--border);
+      background:var(--panel);
+      border-radius:18px;
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(8px);
+      transform:translateZ(10px);
+    }
+    .heroRow{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      justify-content:center;
+      align-items:center;
+      width:100%;
+    }
+    .pill{
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,0.05);
+      color:var(--text);
+      font-size:13px;
+      white-space:nowrap;
+      max-width:100%;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      direction:ltr;
+      text-align:left;
+    }
+    .btn{
+      cursor:pointer;
+      user-select:none;
+      padding:12px 14px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background:linear-gradient(135deg, rgba(102,102,255,0.42), rgba(0,212,255,0.26));
+      color:#fff;
+      font-weight:1000;
+      letter-spacing:.3px;
+      transition:transform .15s ease, filter .15s ease;
+    }
+    .btn:hover{transform:translateY(-2px);filter:brightness(1.06)}
 
-    @media (max-width: 720px) {{
-      .summary {{
-        position: static;
-        width: 100%;
-        margin-bottom: 14px;
-      }}
-      .resultsInner {{ padding-top: 0; }}
-    }}
+    .wrap{max-width:1200px;margin:0 auto;padding:22px 14px 60px}
+    .top{
+      border:1px solid var(--border);
+      background:var(--panel);
+      border-radius:14px;
+      padding:16px;
+      margin-bottom:16px;
+      box-shadow:var(--shadow);
+    }
+    h2.pageTitle{margin:0 0 10px;font-size:18px}
+    .kv{
+      display:grid;
+      grid-template-columns:160px 1fr;
+      gap:8px 12px;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .kv b{color:var(--text)}
+    .ok{color:var(--good);font-weight:1000}
+    .bad{color:var(--bad);font-weight:1000}
+
+    .card{
+      border:1px solid var(--border);
+      background:var(--panel);
+      border-radius:14px;
+      padding:14px;
+      margin-bottom:14px;
+      box-shadow:var(--shadow);
+    }
+    .cardHeader{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:10px;
+    }
+    .title{font-size:15px;font-weight:1000;margin:0}
+    .tag{
+      font-size:12px;
+      padding:6px 10px;
+      border:1px solid var(--border);
+      border-radius:999px;
+      color:var(--muted);
+      direction:ltr;
+    }
+
+    pre{
+      margin:12px 0 0;
+      padding:14px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background:rgba(0,0,0,0.26);
+      overflow:auto;
+      white-space:pre;
+      font-size:12px;
+      line-height:1.65;
+      color:rgba(255,255,255,0.93);
+      direction:ltr;
+      text-align:left;
+      max-height:560px;
+    }
+
+    .footer{margin-top:18px;color:var(--muted);font-size:12px;text-align:center}
+    @media (max-width:700px){
+      .kv{grid-template-columns:120px 1fr}
+      .heroLogo{letter-spacing:6px}
+    }
   </style>
 </head>
 <body>
-  <section class="hero">
-    <div class="logoWrap">
-      <h1 class="logo">CROW</h1>
-      <div class="subtitle">
-       {title} 
-      </div>
-      <div class="heroCard">
-        <span class="pill">Project: {str(self.project_root)}</span>
-        <span class="pill">Workspace: {self.workspace}</span>
-        <span class="pill" id="tsPill">Timestamp: —</span>
-        <span class="btn" onclick="document.getElementById('report').scrollIntoView({{behavior:'smooth'}})">عرض التقرير</span>
+
+  <section class="hero" id="hero">
+    <div class="heroWrap" id="heroWrap">
+      <h1 class="heroLogo" id="heroLogo">CROW</h1>
+      <div class="heroSub">__TITLE__</div>
+
+      <div class="heroBar">
+        <div class="heroRow">
+          <span class="pill" id="pillTs">Timestamp: —</span>
+          <span class="pill">Workspace: __WORKSPACE__</span>
+        </div>
+        <div class="heroRow">
+          <button class="btn" onclick="document.getElementById('report').scrollIntoView({behavior:'smooth'})">View Report</button>
+        </div>
       </div>
     </div>
   </section>
 
-  <div class="container" id="report">
-    <div class="layout">
-      <div class="summary" id="summary">
-        <div class="sectionTitle">Summary</div>
-        <div class="kv" id="kv"></div>
-      </div>
-
-      <div class="results">
-        <div class="sectionTitle">Results</div>
-        <div class="resultsInner" id="results"></div>
-      </div>
+  <div class="wrap" id="report">
+    <div class="top">
+      <h2 class="pageTitle">__TITLE__</h2>
+      <div class="kv" id="summaryKV"></div>
     </div>
 
-    <div class="footer">Generated by CROW • {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}</div>
+    <div id="cards"></div>
+
+    <div class="footer">Generated by CROW • __NOW__</div>
   </div>
 
   <script>
-    const DATA = {data_json};
+    const DATA = __DATA_JSON__;
 
-    function safe(v) {{
+    function pretty(v){
       if (v === null || v === undefined) return "";
-      if (typeof v === "object") return JSON.stringify(v, null, 2);
-      return String(v);
-    }}
+      if (typeof v === "string") return v;
+      try { return JSON.stringify(v, null, 2); } catch(e){ return String(v); }
+    }
 
-    function buildSummary(data) {{
-      const kv = document.getElementById("kv");
-      kv.innerHTML = "";
+    function addSummaryRow(k, v, cls=""){
+      const root = document.getElementById("summaryKV");
+      const kEl = document.createElement("div");
+      kEl.innerHTML = "<b>" + k + "</b>";
+      const vEl = document.createElement("div");
+      if (cls) vEl.innerHTML = "<span class='" + cls + "'>" + v + "</span>";
+      else vEl.textContent = v;
+      root.appendChild(kEl);
+      root.appendChild(vEl);
+    }
 
-      // Try common keys
-      const status = data.status ?? (data.results ? "success" : "unknown");
-      const target = data.target ?? data?.payload?.target ?? "";
-      const ts = data.timestamp ?? data?.payload?.timestamp ?? "";
+    function buildSummary(data){
+      const target = data.target ?? "-";
+      const ts = data.timestamp ?? "-";
 
-      document.getElementById("tsPill").textContent = "Timestamp: " + (ts || "—");
+      const pill = document.getElementById("pillTs");
+      if (pill) pill.textContent = "Timestamp: " + String(ts);
 
-      const items = [
-        ["Status", status],
-        ["Target", target],
-      ];
+      let plugins = 0, ok = 0, bad = 0;
 
-      // AUTO payload has results list
-      if (data.results && Array.isArray(data.results)) {{
-        items.push(["Plugins", data.results.length]);
-      }}
+      if (Array.isArray(data.results)){
+        plugins = data.results.length;
+        for (const r of data.results){
+          const st = String(r.status ?? "unknown").toLowerCase();
+          if (st === "success") ok++; else bad++;
+        }
+      } else {
+        plugins = 1;
+        const st = String(data.status ?? "unknown").toLowerCase();
+        if (st === "success") ok = 1; else bad = 1;
+      }
 
-      // MANUAL payload may have plugin
-      if (data.plugin) items.push(["Plugin", data.plugin]);
-      if (data.type) items.push(["Type", data.type]);
+      addSummaryRow("Target", String(target));
+      addSummaryRow("Timestamp", String(ts));
+      addSummaryRow("Plugins", String(plugins));
+      addSummaryRow("Success", String(ok), "ok");
+      addSummaryRow("Errors", String(bad), "bad");
+    }
 
-      // render
-      for (const [k, v] of items) {{
-        const kEl = document.createElement("div");
-        kEl.innerHTML = "<b>" + k + "</b>";
-        const vEl = document.createElement("div");
-        let vv = safe(v);
-        if (k === "Status") {{
-          vEl.innerHTML = "<span class='" + (vv === "success" ? "ok" : "bad") + "'>" + vv + "</span>";
-        }} else {{
-          vEl.textContent = vv;
-        }}
-        kv.appendChild(kEl);
-        kv.appendChild(vEl);
-      }}
-    }}
+    function onMove(e){
+      const hero = document.getElementById("hero");
+      const logo = document.getElementById("heroLogo");
+      if (!hero || !logo) return;
 
-    function card(title, tag, obj) {{
-      const wrap = document.createElement("div");
-      wrap.className = "card";
+      const r = hero.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width;
+      const y = (e.clientY - r.top) / r.height;
 
-      const h = document.createElement("div");
-      h.className = "cardHeader";
+      const ry = (x - 0.5) * 26;
+      const rx = (0.5 - y) * 20;
+      const tz = 34;
 
-      const t = document.createElement("h3");
-      t.className = "cardTitle";
-      t.textContent = title;
+      logo.style.setProperty("--rx", rx.toFixed(2) + "deg");
+      logo.style.setProperty("--ry", ry.toFixed(2) + "deg");
+      logo.style.setProperty("--tz", tz + "px");
+    }
 
-      const tg = document.createElement("span");
-      tg.className = "tag";
-      tg.textContent = tag;
+    function resetTilt(){
+      const logo = document.getElementById("heroLogo");
+      if (!logo) return;
+      logo.style.setProperty("--rx", "0deg");
+      logo.style.setProperty("--ry", "0deg");
+      logo.style.setProperty("--tz", "0px");
+    }
 
-      h.appendChild(t);
-      h.appendChild(tg);
+    (function(){
+      const hero = document.getElementById("hero");
+      if (!hero) return;
+      hero.addEventListener("mousemove", onMove, {passive:true});
+      hero.addEventListener("mouseleave", resetTilt, {passive:true});
+      hero.addEventListener("touchend", resetTilt, {passive:true});
+    })();
+
+    function renderCard(r){
+      const card = document.createElement("div");
+      card.className = "card";
+
+      const header = document.createElement("div");
+      header.className = "cardHeader";
+
+      const title = document.createElement("h3");
+      title.className = "title";
+      title.textContent = String(r.plugin ?? "plugin");
+
+      const st = String(r.status ?? "unknown").toLowerCase();
+      const tag = document.createElement("span");
+      tag.className = "tag";
+      tag.innerHTML = "status: <span class='" + (st === "success" ? "ok" : "bad") + "'>" + st + "</span>";
+
+      header.appendChild(title);
+      header.appendChild(tag);
+      card.appendChild(header);
 
       const pre = document.createElement("pre");
-      pre.textContent = JSON.stringify(obj, null, 2);
+      pre.textContent = pretty(r.output);
+      card.appendChild(pre);
 
-      wrap.appendChild(h);
-      wrap.appendChild(pre);
-      return wrap;
-    }}
+      if (r.error){
+        const pre2 = document.createElement("pre");
+        pre2.textContent = pretty(r.error);
+        card.appendChild(pre2);
+      }
 
-    function buildResults(data) {{
-      const root = document.getElementById("results");
+      return card;
+    }
+
+    function buildResults(data){
+      const root = document.getElementById("cards");
       root.innerHTML = "";
 
-      // AUTO report: show each plugin result cleanly
-      if (data.results && Array.isArray(data.results)) {{
-        for (const r of data.results) {{
-          const title = (r.plugin ? r.plugin : "plugin");
-          const tag = (r.status ? r.status : "result");
-          root.appendChild(card(title, tag, r));
-        }}
+      if (Array.isArray(data.results)){
+        for (const r of data.results){
+          root.appendChild(renderCard(r));
+        }
         return;
-      }}
+      }
 
-      // MANUAL: show the whole payload, and if output exists show it separately
-      if (data.output) {{
-        root.appendChild(card("Output", "payload", data.output));
-      }}
-      root.appendChild(card("Raw", "json", data));
-    }}
+      root.appendChild(renderCard(data));
+    }
 
     buildSummary(DATA);
     buildResults(DATA);
@@ -728,6 +808,11 @@ class CrowConsole(cmd.Cmd):
 </body>
 </html>
 """
+        html = html.replace("__TITLE__", self._html_escape(title))
+        html = html.replace("__NOW__", self._html_escape(datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
+        html = html.replace("__DATA_JSON__", data_json)
+        html = html.replace("__WORKSPACE__", self._html_escape(self.workspace))
+
         path.parent.mkdir(parents=True, exist_ok=True)
         with open(path, "w", encoding="utf-8") as f:
             f.write(html)
@@ -753,7 +838,6 @@ class CrowConsole(cmd.Cmd):
         ]
 
         if arg:
-            # try built-in docstring help
             fn = getattr(self, f"do_{arg}", None)
             if fn and fn.__doc__:
                 print(fn.__doc__.strip())
@@ -761,7 +845,6 @@ class CrowConsole(cmd.Cmd):
                 print(f"No detailed help for '{arg}'.")
             return
 
-        # prettier output
         print("Commands:")
         for c, d in commands:
             print(f"  {c:<14} {d}")
@@ -859,11 +942,9 @@ class CrowConsole(cmd.Cmd):
     def do_quit(self, arg):
         return self.do_exit(arg)
 
-    # --- Key fix: default behaves by STATE ---
     def default(self, line):
         line = (line or "").strip()
 
-        # HOME: 1/2 are shortcuts
         if self.state == self.STATE_HOME:
             if line == "1":
                 self.do_auto("")
@@ -880,7 +961,6 @@ class CrowConsole(cmd.Cmd):
             print(f"{Fore.RED}[!] Unknown command: {line}{Style.RESET_ALL}")
             return
 
-        # MANUAL: numbers select plugins (fix the repeating list issue)
         if self.state == self.STATE_MANUAL:
             if line.lower() in ("back",):
                 self.do_back("")
@@ -909,7 +989,6 @@ class CrowConsole(cmd.Cmd):
                     with self._quiet_run():
                         res = self._run_plugin(plugin_name, target)
 
-                    # Save MANUAL report (overwrite)
                     json_path = self._manual_json_path(plugin_name)
                     html_path = self._manual_html_path(plugin_name)
                     self._write_json(json_path, res)
@@ -921,7 +1000,6 @@ class CrowConsole(cmd.Cmd):
                     print(f"{Fore.GREEN}[+] MANUAL saved HTML => {html_path}{Style.RESET_ALL}")
                     print(f"{Fore.CYAN}Open report: {html_path.resolve().as_uri()}{Style.RESET_ALL}")
                     self._open_in_browser(html_path)
-
                     return
 
                 print(f"{Fore.RED}[!] Invalid selection. Choose 1-{len(self.manual_order)}{Style.RESET_ALL}")

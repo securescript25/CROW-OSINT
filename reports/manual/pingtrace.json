@@ -1,0 +1,109 @@
+{
+  "status": "success",
+  "plugin": "pingtrace",
+  "type": "active",
+  "target": "ust.edu.ye",
+  "timestamp": "2026-01-14T14:36:59.867368",
+  "output": {
+    "plugin": "pingtrace",
+    "results": [
+      {
+        "type": "ping_results",
+        "target": "ust.edu.ye",
+        "target_ip": "203.161.32.29",
+        "config": {
+          "mode": "ping",
+          "protocol": "icmp",
+          "count": 4,
+          "timeout": 2.0,
+          "max_hops": 30,
+          "packet_size": 64,
+          "fast": false,
+          "resolve_dns": true
+        },
+        "data": [
+          {
+            "sequence": 1,
+            "target": "203.161.32.29",
+            "status": "success",
+            "rtt": 358.56103897094727,
+            "ttl": 67,
+            "protocol": "icmp",
+            "packet_size": 64
+          },
+          {
+            "sequence": 2,
+            "target": "203.161.32.29",
+            "status": "success",
+            "rtt": 309.2916011810303,
+            "ttl": 67,
+            "protocol": "icmp",
+            "packet_size": 64
+          },
+          {
+            "sequence": 3,
+            "target": "203.161.32.29",
+            "status": "success",
+            "rtt": 308.86197090148926,
+            "ttl": 67,
+            "protocol": "icmp",
+            "packet_size": 64
+          },
+          {
+            "sequence": 4,
+            "target": "203.161.32.29",
+            "status": "success",
+            "rtt": 520.6921100616455,
+            "ttl": 67,
+            "protocol": "icmp",
+            "packet_size": 64
+          }
+        ]
+      },
+      {
+        "type": "analysis",
+        "summary": {
+          "target": "ust.edu.ye",
+          "ip": "203.161.32.29",
+          "mode": "ping",
+          "protocol": "icmp",
+          "ping_stats": {
+            "sent": 4,
+            "received": 4,
+            "rtt_values": [
+              358.56103897094727,
+              309.2916011810303,
+              308.86197090148926,
+              520.6921100616455
+            ],
+            "packet_loss": 0.0,
+            "avg_rtt": 374.3516802787781,
+            "min_rtt": 308.86197090148926,
+            "max_rtt": 520.6921100616455
+          },
+          "traceroute_stats": {
+            "total_hops": 0,
+            "successful_hops": 0,
+            "failed_hops": 0,
+            "hops": []
+          },
+          "issues": [
+            "High latency: 374.4ms"
+          ],
+          "recommendations": [
+            "Consider using closer server or CDN"
+          ]
+        }
+      },
+      {
+        "type": "metadata",
+        "scan_duration": "1.91s",
+        "packets_sent": 4,
+        "packets_received": 4,
+        "plugin_version": "1.0.0",
+        "timestamp": "2026-01-14T14:36:59.867128"
+      }
+    ],
+    "errors": []
+  }
+}

@@ -3,457 +3,14 @@
   "version": "1.0.0",
   "workspace": "default",
   "target": "tesla.com",
-  "timestamp": "2026-01-13T13:22:34.573876",
+  "timestamp": "2026-02-09T16:04:52.270929",
   "results": [
-    {
-      "status": "success",
-      "plugin": "active_robots",
-      "type": "active",
-      "target": "tesla.com",
-      "timestamp": "2026-01-13T13:14:37.473091",
-      "output": {
-        "plugin": "active_robots",
-        "results": [
-          {
-            "plugin": "active_robots",
-            "target": "tesla.com",
-            "robots_url": "https://tesla.com/robots.txt",
-            "status_code": 403,
-            "exists": false,
-            "note": "robots.txt not found (HTTP 403)"
-          }
-        ],
-        "errors": []
-      }
-    },
-    {
-      "status": "success",
-      "plugin": "bhp",
-      "type": "active",
-      "target": "tesla.com",
-      "timestamp": "2026-01-13T13:18:14.917862",
-      "output": {
-        "plugin": "bhp",
-        "results": [
-          {
-            "plugin": "bhp",
-            "type": "filter_summary",
-            "filters_applied": {
-              "show_closed": false,
-              "show_filtered": false,
-              "show_errors": false,
-              "min_port": 1,
-              "max_port": 65535,
-              "display_filter": "open_only"
-            },
-            "statistics": {
-              "total_scanned": 1000,
-              "displayed": 3,
-              "hidden": 997,
-              "hidden_breakdown": {
-                "closed": 997,
-                "filtered": 0,
-                "error": 0
-              },
-              "open": 3,
-              "closed": 997,
-              "filtered": 0,
-              "errors": 0,
-              "scan_duration": 217.44
-            },
-            "notes": "Showing 3 of 1000 ports (997 hidden by filters)"
-          },
-          {
-            "plugin": "bhp",
-            "port": 53,
-            "protocol": "tcp",
-            "state": "open",
-            "service": "unknown",
-            "reason": "connected",
-            "latency": 1.0495100021362305,
-            "scan_method": "connect",
-            "should_display": true
-          },
-          {
-            "plugin": "bhp",
-            "port": 80,
-            "protocol": "tcp",
-            "state": "open",
-            "service": "HTTP",
-            "banner": "HTTP/1.0 400 Bad Request\r\nServer: AkamaiGHost\r\nMime-Version: 1.0\r\nContent-Type: text/html\r\nContent-Length: 326\r\nExpires: Tue, 13 Jan 2026 10:14:39 GMT\r\nDate: Tue, 13 Jan 2026 10:14:39 GMT\r\nConnection: close",
-            "reason": "connected",
-            "latency": 1.5534350872039795,
-            "scan_method": "connect",
-            "should_display": true
-          },
-          {
-            "plugin": "bhp",
-            "port": 443,
-            "protocol": "tcp",
-            "state": "open",
-            "service": "HTTPS",
-            "reason": "connected",
-            "latency": 2.6982717514038086,
-            "scan_method": "connect",
-            "should_display": true
-          },
-          {
-            "plugin": "bhp",
-            "service": "HTTP",
-            "raw_banner": "HTTP/1.0 403 Forbidden\r\nServer: AkamaiGHost\r\nMime-Version: 1.0\r\nContent-Type: text/html\r\nContent-Length: 357\r\nExpires: Tue, 13 Jan 2026 10:16:21 GMT\r\nX-Reference-Error: 18.2697d817.1768299381.bc6e41c\r\nDate: Tue, 13 Jan 2026 10:16:21 GMT\r\nConnection: close\r\nX-AK-Cache: Error from child\r\nPermissions-Policy: interest-cohort=()",
-            "parsed_data": {
-              "status": "HTTP/1.0 403 Forbidden",
-              "headers": {
-                "Server": "AkamaiGHost",
-                "Mime-Version": "1.0",
-                "Content-Type": "text/html",
-                "Content-Length": "357",
-                "Expires": "Tue, 13 Jan 2026 10:16:21 GMT",
-                "X-Reference-Error": "18.2697d817.1768299381.bc6e41c",
-                "Date": "Tue, 13 Jan 2026 10:16:21 GMT",
-                "Connection": "close",
-                "X-AK-Cache": "Error from child",
-                "Permissions-Policy": "interest-cohort=()"
-              }
-            },
-            "vulnerabilities": [],
-            "service_details": {
-              "port": 80,
-              "protocol": "tcp",
-              "detected_by": "port_db",
-              "confidence": "high"
-            }
-          },
-          {
-            "plugin": "bhp",
-            "url": "http://tesla.com",
-            "headers": {
-              "X-Cache-UUID": "a57998cc-5c97-475e-bd60-80e116ed4034",
-              "Content-Type": "text/html; charset=UTF-8",
-              "X-Drupal-Dynamic-Cache": "MISS",
-              "X-UA-Compatible": "IE=edge",
-              "Content-Language": "en",
-              "Last-Modified": "Tue, 13 Jan 2026 08:56:38 GMT",
-              "ETag": "\"1768294598\"",
-              "X-Generator": "Drupal 9 (https://www.drupal.org)",
-              "X-Drupal-Cache": "HIT",
-              "Cache-Control": "max-age=10",
-              "X-TZLA-EDGE-HOSTNAME-VCL": "drupal8-prod",
-              "X-TZLA-EDGE-Age": "60.000",
-              "X-TZLA-EDGE-BACKEND-REASON": "OK",
-              "X-TZLA-EDGE-BACKEND-STATUS": "200",
-              "X-Varnish": "981405301 980626511",
-              "X-Frame-Options": "SAMEORIGIN",
-              "X-Content-Type-Options": "nosniff",
-              "X-TZLA-EDGE-Cache-Hit": "Hit",
-              "X-TZLA-EDGE-TTL": "42.573",
-              "X-TZLA-EDGE-Server": "sjc38p1tegvr63.teslamotors.com",
-              "X-TZLA-EDGE-Cache-Hits": "3",
-              "Accept-Ranges": "bytes",
-              "X-Akamai-Transformed": "0 - 0 -",
-              "Vary": "Accept-Encoding",
-              "Content-Encoding": "br",
-              "Date": "Tue, 13 Jan 2026 10:16:27 GMT",
-              "Transfer-Encoding": "chunked",
-              "Connection": "keep-alive, Transfer-Encoding",
-              "Alt-Svc": "h3=\":443\"; ma=93600",
-              "Strict-Transport-Security": "max-age=15768000",
-              "X-AK-Cache": "Hit from child",
-              "Permissions-Policy": "interest-cohort=()",
-              "Set-Cookie": "bm_s=YAAQtes/F4qRzCabAQAAfFjbtgRFhvlMuNLr4xvFyk23LxNVdulJ0n5SkeNe1+pgJmi7R5J3fNKLkc0qctPPtI39Qydwwb6H4horaPWgjPaUoAe37lL8+ucAPUpKXkDEv9niuo3RKwCl55gzp4iFG0N+b0ts2W1qWAxBx1MONfMx7nTGd3XX29jYX2FHWuxHxliW6DDdfYx0CwpPljrmGqqT864mjpuzi8k/e3Eyw35/OrPmpqgRu3D9eJRBQvfz49ZDUeMMlxaIXtDa0undAGiR1HMCkRFIzuNrdjNUGSmlHat4H+hAzD3w/RYZUQnSxXHOQTLHe0cwIFlpnxHKtKqtDGx9x+xLOY0V7gSGB93lV3OPXi96TmR75qCNMW8vYtKYze8rCdHf1VtFojaX2BWf40kxTAtLrW+iX8C6r3yth4qfxat8vec28lQhuxXZMA34eZWM0FD03RfQ6AG7mS9YXWGgV2zgbA3hA0FecEq5N5vmYwXZM3HQq8G0sI79GnRacc5rnbJIgkK8wmU52TwygjBD3reRf8g+cYiztNoFPl7Nmc/rqw==; Domain=.tesla.com; Path=/; Expires=Fri, 13 Feb 2026 10:16:27 GMT; Max-Age=2678400; Secure; HttpOnly"
-            },
-            "security_score": 52,
-            "missing_security_headers": [
-              "Content-Security-Policy",
-              "Referrer-Policy",
-              "X-XSS-Protection",
-              "Cross-Origin-Embedder-Policy",
-              "Cross-Origin-Opener-Policy",
-              "Cross-Origin-Resource-Policy"
-            ],
-            "vulnerabilities": [
-              "HSTS max-age too low: 15768000",
-              "Missing Content-Security-Policy"
-            ],
-            "server_info": {},
-            "cookie_analysis": {
-              "count": 1,
-              "cookies": [
-                {
-                  "name": "bm_s",
-                  "secure": true,
-                  "path": "/"
-                }
-              ],
-              "security_issues": []
-            },
-            "redirect_chain": [
-              {
-                "url": "http://tesla.com/",
-                "status": 301,
-                "location": "http://www.tesla.com/"
-              },
-              {
-                "url": "http://www.tesla.com/",
-                "status": 301,
-                "location": "https://www.tesla.com/"
-              }
-            ]
-          },
-          {
-            "plugin": "bhp",
-            "url": "https://tesla.com",
-            "headers": {
-              "Server": "AkamaiGHost",
-              "Mime-Version": "1.0",
-              "Content-Type": "text/html",
-              "Content-Length": "357",
-              "Expires": "Tue, 13 Jan 2026 10:16:30 GMT",
-              "X-Reference-Error": "18.2697d817.1768299389.bc7db65",
-              "Date": "Tue, 13 Jan 2026 10:16:30 GMT",
-              "Connection": "close",
-              "Strict-Transport-Security": "max-age=15768000",
-              "X-AK-Cache": "Error from child",
-              "Permissions-Policy": "interest-cohort=()"
-            },
-            "security_score": 36,
-            "missing_security_headers": [
-              "Content-Security-Policy",
-              "X-Frame-Options",
-              "X-Content-Type-Options",
-              "Referrer-Policy",
-              "X-XSS-Protection",
-              "Cross-Origin-Embedder-Policy",
-              "Cross-Origin-Opener-Policy",
-              "Cross-Origin-Resource-Policy"
-            ],
-            "vulnerabilities": [
-              "HSTS max-age too low: 15768000",
-              "Missing Content-Security-Policy"
-            ],
-            "server_info": {
-              "server": "AkamaiGHost"
-            },
-            "cookie_analysis": {
-              "count": 0,
-              "cookies": [],
-              "security_issues": []
-            },
-            "redirect_chain": []
-          },
-          {
-            "plugin": "bhp",
-            "url": "http://2.18.48.207",
-            "headers": {
-              "Server": "AkamaiGHost",
-              "Mime-Version": "1.0",
-              "Content-Type": "text/html",
-              "Content-Length": "326",
-              "Expires": "Tue, 13 Jan 2026 10:16:32 GMT",
-              "Date": "Tue, 13 Jan 2026 10:16:32 GMT",
-              "Connection": "close"
-            },
-            "security_score": 20,
-            "missing_security_headers": [
-              "Strict-Transport-Security",
-              "Content-Security-Policy",
-              "X-Frame-Options",
-              "X-Content-Type-Options",
-              "Referrer-Policy",
-              "Permissions-Policy",
-              "X-XSS-Protection",
-              "Cross-Origin-Embedder-Policy",
-              "Cross-Origin-Opener-Policy",
-              "Cross-Origin-Resource-Policy"
-            ],
-            "vulnerabilities": [
-              "Missing Content-Security-Policy"
-            ],
-            "server_info": {
-              "server": "AkamaiGHost"
-            },
-            "cookie_analysis": {
-              "count": 0,
-              "cookies": [],
-              "security_issues": []
-            },
-            "redirect_chain": []
-          },
-          {
-            "plugin": "bhp",
-            "enhanced_intelligence_report": {
-              "target": "tesla.com",
-              "ip": "2.18.48.207",
-              "scan_time": "2026-01-13T13:18:14.917552",
-              "filters_applied": {
-                "show_closed": false,
-                "show_filtered": false,
-                "show_errors": false
-              },
-              "summary": {
-                "total_ports_scanned": 1000,
-                "ports_displayed": 3,
-                "ports_hidden": 997,
-                "hidden_breakdown": {
-                  "closed": 997,
-                  "filtered": 0,
-                  "error": 0
-                },
-                "open_ports": 3,
-                "closed_ports": 997,
-                "filtered_ports": 0,
-                "vulnerabilities_found": 0,
-                "security_score": 0
-              },
-              "displayed_open_services": [
-                {
-                  "port": 53,
-                  "protocol": "tcp",
-                  "service": "unknown",
-                  "banner": ""
-                },
-                {
-                  "port": 80,
-                  "protocol": "tcp",
-                  "service": "HTTP",
-                  "banner": "HTTP/1.0 400 Bad Request\r\nServer: AkamaiGHost\r\nMime-Version: 1.0\r\nContent-Type: text/html\r\nContent-L"
-                },
-                {
-                  "port": 443,
-                  "protocol": "tcp",
-                  "service": "HTTPS",
-                  "banner": ""
-                }
-              ],
-              "security_issues": [],
-              "recommendations": [
-                "Improve security headers configuration"
-              ],
-              "notes": [
-                "Note: 997 ports hidden by filters (997 closed, 0 filtered)",
-                "Note: 997 closed ports hidden (use --show-closed to view them)"
-              ]
-            }
-          }
-        ],
-        "errors": []
-      }
-    },
-    {
-      "status": "success",
-      "plugin": "pingtrace",
-      "type": "active",
-      "target": "tesla.com",
-      "timestamp": "2026-01-13T13:18:17.430351",
-      "output": {
-        "plugin": "pingtrace",
-        "results": [
-          {
-            "type": "ping_results",
-            "target": "tesla.com",
-            "target_ip": "2.18.52.207",
-            "config": {
-              "mode": "ping",
-              "protocol": "icmp",
-              "count": 4,
-              "timeout": 2.0,
-              "max_hops": 30,
-              "packet_size": 64,
-              "fast": false,
-              "resolve_dns": true
-            },
-            "data": [
-              {
-                "sequence": 1,
-                "target": "2.18.52.207",
-                "status": "success",
-                "rtt": 555.0360679626465,
-                "ttl": 67,
-                "protocol": "icmp",
-                "packet_size": 64
-              },
-              {
-                "sequence": 2,
-                "target": "2.18.52.207",
-                "status": "success",
-                "rtt": 514.305830001831,
-                "ttl": 67,
-                "protocol": "icmp",
-                "packet_size": 64
-              },
-              {
-                "sequence": 3,
-                "target": "2.18.52.207",
-                "status": "success",
-                "rtt": 514.3506526947021,
-                "ttl": 67,
-                "protocol": "icmp",
-                "packet_size": 64
-              },
-              {
-                "sequence": 4,
-                "target": "2.18.52.207",
-                "status": "success",
-                "rtt": 517.3511505126953,
-                "ttl": 67,
-                "protocol": "icmp",
-                "packet_size": 64
-              }
-            ]
-          },
-          {
-            "type": "analysis",
-            "summary": {
-              "target": "tesla.com",
-              "ip": "2.18.52.207",
-              "mode": "ping",
-              "protocol": "icmp",
-              "ping_stats": {
-                "sent": 4,
-                "received": 4,
-                "rtt_values": [
-                  555.0360679626465,
-                  514.305830001831,
-                  514.3506526947021,
-                  517.3511505126953
-                ],
-                "packet_loss": 0.0,
-                "avg_rtt": 525.2609252929688,
-                "min_rtt": 514.305830001831,
-                "max_rtt": 555.0360679626465
-              },
-              "traceroute_stats": {
-                "total_hops": 0,
-                "successful_hops": 0,
-                "failed_hops": 0,
-                "hops": []
-              },
-              "issues": [
-                "High latency: 525.3ms"
-              ],
-              "recommendations": [
-                "Consider using closer server or CDN"
-              ]
-            }
-          },
-          {
-            "type": "metadata",
-            "scan_duration": "2.51s",
-            "packets_sent": 4,
-            "packets_received": 4,
-            "plugin_version": "1.0.0",
-            "timestamp": "2026-01-13T13:18:17.430128"
-          }
-        ],
-        "errors": []
-      }
-    },
     {
       "status": "success",
       "plugin": "dns",
       "type": "passive",
       "target": "tesla.com",
-      "timestamp": "2026-01-13T13:18:44.054111",
+      "timestamp": "2026-02-09T15:56:36.739324",
       "output": {
         "plugin": "dns",
         "results": [
@@ -462,7 +19,7 @@
             "name": "tesla.com",
             "wildcard_enabled": false,
             "wildcard_ips": [],
-            "test_name": "h2128yssd1ff563r.tesla.com",
+            "test_name": "rj73xe6za5phh7yz.tesla.com",
             "plugin": "dns"
           },
           {
@@ -471,7 +28,7 @@
             "ttl": 86400,
             "mname": "edns69.ultradns.com",
             "rname": "noc.teslamotors.com",
-            "serial": 2016025155,
+            "serial": 2016025161,
             "plugin": "dns"
           },
           {
@@ -479,13 +36,6 @@
             "name": "tesla.com",
             "ttl": 300,
             "target": "edns69.ultradns.com",
-            "plugin": "dns"
-          },
-          {
-            "type": "NS",
-            "name": "tesla.com",
-            "ttl": 300,
-            "target": "a12-64.akam.net",
             "plugin": "dns"
           },
           {
@@ -506,7 +56,7 @@
             "type": "NS",
             "name": "tesla.com",
             "ttl": 300,
-            "target": "a10-67.akam.net",
+            "target": "a12-64.akam.net",
             "plugin": "dns"
           },
           {
@@ -524,6 +74,13 @@
             "plugin": "dns"
           },
           {
+            "type": "NS",
+            "name": "tesla.com",
+            "ttl": 300,
+            "target": "a10-67.akam.net",
+            "plugin": "dns"
+          },
+          {
             "type": "MX",
             "name": "tesla.com",
             "ttl": 300,
@@ -534,225 +91,71 @@
           {
             "type": "A",
             "name": "tesla.com",
-            "ttl": 184,
-            "address": "2.18.54.207",
-            "plugin": "dns"
-          },
-          {
-            "type": "A",
-            "name": "tesla.com",
-            "ttl": 184,
-            "address": "2.18.52.207",
-            "plugin": "dns"
-          },
-          {
-            "type": "A",
-            "name": "tesla.com",
-            "ttl": 184,
-            "address": "23.7.244.207",
-            "plugin": "dns"
-          },
-          {
-            "type": "A",
-            "name": "tesla.com",
-            "ttl": 184,
-            "address": "2.18.49.207",
-            "plugin": "dns"
-          },
-          {
-            "type": "A",
-            "name": "tesla.com",
-            "ttl": 184,
-            "address": "2.18.50.207",
-            "plugin": "dns"
-          },
-          {
-            "type": "A",
-            "name": "tesla.com",
-            "ttl": 184,
+            "ttl": 299,
             "address": "2.18.51.207",
             "plugin": "dns"
           },
           {
             "type": "A",
             "name": "tesla.com",
-            "ttl": 184,
-            "address": "2.18.48.207",
-            "plugin": "dns"
-          },
-          {
-            "type": "A",
-            "name": "tesla.com",
-            "ttl": 184,
+            "ttl": 299,
             "address": "2.18.55.207",
             "plugin": "dns"
           },
           {
             "type": "A",
             "name": "tesla.com",
-            "ttl": 184,
+            "ttl": 299,
+            "address": "2.18.54.207",
+            "plugin": "dns"
+          },
+          {
+            "type": "A",
+            "name": "tesla.com",
+            "ttl": 299,
+            "address": "2.18.48.207",
+            "plugin": "dns"
+          },
+          {
+            "type": "A",
+            "name": "tesla.com",
+            "ttl": 299,
+            "address": "23.7.244.207",
+            "plugin": "dns"
+          },
+          {
+            "type": "A",
+            "name": "tesla.com",
+            "ttl": 299,
+            "address": "2.18.52.207",
+            "plugin": "dns"
+          },
+          {
+            "type": "A",
+            "name": "tesla.com",
+            "ttl": 299,
             "address": "2.18.53.207",
             "plugin": "dns"
           },
           {
             "type": "A",
             "name": "tesla.com",
-            "ttl": 184,
+            "ttl": 299,
             "address": "23.40.100.207",
             "plugin": "dns"
           },
           {
-            "type": "TXT",
+            "type": "A",
             "name": "tesla.com",
-            "ttl": 60,
-            "strings": "atlassian-domain-verification=U31RjXDO5NBJROoOVpVEsKJ7daGpXuXPDF8HeqlmvXUKOtTao652TOMtejHrohKB",
+            "ttl": 299,
+            "address": "2.18.49.207",
             "plugin": "dns"
           },
           {
-            "type": "TXT",
+            "type": "A",
             "name": "tesla.com",
-            "ttl": 60,
-            "strings": "MS=ms22358213",
-            "plugin": "dns"
-          },
-          {
-            "type": "TXT",
-            "name": "tesla.com",
-            "ttl": 60,
-            "strings": "teamviewer-sso-verification=2fc989f75b19494fab5eb0e2c22dd625",
-            "plugin": "dns"
-          },
-          {
-            "type": "TXT",
-            "name": "tesla.com",
-            "ttl": 60,
-            "strings": "onetrust-domain-verification=480735b10e124e23916192d7e4321902",
-            "plugin": "dns"
-          },
-          {
-            "type": "TXT",
-            "name": "tesla.com",
-            "ttl": 60,
-            "strings": "dell-technologies-domain-verification=tesla.com_c363f56d-9650-430a-82d3-04ac2257c64a_1756487968",
-            "plugin": "dns"
-          },
-          {
-            "type": "TXT",
-            "name": "tesla.com",
-            "ttl": 60,
-            "strings": "adobe-sign-verification=efb2da198047b7a154bd604d2721038b",
-            "plugin": "dns"
-          },
-          {
-            "type": "TXT",
-            "name": "tesla.com",
-            "ttl": 60,
-            "strings": "55zNJIDU0xk94IfGJtL+Hh+wje5JzOS6GY+ntggZF908AUsx0LBKgr+Nln3CgZEUifxSuN09M05jYpdbd6+cpw==",
-            "plugin": "dns"
-          },
-          {
-            "type": "TXT",
-            "name": "tesla.com",
-            "ttl": 60,
-            "strings": "_i88zzpi9e3jr0xglot953efk0ui36y5",
-            "plugin": "dns"
-          },
-          {
-            "type": "TXT",
-            "name": "tesla.com",
-            "ttl": 60,
-            "strings": "ms-domain-verification=e335cec9-0ff5-4a54-b8bc-8966a8d146db",
-            "plugin": "dns"
-          },
-          {
-            "type": "TXT",
-            "name": "tesla.com",
-            "ttl": 60,
-            "strings": "ms-domain-verification=820e4be7-563e-4f52-b73a-5c9ecdd2fda4",
-            "plugin": "dns"
-          },
-          {
-            "type": "TXT",
-            "name": "tesla.com",
-            "ttl": 60,
-            "strings": "SFMC-qkAv7SvlQaslp7NEALX8t68s_AZWOQB6ThKQS5l5",
-            "plugin": "dns"
-          },
-          {
-            "type": "TXT",
-            "name": "tesla.com",
-            "ttl": 60,
-            "strings": "logmein-domain-confirmation=9zxwVn2buGWrLtU24J88",
-            "plugin": "dns"
-          },
-          {
-            "type": "TXT",
-            "name": "tesla.com",
-            "ttl": 60,
-            "strings": "onetrust-domain-verification=79a1328740f44bc48dd97ab52c0c3377",
-            "plugin": "dns"
-          },
-          {
-            "type": "TXT",
-            "name": "tesla.com",
-            "ttl": 60,
-            "strings": "google-site-verification=Y7lbse5bSatjXaqSBOWXjsit4mOp9cQzfLDpnQUSZlg",
-            "plugin": "dns"
-          },
-          {
-            "type": "TXT",
-            "name": "tesla.com",
-            "ttl": 60,
-            "strings": "cursor-domain-verification-6kgt2s=sxbxrRmk2tNjItWtmh1swmBM0",
-            "plugin": "dns"
-          },
-          {
-            "type": "TXT",
-            "name": "tesla.com",
-            "ttl": 60,
-            "strings": "bugcrowd-verification=40bd5dd89a6e4073ca9bc76feac3a47b",
-            "plugin": "dns"
-          },
-          {
-            "type": "TXT",
-            "name": "tesla.com",
-            "ttl": 60,
-            "strings": "_f32sd18rpksw3zh1hgbhaulpv016hoh",
-            "plugin": "dns"
-          },
-          {
-            "type": "TXT",
-            "name": "tesla.com",
-            "ttl": 60,
-            "strings": "jamf-site-verification=u4x3LuqSfpoLn5nJ0zMd5g",
-            "plugin": "dns"
-          },
-          {
-            "type": "TXT",
-            "name": "tesla.com",
-            "ttl": 60,
-            "strings": "zapier-domain-verification-challenge=64e810e8-0fe1-4de0-b104-229592811c5b",
-            "plugin": "dns"
-          },
-          {
-            "type": "TXT",
-            "name": "tesla.com",
-            "ttl": 60,
-            "strings": "v=spf1 ip4:54.240.84.225/32 ip4:54.240.84.226/31 ip4:54.240.84.228/30 ip4:54.240.84.232/29 ip4:54.240.84.240/29 ip4:54.240.84.248/30 ip4:54.240.84.252/32 ip4:44.239.249.139 ip4:52.24.70.112 ip4:34.223.204.78 ip4:213.244.145.203 ip4:213.244.145.219 ip4:213.244.145.204 ip4:213.244.145.220 ip4:8.47.24.203 ip4:8.47.24.219 ip4:8.47.24.204 ip4:8.47.24.220 ip4:8.45.124.203 ip4:8.45.124.219 ip4:8.45.124.204 ip4:8.45.124.220 ip4:8.21.14.203 ip4:8.21.14.219 ip4:8.21.14.204 ip4:8.21.14.220 ip4:8.21.14.194 ip4:8.21.14.211 ip4:212.49.145.0/24 ip4:91.103.52.0/22 ip4:168.245.123.10 ip4:216.81.144.165 ip4:149.72.247.52 ip4:149.72.134.64 ip4:149.72.152.236 ip4:149.72.163.58 ip4:149.72.172.170 ip4:167.89.90.62 ip4:158.228.129.79 ip4:216.81.144.165 ip4:117.50.14.178 ip4:117.50.35.199 ip4:54.240.42.110 ip4:54.240.42.111 ip4:199.71.239.178 ip4:67.216.183.10 ip4:8.43.178.222 ip4:64.95.144.196 ip4:199.71.239.52 include:u13494342.wl093.sendgrid.net include:spf.protection.outlook.com include:mail.zendesk.com include:_spfsn.teslamotors.com include:_spf.qualtrics.com include:_spf.ultipro.com include:_spf.psm.knowbe4.com include:spf1.sendcloud.org include:spf2.sendcloud.org -all",
-            "plugin": "dns"
-          },
-          {
-            "type": "TXT",
-            "name": "tesla.com",
-            "ttl": 60,
-            "strings": "apple-domain-verification=CHZ8RLPKu4dlRxlaNa_nR9oA2MjZ1n2fiE9s0QlbRO8",
-            "plugin": "dns"
-          },
-          {
-            "type": "TXT",
-            "name": "tesla.com",
-            "ttl": 60,
-            "strings": "_w19nckjurfa4aldim48vtbrxsq1phnv",
+            "ttl": 299,
+            "address": "2.18.50.207",
             "plugin": "dns"
           },
           {
@@ -766,35 +169,77 @@
             "type": "TXT",
             "name": "tesla.com",
             "ttl": 60,
-            "strings": "google-site-verification=Xg2DEUg2oCz1q9RMx8gh2htHK16_GG9cZXY_eyeSf6w",
+            "strings": "google-site-verification=Y7lbse5bSatjXaqSBOWXjsit4mOp9cQzfLDpnQUSZlg",
             "plugin": "dns"
           },
           {
             "type": "TXT",
             "name": "tesla.com",
             "ttl": 60,
-            "strings": "adobe-idp-site-verification=321c026a-3a8c-4206-a1fa-391a59585c54",
+            "strings": "_w19nckjurfa4aldim48vtbrxsq1phnv",
             "plugin": "dns"
           },
           {
             "type": "TXT",
             "name": "tesla.com",
             "ttl": 60,
-            "strings": "traction-guest=b4f7ad59-bf17-4b3c-8b36-9c2d28f1de32",
+            "strings": "ms-domain-verification=820e4be7-563e-4f52-b73a-5c9ecdd2fda4",
             "plugin": "dns"
           },
           {
             "type": "TXT",
             "name": "tesla.com",
             "ttl": 60,
-            "strings": "docker-verification=74d1ec4e-a7a6-48a7-9568-9bd0faac833f",
+            "strings": "onetrust-domain-verification=480735b10e124e23916192d7e4321902",
             "plugin": "dns"
           },
           {
             "type": "TXT",
             "name": "tesla.com",
             "ttl": 60,
-            "strings": "T0E0S29854",
+            "strings": "bugcrowd-verification=40bd5dd89a6e4073ca9bc76feac3a47b",
+            "plugin": "dns"
+          },
+          {
+            "type": "TXT",
+            "name": "tesla.com",
+            "ttl": 60,
+            "strings": "zapier-domain-verification-challenge=64e810e8-0fe1-4de0-b104-229592811c5b",
+            "plugin": "dns"
+          },
+          {
+            "type": "TXT",
+            "name": "tesla.com",
+            "ttl": 60,
+            "strings": "cursor-domain-verification-6kgt2s=sxbxrRmk2tNjItWtmh1swmBM0",
+            "plugin": "dns"
+          },
+          {
+            "type": "TXT",
+            "name": "tesla.com",
+            "ttl": 60,
+            "strings": "atlassian-domain-verification=U31RjXDO5NBJROoOVpVEsKJ7daGpXuXPDF8HeqlmvXUKOtTao652TOMtejHrohKB",
+            "plugin": "dns"
+          },
+          {
+            "type": "TXT",
+            "name": "tesla.com",
+            "ttl": 60,
+            "strings": "logmein-domain-confirmation=9zxwVn2buGWrLtU24J88",
+            "plugin": "dns"
+          },
+          {
+            "type": "TXT",
+            "name": "tesla.com",
+            "ttl": 60,
+            "strings": "ms-domain-verification=e335cec9-0ff5-4a54-b8bc-8966a8d146db",
+            "plugin": "dns"
+          },
+          {
+            "type": "TXT",
+            "name": "tesla.com",
+            "ttl": 60,
+            "strings": "adobe-sign-verification=efb2da198047b7a154bd604d2721038b",
             "plugin": "dns"
           },
           {
@@ -808,10 +253,122 @@
             "type": "TXT",
             "name": "tesla.com",
             "ttl": 60,
+            "strings": "apple-domain-verification=CHZ8RLPKu4dlRxlaNa_nR9oA2MjZ1n2fiE9s0QlbRO8",
+            "plugin": "dns"
+          },
+          {
+            "type": "TXT",
+            "name": "tesla.com",
+            "ttl": 60,
+            "strings": "_f32sd18rpksw3zh1hgbhaulpv016hoh",
+            "plugin": "dns"
+          },
+          {
+            "type": "TXT",
+            "name": "tesla.com",
+            "ttl": 60,
+            "strings": "MS=ms22358213",
+            "plugin": "dns"
+          },
+          {
+            "type": "TXT",
+            "name": "tesla.com",
+            "ttl": 60,
+            "strings": "jamf-site-verification=u4x3LuqSfpoLn5nJ0zMd5g",
+            "plugin": "dns"
+          },
+          {
+            "type": "TXT",
+            "name": "tesla.com",
+            "ttl": 60,
+            "strings": "adobe-idp-site-verification=321c026a-3a8c-4206-a1fa-391a59585c54",
+            "plugin": "dns"
+          },
+          {
+            "type": "TXT",
+            "name": "tesla.com",
+            "ttl": 60,
+            "strings": "v=spf1 ip4:54.240.84.225/32 ip4:54.240.84.226/31 ip4:54.240.84.228/30 ip4:54.240.84.232/29 ip4:54.240.84.240/29 ip4:54.240.84.248/30 ip4:54.240.84.252/32 ip4:44.239.249.139 ip4:52.24.70.112 ip4:34.223.204.78 ip4:213.244.145.203 ip4:213.244.145.219 ip4:213.244.145.204 ip4:213.244.145.220 ip4:8.47.24.203 ip4:8.47.24.219 ip4:8.47.24.204 ip4:8.47.24.220 ip4:8.45.124.203 ip4:8.45.124.219 ip4:8.45.124.204 ip4:8.45.124.220 ip4:8.21.14.203 ip4:8.21.14.219 ip4:8.21.14.204 ip4:8.21.14.220 ip4:8.21.14.194 ip4:8.21.14.211 ip4:212.49.145.0/24 ip4:91.103.52.0/22 ip4:168.245.123.10 ip4:216.81.144.165 ip4:149.72.247.52 ip4:149.72.134.64 ip4:149.72.152.236 ip4:149.72.163.58 ip4:149.72.172.170 ip4:167.89.90.62 ip4:158.228.129.79 ip4:216.81.144.165 ip4:117.50.14.178 ip4:117.50.35.199 ip4:54.240.42.110 ip4:54.240.42.111 ip4:199.71.239.178 ip4:67.216.183.10 ip4:8.43.178.222 ip4:64.95.144.196 ip4:199.71.239.52 include:u13494342.wl093.sendgrid.net include:spf.protection.outlook.com include:mail.zendesk.com include:_spfsn.teslamotors.com include:_spf.qualtrics.com include:_spf.ultipro.com include:_spf.psm.knowbe4.com include:spf1.sendcloud.org include:spf2.sendcloud.org -all",
+            "plugin": "dns"
+          },
+          {
+            "type": "TXT",
+            "name": "tesla.com",
+            "ttl": 60,
             "strings": "logmein-verification-code=JFAnsPovogeJ4IeW5MXCU3r0C",
             "plugin": "dns"
           },
           {
+            "type": "TXT",
+            "name": "tesla.com",
+            "ttl": 60,
+            "strings": "onetrust-domain-verification=79a1328740f44bc48dd97ab52c0c3377",
+            "plugin": "dns"
+          },
+          {
+            "type": "TXT",
+            "name": "tesla.com",
+            "ttl": 60,
+            "strings": "_i88zzpi9e3jr0xglot953efk0ui36y5",
+            "plugin": "dns"
+          },
+          {
+            "type": "TXT",
+            "name": "tesla.com",
+            "ttl": 60,
+            "strings": "docker-verification=74d1ec4e-a7a6-48a7-9568-9bd0faac833f",
+            "plugin": "dns"
+          },
+          {
+            "type": "TXT",
+            "name": "tesla.com",
+            "ttl": 60,
+            "strings": "teamviewer-sso-verification=2fc989f75b19494fab5eb0e2c22dd625",
+            "plugin": "dns"
+          },
+          {
+            "type": "TXT",
+            "name": "tesla.com",
+            "ttl": 60,
+            "strings": "SFMC-qkAv7SvlQaslp7NEALX8t68s_AZWOQB6ThKQS5l5",
+            "plugin": "dns"
+          },
+          {
+            "type": "TXT",
+            "name": "tesla.com",
+            "ttl": 60,
+            "strings": "traction-guest=b4f7ad59-bf17-4b3c-8b36-9c2d28f1de32",
+            "plugin": "dns"
+          },
+          {
+            "type": "TXT",
+            "name": "tesla.com",
+            "ttl": 60,
+            "strings": "dell-technologies-domain-verification=tesla.com_c363f56d-9650-430a-82d3-04ac2257c64a_1756487968",
+            "plugin": "dns"
+          },
+          {
+            "type": "TXT",
+            "name": "tesla.com",
+            "ttl": 60,
+            "strings": "google-site-verification=Xg2DEUg2oCz1q9RMx8gh2htHK16_GG9cZXY_eyeSf6w",
+            "plugin": "dns"
+          },
+          {
+            "type": "TXT",
+            "name": "tesla.com",
+            "ttl": 60,
+            "strings": "55zNJIDU0xk94IfGJtL+Hh+wje5JzOS6GY+ntggZF908AUsx0LBKgr+Nln3CgZEUifxSuN09M05jYpdbd6+cpw==",
+            "plugin": "dns"
+          },
+          {
+            "type": "TXT",
+            "name": "tesla.com",
+            "ttl": 60,
+            "strings": "T0E0S29854",
+            "plugin": "dns"
+          },
+          {
             "type": "RECURSION",
             "nameserver": "193.108.91.12",
             "recursive": false,
@@ -827,7 +384,7 @@
           {
             "type": "NXDOMAIN_HIJACK",
             "nameserver": "193.108.91.12",
-            "test_name": "31zj4mkvfdtpcnql421y.com",
+            "test_name": "17jt43rl4ype0nq0relv.com",
             "hijack_detected": false,
             "answers": [],
             "plugin": "dns"
@@ -848,7 +405,7 @@
           {
             "type": "NXDOMAIN_HIJACK",
             "nameserver": "96.7.50.67",
-            "test_name": "x1t8jgyjqdenkuvtvuz9.com",
+            "test_name": "d1bwmz9dbo9qtbv7lfxc.com",
             "hijack_detected": false,
             "answers": [],
             "plugin": "dns"
@@ -869,7 +426,7 @@
           {
             "type": "NXDOMAIN_HIJACK",
             "nameserver": "184.26.160.64",
-            "test_name": "lugi29ka1nurqfq88it2.com",
+            "test_name": "6fifevacbrq3wvo6hj49.com",
             "hijack_detected": false,
             "answers": [],
             "plugin": "dns"
@@ -890,7 +447,7 @@
           {
             "type": "NXDOMAIN_HIJACK",
             "nameserver": "95.100.173.65",
-            "test_name": "m1rredj4nfrrhw8q50mf.com",
+            "test_name": "4dkdiyqwv0nrwbid7hx5.com",
             "hijack_detected": false,
             "answers": [],
             "plugin": "dns"
@@ -911,7 +468,7 @@
           {
             "type": "NXDOMAIN_HIJACK",
             "nameserver": "23.61.199.66",
-            "test_name": "4eh6ngqbb5ux86z9gypu.com",
+            "test_name": "u2wcacx54x92sjhewrjl.com",
             "hijack_detected": false,
             "answers": [],
             "plugin": "dns"
@@ -932,7 +489,7 @@
           {
             "type": "NXDOMAIN_HIJACK",
             "nameserver": "184.85.248.67",
-            "test_name": "xdu9juena68thcknq61i.com",
+            "test_name": "d6jatx3etyqd5uronctp.com",
             "hijack_detected": false,
             "answers": [],
             "plugin": "dns"
@@ -953,7 +510,7 @@
           {
             "type": "NXDOMAIN_HIJACK",
             "nameserver": "204.74.66.69",
-            "test_name": "567wpczi6y1sr20sn5f2.com",
+            "test_name": "1zghw2zrsju6km8pdq25.com",
             "hijack_detected": false,
             "answers": [],
             "plugin": "dns"
@@ -1008,7 +565,6 @@
               "152.32.219.151/32",
               "158.228.129.79/32",
               "160.1.62.192/32",
-              "161.117.0.0/16",
               "162.247.216.0/22",
               "165.154.147.124/32",
               "167.89.90.62/32",
@@ -1017,7 +573,6 @@
               "188.172.128.0/20",
               "188.239.31.0/24",
               "192.161.144.0/20",
-              "198.11.0.0/16",
               "199.16.139.0/24",
               "199.71.239.178/32",
               "199.71.239.52/32",
@@ -1063,14 +618,6 @@
               "40.92.0.0/15",
               "44.239.249.139/32",
               "45.43.0.0/16",
-              "47.241.0.0/16",
-              "47.245.64.0/18",
-              "47.251.0.0/16",
-              "47.254.0.0/16",
-              "47.74.0.0/16",
-              "47.88.0.0/16",
-              "47.89.0.0/16",
-              "47.91.0.0/16",
               "51.163.163.128/25",
               "52.100.0.0/15",
               "52.102.0.0/16",
@@ -1108,8 +655,6 @@
               "8.21.14.211/32",
               "8.21.14.219/32",
               "8.21.14.220/32",
-              "8.214.0.0/16",
-              "8.219.0.0/16",
               "8.43.178.222/32",
               "8.45.124.203/32",
               "8.45.124.204/32",
@@ -1136,7 +681,7 @@
       "plugin": "email",
       "type": "passive",
       "target": "tesla.com",
-      "timestamp": "2026-01-13T13:22:07.677012",
+      "timestamp": "2026-02-09T16:00:03.691868",
       "output": {
         "plugin": "email",
         "results": [],
@@ -1148,24 +693,92 @@
       "plugin": "social",
       "type": "passive",
       "target": "tesla.com",
-      "timestamp": "2026-01-13T13:22:17.739979",
+      "timestamp": "2026-02-09T16:00:58.164105",
       "output": {
         "plugin": "social",
         "results": [
           {
             "plugin": "social",
             "type": "SOCIAL",
-            "engine": "site_extract",
+            "engine": "guess",
             "platform": "Twitter",
-            "url": "https://twitter.com/Tesla",
+            "url": "https://twitter.com/tesla",
             "username": null,
             "exists": true,
             "status_code": 200,
             "response_time": 0,
-            "source": "site"
+            "source": "guess"
+          },
+          {
+            "plugin": "social",
+            "type": "SOCIAL",
+            "engine": "guess",
+            "platform": "Instagram",
+            "url": "https://instagram.com/tesla",
+            "username": null,
+            "exists": true,
+            "status_code": 200,
+            "response_time": 0,
+            "source": "guess"
+          },
+          {
+            "plugin": "social",
+            "type": "SOCIAL",
+            "engine": "guess",
+            "platform": "LinkedIn",
+            "url": "https://www.linkedin.com/company/tesla/",
+            "username": null,
+            "exists": true,
+            "status_code": 200,
+            "response_time": 0,
+            "source": "guess"
+          },
+          {
+            "plugin": "social",
+            "type": "SOCIAL",
+            "engine": "guess",
+            "platform": "Facebook",
+            "url": "https://facebook.com/tesla",
+            "username": null,
+            "exists": true,
+            "status_code": 200,
+            "response_time": 0,
+            "source": "guess"
+          },
+          {
+            "plugin": "social",
+            "type": "SOCIAL",
+            "engine": "guess",
+            "platform": "YouTube",
+            "url": "https://youtube.com/@tesla",
+            "username": null,
+            "exists": true,
+            "status_code": 200,
+            "response_time": 0,
+            "source": "guess"
+          },
+          {
+            "plugin": "social",
+            "type": "SOCIAL",
+            "engine": "guess",
+            "platform": "GitHub",
+            "url": "https://github.com/tesla",
+            "username": null,
+            "exists": true,
+            "status_code": 200,
+            "response_time": 0,
+            "source": "guess"
           }
         ],
-        "errors": []
+        "errors": [
+          "DEBUG: engines_loaded=['site_extract', 'bing_search', 'guess']",
+          "DEBUG: running_engine=site_extract domain=tesla.com brand=tesla",
+          "DEBUG: engine=site_extract returned=0",
+          "DEBUG: running_engine=bing_search domain=tesla.com brand=tesla",
+          "DEBUG: engine=bing_search returned=0",
+          "DEBUG: running_engine=guess domain=tesla.com brand=tesla",
+          "DEBUG: engine=guess returned=6"
+        ]
       }
     },
     {
@@ -1173,26 +786,26 @@
       "plugin": "subdomain",
       "type": "passive",
       "target": "tesla.com",
-      "timestamp": "2026-01-13T13:22:33.226706",
+      "timestamp": "2026-02-09T16:01:13.394767",
       "output": {
         "plugin": "subdomain",
         "results": [
           {
             "plugin": "subdomain",
-            "timestamp": "2026-01-13T10:22:33.124420",
+            "timestamp": "2026-02-09T13:01:13.391523",
             "domain": "shop.tesla.com",
             "type": "A",
             "values": [
-              "23.193.108.68"
+              "184.86.116.70"
             ]
           },
           {
             "plugin": "subdomain",
-            "timestamp": "2026-01-13T10:22:33.226621",
+            "timestamp": "2026-02-09T13:01:13.394696",
             "domain": "www.tesla.com",
             "type": "A",
             "values": [
-              "23.193.108.68"
+              "184.86.116.70"
             ]
           }
         ],
@@ -1204,13 +817,13 @@
       "plugin": "whois",
       "type": "passive",
       "target": "tesla.com",
-      "timestamp": "2026-01-13T13:22:34.561789",
+      "timestamp": "2026-02-09T16:01:14.718935",
       "output": {
         "plugin": "whois",
         "results": [
           {
             "plugin": "whois",
-            "timestamp": "2026-01-13T10:22:34.561707",
+            "timestamp": "2026-02-09T13:01:14.718817",
             "domain": "tesla.com",
             "registrant": null,
             "emails": [
@@ -1229,6 +842,462 @@
               "EDNS69.ULTRADNS.NET",
               "EDNS69.ULTRADNS.ORG"
             ]
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "status": "success",
+      "plugin": "active_robots",
+      "type": "active",
+      "target": "tesla.com",
+      "timestamp": "2026-02-09T16:01:17.385762",
+      "output": {
+        "plugin": "active_robots",
+        "results": [
+          {
+            "plugin": "active_robots",
+            "target": "tesla.com",
+            "robots_url": "https://tesla.com/robots.txt",
+            "status_code": 403,
+            "exists": false,
+            "note": "robots.txt not found (HTTP 403)"
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "status": "success",
+      "plugin": "bhp",
+      "type": "active",
+      "target": "tesla.com",
+      "timestamp": "2026-02-09T16:04:49.803909",
+      "output": {
+        "plugin": "bhp",
+        "results": [
+          {
+            "plugin": "bhp",
+            "type": "filter_summary",
+            "filters_applied": {
+              "show_closed": false,
+              "show_filtered": false,
+              "show_errors": false,
+              "min_port": 1,
+              "max_port": 65535,
+              "display_filter": "open_only"
+            },
+            "statistics": {
+              "total_scanned": 1000,
+              "displayed": 3,
+              "hidden": 997,
+              "hidden_breakdown": {
+                "closed": 997,
+                "filtered": 0,
+                "error": 0
+              },
+              "open": 3,
+              "closed": 997,
+              "filtered": 0,
+              "errors": 0,
+              "scan_duration": 212.41
+            },
+            "notes": "Showing 3 of 1000 ports (997 hidden by filters)"
+          },
+          {
+            "plugin": "bhp",
+            "port": 80,
+            "protocol": "tcp",
+            "state": "open",
+            "service": "HTTP",
+            "banner": "HTTP/1.0 400 Bad Request\r\nServer: AkamaiGHost\r\nMime-Version: 1.0\r\nContent-Type: text/html\r\nContent-Length: 326\r\nExpires: Mon, 09 Feb 2026 13:01:17 GMT\r\nDate: Mon, 09 Feb 2026 13:01:17 GMT\r\nConnection: close",
+            "reason": "connected",
+            "latency": 0.555567741394043,
+            "scan_method": "connect",
+            "should_display": true
+          },
+          {
+            "plugin": "bhp",
+            "port": 53,
+            "protocol": "tcp",
+            "state": "open",
+            "service": "unknown",
+            "reason": "connected",
+            "latency": 1.0824553966522217,
+            "scan_method": "connect",
+            "should_display": true
+          },
+          {
+            "plugin": "bhp",
+            "port": 443,
+            "protocol": "tcp",
+            "state": "open",
+            "service": "HTTPS",
+            "reason": "connected",
+            "latency": 0.4099276065826416,
+            "scan_method": "connect",
+            "should_display": true
+          },
+          {
+            "plugin": "bhp",
+            "service": "HTTP",
+            "raw_banner": "HTTP/1.0 403 Forbidden\r\nServer: AkamaiGHost\r\nMime-Version: 1.0\r\nContent-Type: text/html\r\nContent-Length: 359\r\nExpires: Mon, 09 Feb 2026 13:02:58 GMT\r\nX-Reference-Error: 18.689eb252.1770642178.c4e3462a\r\nDate: Mon, 09 Feb 2026 13:02:58 GMT\r\nConnection: close\r\nX-AK-Cache: Error from child\r\nPermissions-Policy: interest-cohort=()",
+            "parsed_data": {
+              "status": "HTTP/1.0 403 Forbidden",
+              "headers": {
+                "Server": "AkamaiGHost",
+                "Mime-Version": "1.0",
+                "Content-Type": "text/html",
+                "Content-Length": "359",
+                "Expires": "Mon, 09 Feb 2026 13:02:58 GMT",
+                "X-Reference-Error": "18.689eb252.1770642178.c4e3462a",
+                "Date": "Mon, 09 Feb 2026 13:02:58 GMT",
+                "Connection": "close",
+                "X-AK-Cache": "Error from child",
+                "Permissions-Policy": "interest-cohort=()"
+              }
+            },
+            "vulnerabilities": [],
+            "service_details": {
+              "port": 80,
+              "protocol": "tcp",
+              "detected_by": "port_db",
+              "confidence": "high"
+            }
+          },
+          {
+            "plugin": "bhp",
+            "service": "unknown",
+            "raw_banner": "Timeout waiting for response",
+            "parsed_data": {},
+            "vulnerabilities": [],
+            "service_details": {
+              "port": 53,
+              "protocol": "tcp",
+              "detected_by": "port",
+              "confidence": "low"
+            }
+          },
+          {
+            "plugin": "bhp",
+            "url": "http://tesla.com",
+            "headers": {
+              "X-Cache-UUID": "e42f2cc6-6607-4e52-87eb-387548601829",
+              "Content-Type": "text/html; charset=UTF-8",
+              "X-Drupal-Dynamic-Cache": "MISS",
+              "X-UA-Compatible": "IE=edge",
+              "Content-Language": "en",
+              "Last-Modified": "Fri, 06 Feb 2026 22:07:12 GMT",
+              "ETag": "\"1770415632\"",
+              "X-Generator": "Drupal 9 (https://www.drupal.org)",
+              "X-Drupal-Cache": "HIT",
+              "Cache-Control": "max-age=10",
+              "X-TZLA-EDGE-HOSTNAME-VCL": "drupal8-prod",
+              "X-TZLA-EDGE-Age": "60.000",
+              "X-TZLA-EDGE-BACKEND-REASON": "OK",
+              "X-TZLA-EDGE-BACKEND-STATUS": "200",
+              "X-Varnish": "631206166 700042556",
+              "X-Frame-Options": "SAMEORIGIN",
+              "X-Content-Type-Options": "nosniff",
+              "X-TZLA-EDGE-Cache-Hit": "Hit",
+              "X-TZLA-EDGE-TTL": "6.128",
+              "X-TZLA-EDGE-Server": "sjc04p1tegvr69.teslamotors.com",
+              "X-TZLA-EDGE-Cache-Hits": "1",
+              "Accept-Ranges": "bytes",
+              "X-Akamai-Transformed": "0 - 0 -",
+              "Vary": "Accept-Encoding",
+              "Content-Encoding": "br",
+              "Date": "Mon, 09 Feb 2026 13:03:05 GMT",
+              "Transfer-Encoding": "chunked",
+              "Connection": "keep-alive, Transfer-Encoding",
+              "Alt-Svc": "h3=\":443\"; ma=93600",
+              "Strict-Transport-Security": "max-age=15768000",
+              "X-AK-Cache": "RefreshHit from child, Hit from parent",
+              "Permissions-Policy": "interest-cohort=()",
+              "Set-Cookie": "bm_s=YAAQXJ6yUv6R7x6cAQAAo51/QgSf3iNJM98YSikcXWQD/vBNel7pvmDixSazGwFOmoSFJEeryi+BT+e2S9x5C8vic1hnLtHNRbrem8FbGctvC22+PYkdK3mWkee59H6IVrIBixhLh+lACdI/hYcYaYcjYDc4m70LOiIEAc5mp4WXGDOjaxFLGZyzM5IAcQE7Gct9Y3/OeVBvR2mcQlmvJzCRKoMYGDlbIIM3RGXqUet+eYQSFcIdMdeG38otoBUueHhg30e4PdWDGHiJmMInfImtodA0/xmK577b3dWX7CzX9Mj/IxPzH0mLRkDfN9bX+ACQqWPglcQggEcTauoAnRu2Q+euRPCFhMPpCdr3+kImnOoybv7pY4kxT3nByD1dg+paFjuXxy5UAykcLV5nOlJnBtrajFBWcEGWEy8LOfbKvngJ9E6nZv7wbvSn945jSebsi2ax2VRtgg1uNY9yMpA9avMsY4QzdAkAW4fQEydEoBO81JE0gDqqeZCrHrhmvjxQl7zCY4SkKtxK1XFPHuJechSaySqR393uLyeo8w11q94KBbF3+TtWiOe0gfdqa0Qs2xGSdg==; Domain=.tesla.com; Path=/; Expires=Thu, 12 Mar 2026 13:03:05 GMT; Max-Age=2678400; Secure; HttpOnly"
+            },
+            "security_score": 52,
+            "missing_security_headers": [
+              "Content-Security-Policy",
+              "Referrer-Policy",
+              "X-XSS-Protection",
+              "Cross-Origin-Embedder-Policy",
+              "Cross-Origin-Opener-Policy",
+              "Cross-Origin-Resource-Policy"
+            ],
+            "vulnerabilities": [
+              "HSTS max-age too low: 15768000",
+              "Missing Content-Security-Policy"
+            ],
+            "server_info": {},
+            "cookie_analysis": {
+              "count": 1,
+              "cookies": [
+                {
+                  "name": "bm_s",
+                  "secure": true,
+                  "path": "/"
+                }
+              ],
+              "security_issues": []
+            },
+            "redirect_chain": [
+              {
+                "url": "http://tesla.com/",
+                "status": 301,
+                "location": "http://www.tesla.com/"
+              },
+              {
+                "url": "http://www.tesla.com/",
+                "status": 301,
+                "location": "https://www.tesla.com/"
+              }
+            ]
+          },
+          {
+            "plugin": "bhp",
+            "url": "https://tesla.com",
+            "headers": {
+              "Server": "AkamaiGHost",
+              "Mime-Version": "1.0",
+              "Content-Type": "text/html",
+              "Content-Length": "359",
+              "Expires": "Mon, 09 Feb 2026 13:03:08 GMT",
+              "X-Reference-Error": "18.699eb252.1770642187.dbbcc40c",
+              "Date": "Mon, 09 Feb 2026 13:03:08 GMT",
+              "Connection": "close",
+              "Strict-Transport-Security": "max-age=15768000",
+              "X-AK-Cache": "Error from child",
+              "Permissions-Policy": "interest-cohort=()"
+            },
+            "security_score": 36,
+            "missing_security_headers": [
+              "Content-Security-Policy",
+              "X-Frame-Options",
+              "X-Content-Type-Options",
+              "Referrer-Policy",
+              "X-XSS-Protection",
+              "Cross-Origin-Embedder-Policy",
+              "Cross-Origin-Opener-Policy",
+              "Cross-Origin-Resource-Policy"
+            ],
+            "vulnerabilities": [
+              "HSTS max-age too low: 15768000",
+              "Missing Content-Security-Policy"
+            ],
+            "server_info": {
+              "server": "AkamaiGHost"
+            },
+            "cookie_analysis": {
+              "count": 0,
+              "cookies": [],
+              "security_issues": []
+            },
+            "redirect_chain": []
+          },
+          {
+            "plugin": "bhp",
+            "url": "http://23.40.100.207",
+            "headers": {
+              "Server": "AkamaiGHost",
+              "Mime-Version": "1.0",
+              "Content-Type": "text/html",
+              "Content-Length": "326",
+              "Expires": "Mon, 09 Feb 2026 13:03:08 GMT",
+              "Date": "Mon, 09 Feb 2026 13:03:08 GMT",
+              "Connection": "close"
+            },
+            "security_score": 20,
+            "missing_security_headers": [
+              "Strict-Transport-Security",
+              "Content-Security-Policy",
+              "X-Frame-Options",
+              "X-Content-Type-Options",
+              "Referrer-Policy",
+              "Permissions-Policy",
+              "X-XSS-Protection",
+              "Cross-Origin-Embedder-Policy",
+              "Cross-Origin-Opener-Policy",
+              "Cross-Origin-Resource-Policy"
+            ],
+            "vulnerabilities": [
+              "Missing Content-Security-Policy"
+            ],
+            "server_info": {
+              "server": "AkamaiGHost"
+            },
+            "cookie_analysis": {
+              "count": 0,
+              "cookies": [],
+              "security_issues": []
+            },
+            "redirect_chain": []
+          },
+          {
+            "plugin": "bhp",
+            "enhanced_intelligence_report": {
+              "target": "tesla.com",
+              "ip": "23.40.100.207",
+              "scan_time": "2026-02-09T16:04:49.803291",
+              "filters_applied": {
+                "show_closed": false,
+                "show_filtered": false,
+                "show_errors": false
+              },
+              "summary": {
+                "total_ports_scanned": 1000,
+                "ports_displayed": 3,
+                "ports_hidden": 997,
+                "hidden_breakdown": {
+                  "closed": 997,
+                  "filtered": 0,
+                  "error": 0
+                },
+                "open_ports": 3,
+                "closed_ports": 997,
+                "filtered_ports": 0,
+                "vulnerabilities_found": 0,
+                "security_score": 0
+              },
+              "displayed_open_services": [
+                {
+                  "port": 80,
+                  "protocol": "tcp",
+                  "service": "HTTP",
+                  "banner": "HTTP/1.0 400 Bad Request\r\nServer: AkamaiGHost\r\nMime-Version: 1.0\r\nContent-Type: text/html\r\nContent-L"
+                },
+                {
+                  "port": 53,
+                  "protocol": "tcp",
+                  "service": "unknown",
+                  "banner": ""
+                },
+                {
+                  "port": 443,
+                  "protocol": "tcp",
+                  "service": "HTTPS",
+                  "banner": ""
+                }
+              ],
+              "security_issues": [],
+              "recommendations": [
+                "Improve security headers configuration"
+              ],
+              "notes": [
+                "Note: 997 ports hidden by filters (997 closed, 0 filtered)",
+                "Note: 997 closed ports hidden (use --show-closed to view them)"
+              ]
+            }
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "status": "success",
+      "plugin": "pingtrace",
+      "type": "active",
+      "target": "tesla.com",
+      "timestamp": "2026-02-09T16:04:52.270902",
+      "output": {
+        "plugin": "pingtrace",
+        "results": [
+          {
+            "type": "ping_results",
+            "target": "tesla.com",
+            "target_ip": "2.18.55.207",
+            "config": {
+              "mode": "ping",
+              "protocol": "icmp",
+              "count": 4,
+              "timeout": 2.0,
+              "max_hops": 30,
+              "packet_size": 64,
+              "fast": false,
+              "resolve_dns": true
+            },
+            "data": [
+              {
+                "sequence": 1,
+                "target": "2.18.55.207",
+                "status": "success",
+                "rtt": 511.02566719055176,
+                "ttl": 67,
+                "protocol": "icmp",
+                "packet_size": 64
+              },
+              {
+                "sequence": 2,
+                "target": "2.18.55.207",
+                "status": "success",
+                "rtt": 513.7059688568115,
+                "ttl": 67,
+                "protocol": "icmp",
+                "packet_size": 64
+              },
+              {
+                "sequence": 3,
+                "target": "2.18.55.207",
+                "status": "success",
+                "rtt": 515.1073932647705,
+                "ttl": 67,
+                "protocol": "icmp",
+                "packet_size": 64
+              },
+              {
+                "sequence": 4,
+                "target": "2.18.55.207",
+                "status": "success",
+                "rtt": 513.7791633605957,
+                "ttl": 67,
+                "protocol": "icmp",
+                "packet_size": 64
+              }
+            ]
+          },
+          {
+            "type": "analysis",
+            "summary": {
+              "target": "tesla.com",
+              "ip": "2.18.55.207",
+              "mode": "ping",
+              "protocol": "icmp",
+              "ping_stats": {
+                "sent": 4,
+                "received": 4,
+                "rtt_values": [
+                  511.02566719055176,
+                  513.7059688568115,
+                  515.1073932647705,
+                  513.7791633605957
+                ],
+                "packet_loss": 0.0,
+                "avg_rtt": 513.4045481681824,
+                "min_rtt": 511.02566719055176,
+                "max_rtt": 515.1073932647705
+              },
+              "traceroute_stats": {
+                "total_hops": 0,
+                "successful_hops": 0,
+                "failed_hops": 0,
+                "hops": []
+              },
+              "issues": [
+                "High latency: 513.4ms"
+              ],
+              "recommendations": [
+                "Consider using closer server or CDN"
+              ]
+            }
+          },
+          {
+            "type": "metadata",
+            "scan_duration": "2.47s",
+            "packets_sent": 4,
+            "packets_received": 4,
+            "plugin_version": "1.0.0",
+            "timestamp": "2026-02-09T16:04:52.270653"
           }
         ],
         "errors": []
