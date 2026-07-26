@@ -1,7 +1,4 @@
-"""
-crow/plugins/active_robots/plugin.py
-أداة بسيطة لجلب وتحليل robots.txt بدون تعقيدات
-"""
+
 
 import re
 from typing import List, Dict, Optional
