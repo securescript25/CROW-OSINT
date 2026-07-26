@@ -29,17 +29,17 @@ class active_robots(ActivePlugin):
         errors = []
         
         try:
-            # تطبيع الهدف
+            
             base_url = self._normalize_url(target)
             
-            # جلب robots.txt
+            
             robots_url = urljoin(base_url, "/robots.txt")
             
-            # محاولة HTTPS أولاً
+             
             content, status, final_url = self._fetch_robots(robots_url)
             
             if content:
-                # تحليل بسيط
+                
                 parsed_data = self._simple_parse(content)
                 
                 results.append({
