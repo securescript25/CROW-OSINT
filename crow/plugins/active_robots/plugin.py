@@ -13,10 +13,7 @@ from crow.core.bases import ActivePlugin
 from crow.core.models import PluginOutput
 
 class active_robots(ActivePlugin):
-    """
-    أداة بسيطة لجلب وتحليل robots.txt
-    فقط إحضار وتحليل البيانات الأساسية
-    """
+    
     
     name = "active_robots"
     description = "Simple robots.txt fetcher and parser"
@@ -30,15 +27,7 @@ class active_robots(ActivePlugin):
                                  "Mozilla/5.0 (CROW-Robots-Fetcher/1.0)")
     
     def run(self, target: str, **kwargs) -> PluginOutput:
-        """
-        جلب وتحليل robots.txt بشكل بسيط
-        
-        Args:
-            target: الهدف (مثال: example.com)
-            
-        Returns:
-            PluginOutput: نتائج بسيطة
-        """
+      
         results = []
         errors = []
         
@@ -67,7 +56,7 @@ class active_robots(ActivePlugin):
                     "parsed_data": parsed_data
                 })
             else:
-                # محاولة HTTP إذا فشل HTTPS
+                
                 http_url = robots_url.replace('https://', 'http://')
                 content, status, final_url = self._fetch_robots(http_url)
                 
@@ -86,7 +75,6 @@ class active_robots(ActivePlugin):
                         "note": "Fetched via HTTP (HTTPS failed)"
                     })
                 else:
-                    # robots.txt غير موجود
                     results.append({
                         "plugin": self.name,
                         "target": target,
@@ -106,13 +94,13 @@ class active_robots(ActivePlugin):
         )
     
     def _normalize_url(self, target: str) -> str:
-        """إضافة http:// إذا لم يكن موجوداً"""
+    
         if not target.startswith(('http://', 'https://')):
             return f"https://{target}"
         return target
     
     def _fetch_robots(self, url: str) -> tuple:
-        """جلب محتوى robots.txt"""
+       
         try:
             response = requests.get(
                 url,
@@ -131,10 +119,10 @@ class active_robots(ActivePlugin):
             return None, 0, url
     
     def _simple_parse(self, content: str) -> Dict:
-        """تحليل بسيط لـ robots.txt"""
+       
         lines = content.splitlines()
         
-        # تحليل كل سطر
+        
         rules = []
         sitemaps = []
         user_agents = set()
@@ -143,15 +131,15 @@ class active_robots(ActivePlugin):
         for i, line in enumerate(lines, 1):
             line = line.strip()
             
-            # تخطي الأسطر الفارغة والتعليقات
+            
             if not line or line.startswith('#'):
                 continue
             
-            # إزالة التعليقات في نهاية السطر
+            
             if '#' in line:
                 line = line.split('#')[0].strip()
             
-            # تقسيم السطر
+            
             if ':' in line:
                 parts = line.split(':', 1)
                 directive = parts[0].strip().lower()
@@ -198,7 +186,7 @@ class active_robots(ActivePlugin):
                     rule["user_agent"] = current_agent
                     rules.append(rule)
         
-        # إحصاءات بسيطة
+        
         disallow_count = sum(1 for r in rules if r.get("directive") == "disallow")
         allow_count = sum(1 for r in rules if r.get("directive") == "allow")
         
